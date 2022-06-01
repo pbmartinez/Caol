@@ -1,9 +1,0 @@
-﻿@model Application.Dtos.GatewayDto
-
-
-    <form action="@Url.Action("Edit","Gateway")" method="post">
-        <input asp-for="Name"/>
-        <input asp-for="Ipv4Address"/>
-        <button class="btn btn-success" type="submit">@Domain.Localization.Resource.btn_Edit</button>
-        <a class="btn btn-secondary" href="@Url.Action("Index","Gateway")">@Domain.Localization.Resource.btn_Cancel</a>
-    </form>
