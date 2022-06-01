@@ -2,7 +2,7 @@
 
 namespace Application.IAppServices
 {
-    public partial interface IProviderAppService : IAppService<ProviderDto>
+    public partial interface ICaoOAppService : IAppService<CaoODto>
     {
     }
 }

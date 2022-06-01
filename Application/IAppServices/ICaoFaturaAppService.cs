@@ -2,7 +2,7 @@
 
 namespace Application.IAppServices
 {
-    public partial interface IBrandAppService : IAppService<BrandDto>
+    public partial interface ICaoFaturaAppService : IAppService<CaoFaturaDto>
     {
     }
 }

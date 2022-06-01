@@ -4,9 +4,9 @@ using Domain.UnitOfWork;
 
 namespace Infraestructure.Domain.Repositories
 {
-    public partial class GatewayRepository : Repository<Gateway>, IGatewayRepository
+    public partial class CaoORepository : Repository<CaoO>, ICaoORepository
     {
-        public GatewayRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public CaoORepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
 
         }

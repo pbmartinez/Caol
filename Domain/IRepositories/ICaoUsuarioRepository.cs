@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Domain.IRepositories
 {
-    public interface IPeripheralRepository : IRepository<Peripheral>
+    public interface ICaoUsuarioRepository : IRepository<CaoUsuario>
     {
 
     }

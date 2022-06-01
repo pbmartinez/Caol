@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Domain.IRepositories
 {
-    public interface IBrandRepository : IRepository<Brand>
+    public interface ICaoORepository : IRepository<CaoO>
     {
 
     }

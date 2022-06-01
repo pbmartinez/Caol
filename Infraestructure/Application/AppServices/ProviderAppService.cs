@@ -16,7 +16,7 @@ using Application.Exceptions;
 
 namespace Infraestructure.Application.AppServices
 {
-    public partial class ProviderAppService : IProviderAppService
+    public partial class ProviderAppService : ICaoClienteAppService
     {
         private readonly IProviderRepository _ProviderRepository;
         private readonly IMapper _mapper;

@@ -13,9 +13,9 @@ namespace WebApi.Controllers
     [Route("api/peripheral")]
     public class PeripheralController : ApiBaseController<PeripheralDto>
     {
-        private readonly IGatewayAppService _gatewayAppService;        
-        public PeripheralController(IPeripheralAppService appService, ILogger<ApiBaseController<PeripheralDto>> logger, IPropertyCheckerService propertyCheckerService,
-            IGatewayAppService gatewayAppService) 
+        private readonly IPermissaoSistemaAppService _gatewayAppService;        
+        public PeripheralController(ICaoFaturaAppService appService, ILogger<ApiBaseController<PeripheralDto>> logger, IPropertyCheckerService propertyCheckerService,
+            IPermissaoSistemaAppService gatewayAppService) 
             : base(appService, logger, propertyCheckerService)
         {
             _gatewayAppService = gatewayAppService;

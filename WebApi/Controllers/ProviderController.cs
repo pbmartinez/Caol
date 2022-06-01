@@ -10,7 +10,7 @@ namespace WebApi.Controllers
     [ApiController]
     public class ProviderController : ApiBaseController<ProviderDto>
     {
-        public ProviderController(IProviderAppService appService, ILogger<ApiBaseController<ProviderDto>> logger, IPropertyCheckerService propertyCheckerService) : base(appService, logger, propertyCheckerService)
+        public ProviderController(ICaoClienteAppService appService, ILogger<ApiBaseController<ProviderDto>> logger, IPropertyCheckerService propertyCheckerService) : base(appService, logger, propertyCheckerService)
         {
         }
     }

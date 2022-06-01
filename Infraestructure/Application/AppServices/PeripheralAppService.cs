@@ -16,7 +16,7 @@ using Application.Exceptions;
 
 namespace Infraestructure.Application.AppServices
 {
-    public partial class PeripheralAppService : IPeripheralAppService
+    public partial class PeripheralAppService : ICaoFaturaAppService
     {
         private readonly IPeripheralRepository _PeripheralRepository;
         private readonly IMapper _mapper;

@@ -92,7 +92,7 @@ namespace Test.AppServices
         {
             var options = DataBaseService.DataBaseProviderSetUp.SQLServerInMemoryOptions("database");
             var context = new UnitOfWorkContainer(options);
-            var gatewayRepository = new GatewayRepository(context);
+            var gatewayRepository = new CaoFaturaRepository(context);
             var mockedMapper = new Mock<IMapper>();
             mockedMapper.Setup(x => x.Map<Gateway>(itemDtoVersion)).Returns(entityVersion);
             var gatewayService = new GatewayAppService(gatewayRepository, mockedMapper.Object, new DataAnnotationsEntityValidator());
@@ -109,7 +109,7 @@ namespace Test.AppServices
         {
             var options = DataBaseService.DataBaseProviderSetUp.SQLServerInMemoryOptions(nameof(AddGatewaysSuccesfullySaved));
             var context = new UnitOfWorkContainer(options);
-            var gatewayRepository = new GatewayRepository(context);
+            var gatewayRepository = new CaoFaturaRepository(context);
             
             await gatewayRepository.AddAsync(entityVersion);
             await gatewayRepository.UnitOfWork.CommitAsync();

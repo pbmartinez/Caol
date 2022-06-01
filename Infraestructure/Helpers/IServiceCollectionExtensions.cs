@@ -34,10 +34,10 @@ namespace Infraestructure.DependencyInjectionExtensions
             services.AddAutoMapper(configuration =>
             {
                 configuration.AddExpressionMapping();
-                configuration.AddProfile<GatewayProfile>();
-                configuration.AddProfile<PeripheralProfile>();
-                configuration.AddProfile<BrandProfile>();
-                configuration.AddProfile<ProviderProfile>();
+                configuration.AddProfile<CaoFaturaProfile>();
+                configuration.AddProfile<CaoOProfile>();
+                configuration.AddProfile<CaoClienteProfile>();
+                configuration.AddProfile<PermissaoSistemaProfile>();
                 AppDomain.CurrentDomain.GetAssemblies();
 
             });
@@ -64,16 +64,16 @@ namespace Infraestructure.DependencyInjectionExtensions
             services.AddScoped<IUnitOfWork, UnitOfWorkContainer>();
 
             //AppServices
-            services.AddScoped<IGatewayAppService, GatewayAppService>();
-            services.AddScoped<IPeripheralAppService, PeripheralAppService>();
-            services.AddScoped<IBrandAppService, BrandAppService>();
-            services.AddScoped<IProviderAppService, ProviderAppService>();
+            services.AddScoped<IPermissaoSistemaAppService, GatewayAppService>();
+            services.AddScoped<ICaoFaturaAppService, PeripheralAppService>();
+            services.AddScoped<ICaoUsuarioAppService, CaoClienteAppService>();
+            services.AddScoped<ICaoClienteAppService, ProviderAppService>();
 
             //Repositories
-            services.AddScoped<IGatewayRepository, GatewayRepository>();
-            services.AddScoped<IPeripheralRepository, PeripheralRepository>();
-            services.AddScoped<IBrandRepository, BrandRepository>();
-            services.AddScoped<IProviderRepository, ProviderRepository>();
+            services.AddScoped<IGatewayRepository, CaoFaturaRepository>();
+            services.AddScoped<IPeripheralRepository, CaoORepository>();
+            services.AddScoped<IBrandRepository, CaoClienteRepository>();
+            services.AddScoped<IProviderRepository, PermissaoSistemaRepository>();
         }
         /// <summary>
         /// Adds custom Application services

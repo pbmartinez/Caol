@@ -10,7 +10,7 @@ namespace WebApi.Controllers
     [ApiController]
     public class BrandController : ApiBaseController<BrandDto>
     {
-        public BrandController(IBrandAppService appService, ILogger<ApiBaseController<BrandDto>> logger, IPropertyCheckerService propertyCheckerService) : base(appService, logger, propertyCheckerService)
+        public BrandController(ICaoUsuarioAppService appService, ILogger<ApiBaseController<BrandDto>> logger, IPropertyCheckerService propertyCheckerService) : base(appService, logger, propertyCheckerService)
         {
         }
     }

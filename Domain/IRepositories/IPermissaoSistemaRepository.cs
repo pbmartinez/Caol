@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Domain.IRepositories
 {
-    public interface IGatewayRepository : IRepository<Gateway>
+    public interface IPermissaoSistemaRepository : IRepository<PermissaoSistema>
     {
 
     }

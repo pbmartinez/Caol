@@ -16,7 +16,7 @@ using Application.Exceptions;
 
 namespace Infraestructure.Application.AppServices
 {
-    public partial class GatewayAppService : IGatewayAppService
+    public partial class GatewayAppService : IPermissaoSistemaAppService
     {
         private readonly IGatewayRepository _GatewayRepository;
         private readonly IMapper _mapper;
