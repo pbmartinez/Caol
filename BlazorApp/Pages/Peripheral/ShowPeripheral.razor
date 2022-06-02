@@ -23,7 +23,7 @@
         <MudForm @bind-IsValid="@success" >
             <MudGrid>
 
-                <MudItem xs="6" sm="4">
+                @*<MudItem xs="6" sm="4">
                     <MudTextField @bind-Value=@(item.Vendor) Disabled=@(disabled) Label="@Localizer[Resource.PeripheralDtoVendor]" Margin="Margin.Normal" Placeholder="@($"{Localizer[Resource.PeripheralDtoVendor]} ...")"
                                   Required="true" RequiredError="@Localizer[Resource.validation_FieldRequired]">
                     </MudTextField>
@@ -55,7 +55,7 @@
                             <MudSelectItem Value="@gateway.Id">@gateway.Name</MudSelectItem>
                         }
                     </MudSelect>
-                </MudItem>
+                </MudItem>*@
 
 
             </MudGrid>
@@ -92,8 +92,8 @@
 </MudCard>
 
 @code {
-    [Parameter]
-    public PeripheralDto item { get; set; } = new PeripheralDto();
+    //[Parameter]
+    //public PeripheralDto item { get; set; } = new PeripheralDto();
 
     [Parameter]
     public Action OnSuccessfullySaveAsync { get; set; } = () => { };
@@ -122,7 +122,7 @@
     private bool disabledDate => ShowMode || DeleteMode || EditMode;
 
     private string CardHeader = string.Empty;
-    private List<GatewayDto> Gateways = new List<GatewayDto>();
+    //private List<GatewayDto> Gateways = new List<GatewayDto>();
 
     private void UpdateCardHeader()
     {
@@ -149,8 +149,8 @@
     }
     private async Task UpdateAsync()
     { 
-        var updatedGateways = await Http.GetFromJsonAsync<List<GatewayDto>>("/api/gateway");
-        Gateways = updatedGateways ?? new List<GatewayDto>();
+        //var updatedGateways = await Http.GetFromJsonAsync<List<GatewayDto>>("/api/gateway");
+        //Gateways = updatedGateways ?? new List<GatewayDto>();
     }
     private void Cancel()
     {
@@ -164,60 +164,60 @@
     }
     private async Task DeleteAsync()
     {
-        if (item == null || item.Id == Guid.Empty)
-        {
-            Snackbar.Add(Localizer[Resource.message_ItemDoesNotExist], Severity.Warning);
-        }
-        else
-        {
-            var itemToDelete = await Http.GetFromJsonAsync<PeripheralDto>($"api/peripheral/{item.Id}");
+        //if (item == null || item.Id == Guid.Empty)
+        //{
+        //    Snackbar.Add(Localizer[Resource.message_ItemDoesNotExist], Severity.Warning);
+        //}
+        //else
+        //{
+        //    var itemToDelete = await Http.GetFromJsonAsync<PeripheralDto>($"api/peripheral/{item.Id}");
 
-            if (itemToDelete == null)
-            {
-                Snackbar.Add(Localizer[Resource.message_ItemDoesNotExist], Severity.Warning);
-            }
-            else
-            {
-                var result = await Http.DeleteAsync($"api/peripheral/{item.Id}");
-                if (result.StatusCode == HttpStatusCode.NoContent)
-                {
-                    Snackbar.Add(Localizer[Resource.message_SuccesfullyDeleted], Severity.Success);
-                    OnSuccessfullyDeletedAsync.Invoke();
-                }
-                //TODO: Handle fail on Delete
-            }
-        }
+        //    if (itemToDelete == null)
+        //    {
+        //        Snackbar.Add(Localizer[Resource.message_ItemDoesNotExist], Severity.Warning);
+        //    }
+        //    else
+        //    {
+        //        var result = await Http.DeleteAsync($"api/peripheral/{item.Id}");
+        //        if (result.StatusCode == HttpStatusCode.NoContent)
+        //        {
+        //            Snackbar.Add(Localizer[Resource.message_SuccesfullyDeleted], Severity.Success);
+        //            OnSuccessfullyDeletedAsync.Invoke();
+        //        }
+        //        //TODO: Handle fail on Delete
+        //    }
+        //}
     }
     private async Task EditAsync()
     {
-        var itemToEdit = await Http.GetFromJsonAsync<PeripheralDto>($"api/peripheral/{item.Id}");
+        //var itemToEdit = await Http.GetFromJsonAsync<PeripheralDto>($"api/peripheral/{item.Id}");
 
-        if (itemToEdit == null)
-        {
-            Snackbar.Add(Localizer[Resource.message_ItemDoesNotExist], Severity.Warning);
-        }
-        else
-        {
-            var result = await Http.PutAsJsonAsync<PeripheralDto>($"api/peripheral/{item.Id}", item);
-            if (result.StatusCode == HttpStatusCode.NoContent)
-            {
-                Snackbar.Add(Localizer[Resource.message_SuccesfullyEdited], Severity.Success);
-                OnSuccessfullySaveAsync.Invoke();
-            }
-            //TODO: Handle fail on Edit
-        }
+        //if (itemToEdit == null)
+        //{
+        //    Snackbar.Add(Localizer[Resource.message_ItemDoesNotExist], Severity.Warning);
+        //}
+        //else
+        //{
+        //    var result = await Http.PutAsJsonAsync<PeripheralDto>($"api/peripheral/{item.Id}", item);
+        //    if (result.StatusCode == HttpStatusCode.NoContent)
+        //    {
+        //        Snackbar.Add(Localizer[Resource.message_SuccesfullyEdited], Severity.Success);
+        //        OnSuccessfullySaveAsync.Invoke();
+        //    }
+        //    //TODO: Handle fail on Edit
+        //}
     }
     private async Task AddAsync()
     {
-        item.CreatedDate = item.CreatedDateHelper != null ? item.CreatedDateHelper.Value : DateTime.Today;
-        var result = await Http.PostAsJsonAsync<PeripheralDto>($"api/peripheral", item);
-        if (result.StatusCode == HttpStatusCode.Created || result.StatusCode == HttpStatusCode.OK)
-        {
-            Snackbar.Add(Localizer[Resource.message_SuccesfullyAdded], Severity.Success);
-            OnSuccessfullySaveAsync.Invoke();
-        }
-        //TODO: Handle fail on Add
-        var response = result.Content.ReadAsStringAsync();
+        //item.CreatedDate = item.CreatedDateHelper != null ? item.CreatedDateHelper.Value : DateTime.Today;
+        //var result = await Http.PostAsJsonAsync<PeripheralDto>($"api/peripheral", item);
+        //if (result.StatusCode == HttpStatusCode.Created || result.StatusCode == HttpStatusCode.OK)
+        //{
+        //    Snackbar.Add(Localizer[Resource.message_SuccesfullyAdded], Severity.Success);
+        //    OnSuccessfullySaveAsync.Invoke();
+        //}
+        ////TODO: Handle fail on Add
+        //var response = result.Content.ReadAsStringAsync();
     }
 
 

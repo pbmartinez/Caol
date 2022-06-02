@@ -20,7 +20,7 @@
         <MudForm @bind-IsValid="@success">
             <MudGrid>
 
-                <MudItem xs="6" sm="4">
+                @*<MudItem xs="6" sm="4">
                     <MudTextField @bind-Value=@(item.Name) Disabled=@(disabled) Label="@Localizer[Resource.GatewayDtoName]" Margin="Margin.Normal" Placeholder="@($"{Localizer[Resource.GatewayDtoName]} ...")"
                                   Required="true" RequiredError="@Localizer[Resource.validation_FieldRequired]">
                     </MudTextField>
@@ -31,7 +31,7 @@
                                   Required="true" RequiredError="@Localizer[Resource.validation_FieldRequired]"
                                   Validation="@(new Ipv4Address(){ErrorMessage=Localizer[Resource.validation_Ipv4AddressBadFormat]})">
                     </MudTextField>
-                </MudItem>
+                </MudItem>*@
 
             </MudGrid>
             <br />
@@ -67,8 +67,8 @@
 </MudCard>
 
 @code {
-    [Parameter]
-    public GatewayDto item { get; set; } = new GatewayDto();
+    //[Parameter]
+    //public GatewayDto item { get; set; } = new GatewayDto();
 
     [Parameter]
     public Action OnSuccessfullySaveAsync { get; set; } = () => { };
@@ -127,56 +127,56 @@
 
     private async Task DeleteAsync()
     {
-        if (item == null || item.Id == Guid.Empty)
-        {
-            Snackbar.Add(Localizer[Resource.message_ItemDoesNotExist], Severity.Warning);
-        }
-        else
-        {
-            var itemToDelete = await Http.GetFromJsonAsync<GatewayDto>($"api/gateway/{item.Id}");
+        //if (item == null || item.Id == Guid.Empty)
+        //{
+        //    Snackbar.Add(Localizer[Resource.message_ItemDoesNotExist], Severity.Warning);
+        //}
+        //else
+        //{
+        //    var itemToDelete = await Http.GetFromJsonAsync<GatewayDto>($"api/gateway/{item.Id}");
 
-            if (itemToDelete == null)
-            {
-                Snackbar.Add(Localizer[Resource.message_ItemDoesNotExist], Severity.Warning);
-            }
-            else
-            {
-                var result = await Http.DeleteAsync($"api/gateway/{item.Id}");
-                if (result.StatusCode == HttpStatusCode.NoContent)
-                {
-                    Snackbar.Add(Localizer[Resource.message_SuccesfullyDeleted], Severity.Success);
-                    OnSuccessfullyDeletedAsync.Invoke();
-                }
-            }
-        }
+        //    if (itemToDelete == null)
+        //    {
+        //        Snackbar.Add(Localizer[Resource.message_ItemDoesNotExist], Severity.Warning);
+        //    }
+        //    else
+        //    {
+        //        var result = await Http.DeleteAsync($"api/gateway/{item.Id}");
+        //        if (result.StatusCode == HttpStatusCode.NoContent)
+        //        {
+        //            Snackbar.Add(Localizer[Resource.message_SuccesfullyDeleted], Severity.Success);
+        //            OnSuccessfullyDeletedAsync.Invoke();
+        //        }
+        //    }
+        //}
     }
     private async Task EditAsync()
     {
-        var itemToEdit = await Http.GetFromJsonAsync<GatewayDto>($"api/gateway/{item.Id}");
+        //var itemToEdit = await Http.GetFromJsonAsync<GatewayDto>($"api/gateway/{item.Id}");
 
-        if (itemToEdit == null)
-        {
-            Snackbar.Add(Localizer[Resource.message_ItemDoesNotExist], Severity.Warning);
-        }
-        else
-        {
-            var result = await Http.PutAsJsonAsync<GatewayDto>($"api/gateway/{item.Id}", item);
-            if (result.StatusCode == HttpStatusCode.NoContent)
-            {
-                Snackbar.Add(Localizer[Resource.message_SuccesfullyEdited], Severity.Success);
-                OnSuccessfullySaveAsync.Invoke();
-            }
-        }
+        //if (itemToEdit == null)
+        //{
+        //    Snackbar.Add(Localizer[Resource.message_ItemDoesNotExist], Severity.Warning);
+        //}
+        //else
+        //{
+        //    var result = await Http.PutAsJsonAsync<GatewayDto>($"api/gateway/{item.Id}", item);
+        //    if (result.StatusCode == HttpStatusCode.NoContent)
+        //    {
+        //        Snackbar.Add(Localizer[Resource.message_SuccesfullyEdited], Severity.Success);
+        //        OnSuccessfullySaveAsync.Invoke();
+        //    }
+        //}
     }
     private async Task AddAsync()
     {
-        var result = await Http.PostAsJsonAsync<GatewayDto>($"api/gateway", item);
-        if (result.StatusCode == HttpStatusCode.Created || result.StatusCode == HttpStatusCode.OK)
-        {
-            Snackbar.Add(Localizer[Resource.message_SuccesfullyAdded], Severity.Success);
-            OnSuccessfullySaveAsync.Invoke();
-        }
-        var response = result.Content.ReadAsStringAsync();
+        //var result = await Http.PostAsJsonAsync<GatewayDto>($"api/gateway", item);
+        //if (result.StatusCode == HttpStatusCode.Created || result.StatusCode == HttpStatusCode.OK)
+        //{
+        //    Snackbar.Add(Localizer[Resource.message_SuccesfullyAdded], Severity.Success);
+        //    OnSuccessfullySaveAsync.Invoke();
+        //}
+        //var response = result.Content.ReadAsStringAsync();
     }
 
 

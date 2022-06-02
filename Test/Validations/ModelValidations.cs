@@ -19,54 +19,54 @@ namespace Test.Validations
         #region Data Sets
         private static Guid gatewayId = Guid.NewGuid();
 
-        private static readonly object[] GatewaysDataSet =
-        {
-            // Validation Fails
-            new object[]{ null,false},
-            new object[]{ new GatewayDto{Id = Guid.NewGuid(),Name=null,Ipv4Address=null },false},
-            new object[]{ new GatewayDto{Id = Guid.NewGuid(),Name=string.Empty,Ipv4Address=string.Empty },false},
-            new object[]{ new GatewayDto{Id = Guid.NewGuid(),Name=string.Empty,Ipv4Address="4999.168.10.1" },false},
-            new object[]{ new GatewayDto{Id = Guid.NewGuid(),Name="Name 1",Ipv4Address=string.Empty },false},
-            new object[]{ new GatewayDto{Id = Guid.NewGuid(),Name="Name 1",Ipv4Address="4999.168.10.1" },false},
-            new object[]{ new GatewayDto{Id = Guid.NewGuid(),Name="Name 1",Ipv4Address="192.4999.10.1" },false},
-            new object[]{ new GatewayDto{Id = gatewayId,Name="Name 1",Ipv4Address="192.168.10.1",
-                Peripherals=new List<PeripheralDto>() {
-                new PeripheralDto{ Id = Guid.NewGuid(), Vendor="Pa & Co",CreatedDate=DateTime.Today,Status=true, GatewayId=gatewayId},
-                new PeripheralDto{ Id = Guid.NewGuid(), Vendor="Pa & Co",CreatedDate=DateTime.Today,Status=true, GatewayId=gatewayId},
-                new PeripheralDto{ Id = Guid.NewGuid(), Vendor="Pa & Co",CreatedDate=DateTime.Today,Status=true, GatewayId=gatewayId},
-                new PeripheralDto{ Id = Guid.NewGuid(), Vendor="Pa & Co",CreatedDate=DateTime.Today,Status=true, GatewayId=gatewayId},
-                new PeripheralDto{ Id = Guid.NewGuid(), Vendor="Pa & Co",CreatedDate=DateTime.Today,Status=true, GatewayId=gatewayId},
-                new PeripheralDto{ Id = Guid.NewGuid(), Vendor="Pa & Co",CreatedDate=DateTime.Today,Status=true, GatewayId=gatewayId},
-                new PeripheralDto{ Id = Guid.NewGuid(), Vendor="Pa & Co",CreatedDate=DateTime.Today,Status=true, GatewayId=gatewayId},
-                new PeripheralDto{ Id = Guid.NewGuid(), Vendor="Pa & Co",CreatedDate=DateTime.Today,Status=true, GatewayId=gatewayId},
-                new PeripheralDto{ Id = Guid.NewGuid(), Vendor="Pa & Co",CreatedDate=DateTime.Today,Status=true, GatewayId=gatewayId},
-                new PeripheralDto{ Id = Guid.NewGuid(), Vendor="Pa & Co",CreatedDate=DateTime.Today,Status=true, GatewayId=gatewayId},
-                new PeripheralDto{ Id = Guid.NewGuid(), Vendor="Pa & Co",CreatedDate=DateTime.Today,Status=true, GatewayId=gatewayId},
-                new PeripheralDto{ Id = Guid.NewGuid(), Vendor="Pa & Co",CreatedDate=DateTime.Today,Status=true, GatewayId=gatewayId},
-            } }, false},
+        //private static readonly object[] GatewaysDataSet =
+        //{
+        //    // Validation Fails
+        //    new object[]{ null,false},
+        //    new object[]{ new GatewayDto{Id = Guid.NewGuid(),Name=null,Ipv4Address=null },false},
+        //    new object[]{ new GatewayDto{Id = Guid.NewGuid(),Name=string.Empty,Ipv4Address=string.Empty },false},
+        //    new object[]{ new GatewayDto{Id = Guid.NewGuid(),Name=string.Empty,Ipv4Address="4999.168.10.1" },false},
+        //    new object[]{ new GatewayDto{Id = Guid.NewGuid(),Name="Name 1",Ipv4Address=string.Empty },false},
+        //    new object[]{ new GatewayDto{Id = Guid.NewGuid(),Name="Name 1",Ipv4Address="4999.168.10.1" },false},
+        //    new object[]{ new GatewayDto{Id = Guid.NewGuid(),Name="Name 1",Ipv4Address="192.4999.10.1" },false},
+        //    new object[]{ new GatewayDto{Id = gatewayId,Name="Name 1",Ipv4Address="192.168.10.1",
+        //        Peripherals=new List<PeripheralDto>() {
+        //        new PeripheralDto{ Id = Guid.NewGuid(), Vendor="Pa & Co",CreatedDate=DateTime.Today,Status=true, GatewayId=gatewayId},
+        //        new PeripheralDto{ Id = Guid.NewGuid(), Vendor="Pa & Co",CreatedDate=DateTime.Today,Status=true, GatewayId=gatewayId},
+        //        new PeripheralDto{ Id = Guid.NewGuid(), Vendor="Pa & Co",CreatedDate=DateTime.Today,Status=true, GatewayId=gatewayId},
+        //        new PeripheralDto{ Id = Guid.NewGuid(), Vendor="Pa & Co",CreatedDate=DateTime.Today,Status=true, GatewayId=gatewayId},
+        //        new PeripheralDto{ Id = Guid.NewGuid(), Vendor="Pa & Co",CreatedDate=DateTime.Today,Status=true, GatewayId=gatewayId},
+        //        new PeripheralDto{ Id = Guid.NewGuid(), Vendor="Pa & Co",CreatedDate=DateTime.Today,Status=true, GatewayId=gatewayId},
+        //        new PeripheralDto{ Id = Guid.NewGuid(), Vendor="Pa & Co",CreatedDate=DateTime.Today,Status=true, GatewayId=gatewayId},
+        //        new PeripheralDto{ Id = Guid.NewGuid(), Vendor="Pa & Co",CreatedDate=DateTime.Today,Status=true, GatewayId=gatewayId},
+        //        new PeripheralDto{ Id = Guid.NewGuid(), Vendor="Pa & Co",CreatedDate=DateTime.Today,Status=true, GatewayId=gatewayId},
+        //        new PeripheralDto{ Id = Guid.NewGuid(), Vendor="Pa & Co",CreatedDate=DateTime.Today,Status=true, GatewayId=gatewayId},
+        //        new PeripheralDto{ Id = Guid.NewGuid(), Vendor="Pa & Co",CreatedDate=DateTime.Today,Status=true, GatewayId=gatewayId},
+        //        new PeripheralDto{ Id = Guid.NewGuid(), Vendor="Pa & Co",CreatedDate=DateTime.Today,Status=true, GatewayId=gatewayId},
+        //    } }, false},
 
-            //Validation Success
-            new object[]{ new GatewayDto{Id = Guid.NewGuid(),Name="Name 1",Ipv4Address="192.168.10.1" },true},
-            new object[]{ new GatewayDto{Id = new Guid("68cc3e5e-01be-459b-84d1-8d03bf1f6f58"),Name="Name 1",Ipv4Address="192.168.10.1",
-                Peripherals=new List<PeripheralDto>() {
-                new PeripheralDto{ Id = Guid.NewGuid(), Vendor="Pa & Co",CreatedDate=DateTime.Today,Status=true, GatewayId=new Guid("68cc3e5e-01be-459b-84d1-8d03bf1f6f58")},
-                new PeripheralDto{ Id = Guid.NewGuid(), Vendor="Pa & Co",CreatedDate=DateTime.Today,Status=true, GatewayId=new Guid("68cc3e5e-01be-459b-84d1-8d03bf1f6f58")},
-                new PeripheralDto{ Id = Guid.NewGuid(), Vendor="Pa & Co",CreatedDate=DateTime.Today,Status=true, GatewayId=new Guid("68cc3e5e-01be-459b-84d1-8d03bf1f6f58")},
-                new PeripheralDto{ Id = Guid.NewGuid(), Vendor="Pa & Co",CreatedDate=DateTime.Today,Status=true, GatewayId=new Guid("68cc3e5e-01be-459b-84d1-8d03bf1f6f58")},
-            } }, true},
-        };
+        //    //Validation Success
+        //    new object[]{ new GatewayDto{Id = Guid.NewGuid(),Name="Name 1",Ipv4Address="192.168.10.1" },true},
+        //    new object[]{ new GatewayDto{Id = new Guid("68cc3e5e-01be-459b-84d1-8d03bf1f6f58"),Name="Name 1",Ipv4Address="192.168.10.1",
+        //        Peripherals=new List<PeripheralDto>() {
+        //        new PeripheralDto{ Id = Guid.NewGuid(), Vendor="Pa & Co",CreatedDate=DateTime.Today,Status=true, GatewayId=new Guid("68cc3e5e-01be-459b-84d1-8d03bf1f6f58")},
+        //        new PeripheralDto{ Id = Guid.NewGuid(), Vendor="Pa & Co",CreatedDate=DateTime.Today,Status=true, GatewayId=new Guid("68cc3e5e-01be-459b-84d1-8d03bf1f6f58")},
+        //        new PeripheralDto{ Id = Guid.NewGuid(), Vendor="Pa & Co",CreatedDate=DateTime.Today,Status=true, GatewayId=new Guid("68cc3e5e-01be-459b-84d1-8d03bf1f6f58")},
+        //        new PeripheralDto{ Id = Guid.NewGuid(), Vendor="Pa & Co",CreatedDate=DateTime.Today,Status=true, GatewayId=new Guid("68cc3e5e-01be-459b-84d1-8d03bf1f6f58")},
+        //    } }, true},
+        //};
 
         #endregion
 
 
-        [Test]
-        [TestCaseSource(nameof(GatewaysDataSet))]
-        public void GatewaysValidations(GatewayDto item, bool result)
-        {
-            var validator = new DataAnnotationsEntityValidator();
-            var validationResult = validator.IsValid(item);
-            validationResult.Should().Be(result);
-        }
+        //[Test]
+        //[TestCaseSource(nameof(GatewaysDataSet))]
+        //public void GatewaysValidations(GatewayDto item, bool result)
+        //{
+        //    var validator = new DataAnnotationsEntityValidator();
+        //    var validationResult = validator.IsValid(item);
+        //    validationResult.Should().Be(result);
+        //}
 
 
 

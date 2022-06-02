@@ -25,7 +25,7 @@
 
 
 <br />
-<MudCard Elevation="2">
+@*<MudCard Elevation="2">
     @if (Gateways == null)
     {
             <SkeletonGrid />
@@ -83,135 +83,135 @@
             </PagerContent>
         </MudTable>
     }
-</MudCard>
+</MudCard>*@
 
 
 
 @code {
 
-    private List<GatewayDto>? Gateways;
-    private IDialogReference? dialogReference;
-    private string searchString = "";
-    private DialogOptions dialogOptions = new DialogOptions { CloseButton = true };
+    //private List<GatewayDto>? Gateways;
+    //private IDialogReference? dialogReference;
+    //private string searchString = "";
+    //private DialogOptions dialogOptions = new DialogOptions { CloseButton = true };
 
-    public void Dispose() => Interceptor.DisposeEvent();
-    protected override async Task OnInitializedAsync()
-    {
-        Interceptor.RegisterEvent();
+    //public void Dispose() => Interceptor.DisposeEvent();
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    Interceptor.RegisterEvent();
 
-        await UpdateGridAsync();
-    }
+    //    await UpdateGridAsync();
+    //}
 
-    private async Task UpdateGridAsync()
-    {
-        //Gateways = await Http.GetFromJsonAsync<List<GatewayDto>>("api/gateway") ?? new List<GatewayDto>();
+    //private async Task UpdateGridAsync()
+    //{
+    //    //Gateways = await Http.GetFromJsonAsync<List<GatewayDto>>("api/gateway") ?? new List<GatewayDto>();
         
-        var response = await Http.GetAsync("api/gateway?Fields=name");
-        var a = await response.Content.ReadAsStringAsync();
-        var f = 33;
-        var c = await Http.GetFromJsonAsync<List<ExpandoObject>>("api/gateway") ?? new List<ExpandoObject>();
-        var b = await Http.GetFromJsonAsync<List<ExpandoObject>>("api/gateway") ?? new List<ExpandoObject>();
-    }
+    //    var response = await Http.GetAsync("api/gateway?Fields=name");
+    //    var a = await response.Content.ReadAsStringAsync();
+    //    var f = 33;
+    //    var c = await Http.GetFromJsonAsync<List<ExpandoObject>>("api/gateway") ?? new List<ExpandoObject>();
+    //    var b = await Http.GetFromJsonAsync<List<ExpandoObject>>("api/gateway") ?? new List<ExpandoObject>();
+    //}
 
-    private void OnCancelled()
-    {
-        dialogReference?.Close();
-    }
-    private async Task OnSuccessfullySaveAsync()
-    {
-        dialogReference?.Close();
-        await UpdateGridAsync();
-        StateHasChanged();
-    }
-    private async Task OnSuccessfullyDeletedAsync()
-    {
-        dialogReference?.Close();
-        await UpdateGridAsync();
-        StateHasChanged();
-    }
-    private void SuccessfullySave() => Task.FromResult(OnSuccessfullySaveAsync());
-    private void SuccessfullyDelete() => Task.FromResult(OnSuccessfullySaveAsync());
+    //private void OnCancelled()
+    //{
+    //    dialogReference?.Close();
+    //}
+    //private async Task OnSuccessfullySaveAsync()
+    //{
+    //    dialogReference?.Close();
+    //    await UpdateGridAsync();
+    //    StateHasChanged();
+    //}
+    //private async Task OnSuccessfullyDeletedAsync()
+    //{
+    //    dialogReference?.Close();
+    //    await UpdateGridAsync();
+    //    StateHasChanged();
+    //}
+    //private void SuccessfullySave() => Task.FromResult(OnSuccessfullySaveAsync());
+    //private void SuccessfullyDelete() => Task.FromResult(OnSuccessfullySaveAsync());
 
-    private DialogParameters SetParametersForShow()
-    {
-        var parameters = new DialogParameters();
-        parameters.Add("OnSuccessfullySaveAsync", () => SuccessfullySave());
-        parameters.Add("OnSuccessfullyDeletedAsync", () => SuccessfullyDelete());
-        parameters.Add("OnCancelled", () => OnCancelled());
-        return parameters;
-    }
-    private void ShowHideRelatedPeripherals(GatewayDto item)
-    {
-        item.ShowPeripherlsInGrid = !item.ShowPeripherlsInGrid;
-    }
+    //private DialogParameters SetParametersForShow()
+    //{
+    //    var parameters = new DialogParameters();
+    //    parameters.Add("OnSuccessfullySaveAsync", () => SuccessfullySave());
+    //    parameters.Add("OnSuccessfullyDeletedAsync", () => SuccessfullyDelete());
+    //    parameters.Add("OnCancelled", () => OnCancelled());
+    //    return parameters;
+    //}
+    //private void ShowHideRelatedPeripherals(GatewayDto item)
+    //{
+    //    item.ShowPeripherlsInGrid = !item.ShowPeripherlsInGrid;
+    //}
 
-    private async Task Show(GatewayDto pivot)
-    {
-        var item = await Http.GetFromJsonAsync<GatewayDto>($"/api/gateway/{pivot.Id}");
-        if (item == null)
-        {
-            Snackbar.Add(Localizer[Resource.message_ItemDoesNotExist], Severity.Warning);
-            await UpdateGridAsync();
-        }
-        else
-        {
-            var parameters = SetParametersForShow();
-            parameters.Add("item", item);
-            parameters.Add("ShowMode", true);
-            dialogReference = Dialog.Show<ShowGateway>("", parameters, dialogOptions);
-        }
-    }
-    private void Add()
-    {
-        var parameters = SetParametersForShow();
-        parameters.Add("item", new GatewayDto());
-        parameters.Add("AddMode", true);
-        dialogReference = Dialog.Show<ShowGateway>("", parameters, dialogOptions);
+    //private async Task Show(GatewayDto pivot)
+    //{
+    //    var item = await Http.GetFromJsonAsync<GatewayDto>($"/api/gateway/{pivot.Id}");
+    //    if (item == null)
+    //    {
+    //        Snackbar.Add(Localizer[Resource.message_ItemDoesNotExist], Severity.Warning);
+    //        await UpdateGridAsync();
+    //    }
+    //    else
+    //    {
+    //        var parameters = SetParametersForShow();
+    //        parameters.Add("item", item);
+    //        parameters.Add("ShowMode", true);
+    //        dialogReference = Dialog.Show<ShowGateway>("", parameters, dialogOptions);
+    //    }
+    //}
+    //private void Add()
+    //{
+    //    var parameters = SetParametersForShow();
+    //    parameters.Add("item", new GatewayDto());
+    //    parameters.Add("AddMode", true);
+    //    dialogReference = Dialog.Show<ShowGateway>("", parameters, dialogOptions);
 
-    }
-    private async Task Edit(GatewayDto pivot)
-    {
-        var item = await Http.GetFromJsonAsync<GatewayDto>($"/api/gateway/{pivot.Id}");
-        if (item == null)
-        {
-            Snackbar.Add(Localizer[Resource.message_ItemDoesNotExist], Severity.Warning);
-            await UpdateGridAsync();
-        }
-        else
-        {
-            var parameters = SetParametersForShow();
-            parameters.Add("item", item);
-            parameters.Add("EditMode", true);
-            dialogReference = Dialog.Show<ShowGateway>("", parameters, dialogOptions);
-        }
-    }
-    private async Task Delete(GatewayDto pivot)
-    {
-        var item = await Http.GetFromJsonAsync<GatewayDto>($"/api/gateway/{pivot.Id}");
-        if (item == null)
-        {
-            Snackbar.Add(Localizer[Resource.message_ItemDoesNotExist], Severity.Warning);
-            await UpdateGridAsync();
-        }
-        else
-        {
-            var parameters = SetParametersForShow();
-            parameters.Add("item", item);
-            parameters.Add("DeleteMode", true);
-            dialogReference = Dialog.Show<ShowGateway>("", parameters, dialogOptions);
-        }
-    }
+    //}
+    //private async Task Edit(GatewayDto pivot)
+    //{
+    //    var item = await Http.GetFromJsonAsync<GatewayDto>($"/api/gateway/{pivot.Id}");
+    //    if (item == null)
+    //    {
+    //        Snackbar.Add(Localizer[Resource.message_ItemDoesNotExist], Severity.Warning);
+    //        await UpdateGridAsync();
+    //    }
+    //    else
+    //    {
+    //        var parameters = SetParametersForShow();
+    //        parameters.Add("item", item);
+    //        parameters.Add("EditMode", true);
+    //        dialogReference = Dialog.Show<ShowGateway>("", parameters, dialogOptions);
+    //    }
+    //}
+    //private async Task Delete(GatewayDto pivot)
+    //{
+    //    var item = await Http.GetFromJsonAsync<GatewayDto>($"/api/gateway/{pivot.Id}");
+    //    if (item == null)
+    //    {
+    //        Snackbar.Add(Localizer[Resource.message_ItemDoesNotExist], Severity.Warning);
+    //        await UpdateGridAsync();
+    //    }
+    //    else
+    //    {
+    //        var parameters = SetParametersForShow();
+    //        parameters.Add("item", item);
+    //        parameters.Add("DeleteMode", true);
+    //        dialogReference = Dialog.Show<ShowGateway>("", parameters, dialogOptions);
+    //    }
+    //}
 
-    private bool FilterFunc1(GatewayDto item) => FilterFunc(item, searchString);
+    //private bool FilterFunc1(GatewayDto item) => FilterFunc(item, searchString);
 
-    private bool FilterFunc(GatewayDto item, string searchString)
-    {
-        if (string.IsNullOrWhiteSpace(searchString) || string.IsNullOrEmpty(searchString))
-            return true;
-        if (item.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if ((item.Ipv4Address).Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        return false;
-    }
+    //private bool FilterFunc(GatewayDto item, string searchString)
+    //{
+    //    if (string.IsNullOrWhiteSpace(searchString) || string.IsNullOrEmpty(searchString))
+    //        return true;
+    //    if (item.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+    //        return true;
+    //    if ((item.Ipv4Address).Contains(searchString, StringComparison.OrdinalIgnoreCase))
+    //        return true;
+    //    return false;
+    //}
 }

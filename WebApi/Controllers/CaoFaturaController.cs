@@ -12,10 +12,9 @@ namespace WebApi.Controllers
     
     [ApiController]
     [Route("api/gateway")]
-    public class CaoFaturaDtoController : ApiBaseController<CaoFaturaDto>
+    public class CaoFaturaController : ApiBaseController<CaoFaturaDto>
     {
-        
-        public CaoFaturaDtoController(ICaoFaturaAppService appService, ILogger<ApiBaseController<CaoFaturaDto>> logger, IPropertyCheckerService propertyCheckerService) 
+        public CaoFaturaController(ICaoFaturaAppService appService, ILogger<ApiBaseController<CaoFaturaDto>> logger, IPropertyCheckerService propertyCheckerService) 
             : base(appService, logger, propertyCheckerService)
         {
             

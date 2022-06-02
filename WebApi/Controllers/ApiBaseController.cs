@@ -77,14 +77,14 @@ namespace WebApi.Controllers
 
         [HttpGet("{id}")]
         [HttpHead("{id}")]
-        public virtual async Task<ActionResult<TEntityDto>> Get(Guid? id, [FromQuery] QueryStringParameters queryStringParameters)
+        public virtual async Task<ActionResult<TEntityDto>> Get(string id, [FromQuery] QueryStringParameters queryStringParameters)
         {
             if (!_propertyCheckerService.TypeHasProperties<TEntityDto>(queryStringParameters.Fields))
                 return BadRequest();
-            if (id == null || id.Value == Guid.Empty)
+            if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))
                 return BadRequest();
             var includes = queryStringParameters.Includes.Split(',').ToList();
-            var item = await AppService.GetAsync(id.Value, includes);
+            var item = await AppService.GetAsync(id, includes);
             if (item == null)
                 return NotFound();
             return Ok(item.ShapeDataOnObject(queryStringParameters.Fields ?? string.Empty));
@@ -100,22 +100,22 @@ namespace WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public virtual async Task<IActionResult> Put(Guid? id, TEntityDto item)
+        public virtual async Task<IActionResult> Put(string id, TEntityDto item)
         {
-            if (id == null || id == Guid.Empty)
+            if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))                
                 return BadRequest();
-            var itemTarget = await AppService.GetAsync(id.Value);
+            var itemTarget = await AppService.GetAsync(id);
             if (itemTarget == null)
                 return NotFound();
             var result = await AppService.UpdateAsync(item);
             return NoContent();
         }
         [HttpPatch("{id}")]
-        public virtual async Task<IActionResult> Patch(Guid? id, JsonPatchDocument<TEntityDto> patchDocument)
+        public virtual async Task<IActionResult> Patch(string id, JsonPatchDocument<TEntityDto> patchDocument)
         {
-            if (id == null || id == Guid.Empty)
+            if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))
                 return BadRequest();
-            var item = await AppService.GetAsync(id.Value);
+            var item = await AppService.GetAsync(id);
             if (item == null)
                 return NotFound();            
             //TODO: Check client errors vs server error response
@@ -126,14 +126,14 @@ namespace WebApi.Controllers
             return NoContent();
         }
         [HttpDelete("{id}")]
-        public virtual async Task<IActionResult> Delete(Guid? id)
+        public virtual async Task<IActionResult> Delete(string id)
         {
-            if (id == null || id.Value == Guid.Empty)
+            if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))
                 return NotFound();
-            var item = await AppService.GetAsync(id.Value);
+            var item = await AppService.GetAsync(id);
             if (item==null)
                 return NotFound();
-            var result = await AppService.RemoveAsync(id.Value);
+            var result = await AppService.RemoveAsync(id);
             return NoContent();
         }
 

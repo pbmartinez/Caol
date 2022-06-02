@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
 {
-    [Route("api/brand")]
+    [Route("api/caocliente")]
     [ApiController]
     public class CaoClienteController : ApiBaseController<CaoClienteDto>
     {

@@ -25,7 +25,7 @@
 
 
 <br />
-<MudCard Elevation="2">
+@*<MudCard Elevation="2">
     @if (Peripherals == null)
     {
         <SkeletonGrid />
@@ -74,132 +74,132 @@
             </PagerContent>
         </MudTable>
     }
-</MudCard>
+</MudCard>*@
 
 
 
 @code {
-    [Parameter]
-    public Guid? GatewayId { get; set; }
-    [Parameter]
+    //[Parameter]
+    //public Guid? GatewayId { get; set; }
+    //[Parameter]
     public bool IsComponent { get; set; }
-    private List<PeripheralDto>? Peripherals ;
-    private IDialogReference? dialogReference;
-    private string searchString = "";
-    private DialogOptions dialogOptions = new DialogOptions { CloseButton = true};
-    public void Dispose() => Interceptor.DisposeEvent();
-    protected override async Task OnInitializedAsync()
-    { 
-        Interceptor.RegisterEvent();
-        await UpdateGridAsync();
-    }
+    //private List<PeripheralDto>? Peripherals ;
+    //private IDialogReference? dialogReference;
+    //private string searchString = "";
+    //private DialogOptions dialogOptions = new DialogOptions { CloseButton = true};
+    //public void Dispose() => Interceptor.DisposeEvent();
+    //protected override async Task OnInitializedAsync()
+    //{ 
+    //    Interceptor.RegisterEvent();
+    //    await UpdateGridAsync();
+    //}
 
-    private async Task UpdateGridAsync()
-    {
-        if(GatewayId == null || GatewayId == Guid.Empty)
-            Peripherals = await Http.GetFromJsonAsync<List<PeripheralDto>>("api/peripheral") ?? new List<PeripheralDto>();        
-        else
-            Peripherals = await Http.GetFromJsonAsync<List<PeripheralDto>>($"api/gateway/{GatewayId.Value}/peripheral") ?? new List<PeripheralDto>();        
-    }
+    //private async Task UpdateGridAsync()
+    //{
+    //    if(GatewayId == null || GatewayId == Guid.Empty)
+    //        Peripherals = await Http.GetFromJsonAsync<List<PeripheralDto>>("api/peripheral") ?? new List<PeripheralDto>();        
+    //    else
+    //        Peripherals = await Http.GetFromJsonAsync<List<PeripheralDto>>($"api/gateway/{GatewayId.Value}/peripheral") ?? new List<PeripheralDto>();        
+    //}
 
-    private void OnCancelled()
-    {
-        dialogReference?.Close();
-    }
-    private async Task OnSuccessfullySaveAsync()
-    {
-        dialogReference?.Close();
-        await UpdateGridAsync();
-        StateHasChanged();
-    }
-    private async Task OnSuccessfullyDeletedAsync()
-    {
-        dialogReference?.Close();
-        await UpdateGridAsync();
-        StateHasChanged();
-    }
-    private void SuccessfullySave() => Task.FromResult( OnSuccessfullySaveAsync());
-    private void SuccessfullyDelete() => Task.FromResult(OnSuccessfullySaveAsync());
+    //private void OnCancelled()
+    //{
+    //    dialogReference?.Close();
+    //}
+    //private async Task OnSuccessfullySaveAsync()
+    //{
+    //    dialogReference?.Close();
+    //    await UpdateGridAsync();
+    //    StateHasChanged();
+    //}
+    //private async Task OnSuccessfullyDeletedAsync()
+    //{
+    //    dialogReference?.Close();
+    //    await UpdateGridAsync();
+    //    StateHasChanged();
+    //}
+    //private void SuccessfullySave() => Task.FromResult( OnSuccessfullySaveAsync());
+    //private void SuccessfullyDelete() => Task.FromResult(OnSuccessfullySaveAsync());
 
-    private DialogParameters SetParametersForShow()
-    {
-        var parameters = new DialogParameters();
-        parameters.Add("OnSuccessfullySaveAsync", () => SuccessfullySave());
-        parameters.Add("OnSuccessfullyDeletedAsync", () => SuccessfullyDelete());
-        parameters.Add("OnCancelled", () => OnCancelled());
-        return parameters;
-    }    
-    private async Task Show(PeripheralDto pivot) 
-    {
-        var item = await Http.GetFromJsonAsync<PeripheralDto>($"/api/peripheral/{pivot.Id}");
-        if (item == null)
-        {
-            Snackbar.Add(Localizer[Resource.message_ItemDoesNotExist], Severity.Warning);
-            await UpdateGridAsync();
-        }
-        else
-        {
-            var parameters = SetParametersForShow();
-            parameters.Add("item", item);
-            parameters.Add("ShowMode", true);
-            dialogReference = Dialog.Show<ShowPeripheral>("",parameters, dialogOptions);
-        }
-    }
-    private void Add()
-    {
-        var parameters = SetParametersForShow();
-        parameters.Add("item", new PeripheralDto());
-        parameters.Add("AddMode", true);
-        dialogReference = Dialog.Show<ShowPeripheral>("", parameters, dialogOptions);
+    //private DialogParameters SetParametersForShow()
+    //{
+    //    var parameters = new DialogParameters();
+    //    parameters.Add("OnSuccessfullySaveAsync", () => SuccessfullySave());
+    //    parameters.Add("OnSuccessfullyDeletedAsync", () => SuccessfullyDelete());
+    //    parameters.Add("OnCancelled", () => OnCancelled());
+    //    return parameters;
+    //}    
+    //private async Task Show(PeripheralDto pivot) 
+    //{
+    //    var item = await Http.GetFromJsonAsync<PeripheralDto>($"/api/peripheral/{pivot.Id}");
+    //    if (item == null)
+    //    {
+    //        Snackbar.Add(Localizer[Resource.message_ItemDoesNotExist], Severity.Warning);
+    //        await UpdateGridAsync();
+    //    }
+    //    else
+    //    {
+    //        var parameters = SetParametersForShow();
+    //        parameters.Add("item", item);
+    //        parameters.Add("ShowMode", true);
+    //        dialogReference = Dialog.Show<ShowPeripheral>("",parameters, dialogOptions);
+    //    }
+    //}
+    //private void Add()
+    //{
+    //    var parameters = SetParametersForShow();
+    //    parameters.Add("item", new PeripheralDto());
+    //    parameters.Add("AddMode", true);
+    //    dialogReference = Dialog.Show<ShowPeripheral>("", parameters, dialogOptions);
         
-    }
-    private async Task Edit(PeripheralDto pivot)
-    {
-        var item = await Http.GetFromJsonAsync<PeripheralDto>($"/api/peripheral/{pivot.Id}");
-        if (item == null)
-        {
-            Snackbar.Add(Localizer[Resource.message_ItemDoesNotExist], Severity.Warning);
-            await UpdateGridAsync();
-        }
-        else
-        {            
-            var parameters = SetParametersForShow();
-            parameters.Add("item", item);
-            parameters.Add("EditMode", true);
-            dialogReference = Dialog.Show<ShowPeripheral>("", parameters, dialogOptions);        
-        }
-    }
-    private async Task Delete(PeripheralDto pivot)
-    {
-        var item = await Http.GetFromJsonAsync<PeripheralDto>($"/api/peripheral/{pivot.Id}");
-        if (item == null)
-        {
-            Snackbar.Add(Localizer[Resource.message_ItemDoesNotExist], Severity.Warning);
-            await UpdateGridAsync();
-        }
-        else
-        {
-            var parameters = SetParametersForShow();
-            parameters.Add("item", item);
-            parameters.Add("DeleteMode", true);
-            dialogReference = Dialog.Show<ShowPeripheral>("",parameters,dialogOptions);            
-        }
-    }
+    //}
+    //private async Task Edit(PeripheralDto pivot)
+    //{
+    //    var item = await Http.GetFromJsonAsync<PeripheralDto>($"/api/peripheral/{pivot.Id}");
+    //    if (item == null)
+    //    {
+    //        Snackbar.Add(Localizer[Resource.message_ItemDoesNotExist], Severity.Warning);
+    //        await UpdateGridAsync();
+    //    }
+    //    else
+    //    {            
+    //        var parameters = SetParametersForShow();
+    //        parameters.Add("item", item);
+    //        parameters.Add("EditMode", true);
+    //        dialogReference = Dialog.Show<ShowPeripheral>("", parameters, dialogOptions);        
+    //    }
+    //}
+    //private async Task Delete(PeripheralDto pivot)
+    //{
+    //    var item = await Http.GetFromJsonAsync<PeripheralDto>($"/api/peripheral/{pivot.Id}");
+    //    if (item == null)
+    //    {
+    //        Snackbar.Add(Localizer[Resource.message_ItemDoesNotExist], Severity.Warning);
+    //        await UpdateGridAsync();
+    //    }
+    //    else
+    //    {
+    //        var parameters = SetParametersForShow();
+    //        parameters.Add("item", item);
+    //        parameters.Add("DeleteMode", true);
+    //        dialogReference = Dialog.Show<ShowPeripheral>("",parameters,dialogOptions);            
+    //    }
+    //}
 
-    private bool FilterFunc1(PeripheralDto item) => FilterFunc(item, searchString);
+    //private bool FilterFunc1(PeripheralDto item) => FilterFunc(item, searchString);
 
-    private bool FilterFunc(PeripheralDto item, string searchString)
-    {
-        if (string.IsNullOrWhiteSpace(searchString) || string.IsNullOrEmpty(searchString))
-            return true;
-        if (item.Vendor.Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if ((item.CreatedDate.ToShortDateString()).Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if ((item.Status.ToString()).Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if ((item.Gateway.Name).Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        return false;
-    }
+    //private bool FilterFunc(PeripheralDto item, string searchString)
+    //{
+    //    if (string.IsNullOrWhiteSpace(searchString) || string.IsNullOrEmpty(searchString))
+    //        return true;
+    //    if (item.Vendor.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+    //        return true;
+    //    if ((item.CreatedDate.ToShortDateString()).Contains(searchString, StringComparison.OrdinalIgnoreCase))
+    //        return true;
+    //    if ((item.Status.ToString()).Contains(searchString, StringComparison.OrdinalIgnoreCase))
+    //        return true;
+    //    if ((item.Gateway.Name).Contains(searchString, StringComparison.OrdinalIgnoreCase))
+    //        return true;
+    //    return false;
+    //}
 }

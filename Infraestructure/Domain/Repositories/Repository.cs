@@ -50,7 +50,7 @@ namespace Infraestructure.Domain.Repositories
         }
 
 
-        public TEntity Get(Guid id, List<string>? includes = null)
+        public TEntity Get(string id, List<string>? includes = null)
         {
             var item = _unitOfWork.GetQueryable(includes,(Expression<Func<TEntity,bool>>) (a => a.Id == id)).FirstOrDefault();
             return item;
@@ -62,7 +62,7 @@ namespace Infraestructure.Domain.Repositories
             return (IQueryable<TEntity>)await Task.FromResult(items);
         }
 
-        public async Task<TEntity> GetAsync(Guid id, List<string>? includes = null)
+        public async Task<TEntity> GetAsync(string id, List<string>? includes = null)
         {
             var i = includes == null ? new List<string>() : includes.ToList();
             var item = await _unitOfWork.GetQueryable(i, (Expression<Func<TEntity, bool>>)(a => a.Id == id)).FirstOrDefaultAsync();

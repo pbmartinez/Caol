@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 
 namespace WebApi.Controllers
 {
-
+    [Route("api/caoo")]
     [ApiController]
     public class CaoOController : ApiBaseController<CaoODto>
     {    

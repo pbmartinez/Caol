@@ -6,11 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
 {
-    [Route("api/CaoSistema")]
+    [Route("api/caosistema")]
     [ApiController]
     public class CaoSistemaController : ApiBaseController<CaoSistemaDto>
     {
-        public CaoSistemaController(ICaoClienteAppService appService, ILogger<ApiBaseController<CaoSistemaDto>> logger, IPropertyCheckerService propertyCheckerService) : base(appService, logger, propertyCheckerService)
+        public CaoSistemaController(ICaoSistemaAppService appService, ILogger<ApiBaseController<CaoSistemaDto>> logger, IPropertyCheckerService propertyCheckerService) : base(appService, logger, propertyCheckerService)
         {
         }
     }
