@@ -1,11 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities
 {
     public partial class CaoCliente : Entity
     {
-        public override string Id => CoCliente + "";
+        //[Column("co_cliente")]
+        ////[NotMapped]
+        //public override string Id
+        //{
+        //    get;set;
+        //    //get => CoCliente + "";
+        //    //set => CoCliente = uint.Parse(value);
+        //}
 
         public uint CoCliente { get; set; }
         public string? NoRazao { get; set; }

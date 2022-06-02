@@ -71,10 +71,10 @@ namespace Infraestructure.Application.AppServices
         }
 
 
-        public CaoFaturaDto Get(string id, List<string>? includes = null)
-        {
-            return _mapper.Map<CaoFaturaDto>(_CaoFaturaRepository.Get(id, includes));
-        }
+        //public CaoFaturaDto Get(string id, List<string>? includes = null)
+        //{
+        //    return _mapper.Map<CaoFaturaDto>(_CaoFaturaRepository.Get(id, includes));
+        //}
 
         public async Task<List<CaoFaturaDto>> GetAllAsync(List<string>? includes = null, Dictionary<string, bool>? order = null)
         {
@@ -84,32 +84,32 @@ namespace Infraestructure.Application.AppServices
         }
 
 
-        public async Task<CaoFaturaDto> GetAsync(string id, List<string>? includes = null)
-        {
-            return _mapper.Map<CaoFaturaDto>(await _CaoFaturaRepository.GetAsync(id, includes));
-        }
+        //public async Task<CaoFaturaDto> GetAsync(string id, List<string>? includes = null)
+        //{
+        //    return _mapper.Map<CaoFaturaDto>(await _CaoFaturaRepository.GetAsync(id, includes));
+        //}
 
-        public async Task<bool> RemoveAsync(string id)
-        {
-            var item = await _CaoFaturaRepository.GetAsync(id);
-            await _CaoFaturaRepository.DeleteAsync(item);
-            var commited = await _CaoFaturaRepository.UnitOfWork.CommitAsync();
+        //public async Task<bool> RemoveAsync(string id)
+        //{
+        //    var item = await _CaoFaturaRepository.GetAsync(id);
+        //    await _CaoFaturaRepository.DeleteAsync(item);
+        //    var commited = await _CaoFaturaRepository.UnitOfWork.CommitAsync();
 
-            return commited > 0;
-        }
+        //    return commited > 0;
+        //}
 
-        public async Task<bool> UpdateAsync(CaoFaturaDto item)
-        {
-            int commited;
-            if (_entityValidator.IsValid(item))
-            {
-                await _CaoFaturaRepository.UpdateAsync(_mapper.Map<CaoFatura>(item));
-                commited = await _CaoFaturaRepository.UnitOfWork.CommitAsync();
-            }
-            else
-                throw new ApplicationValidationErrorsException(_entityValidator.GetInvalidMessages(item));
-            return commited > 0;
-        }
+        //public async Task<bool> UpdateAsync(CaoFaturaDto item)
+        //{
+        //    int commited;
+        //    if (_entityValidator.IsValid(item))
+        //    {
+        //        await _CaoFaturaRepository.UpdateAsync(_mapper.Map<CaoFatura>(item));
+        //        commited = await _CaoFaturaRepository.UnitOfWork.CommitAsync();
+        //    }
+        //    else
+        //        throw new ApplicationValidationErrorsException(_entityValidator.GetInvalidMessages(item));
+        //    return commited > 0;
+        //}
 
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
 {
-    [Route("api/caosistema")]
+    [Route("api/sistemas")]
     [ApiController]
     public class CaoSistemaController : ApiBaseController<CaoSistemaDto>
     {

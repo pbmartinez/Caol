@@ -11,7 +11,7 @@ namespace WebApi.Controllers
 {
     
     [ApiController]
-    [Route("api/gateway")]
+    [Route("api/facturas")]
     public class CaoFaturaController : ApiBaseController<CaoFaturaDto>
     {
         public CaoFaturaController(ICaoFaturaAppService appService, ILogger<ApiBaseController<CaoFaturaDto>> logger, IPropertyCheckerService propertyCheckerService) 

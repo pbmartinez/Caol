@@ -70,10 +70,10 @@ namespace Infraestructure.Application.AppServices
         }
 
         
-        public CaoSalarioDto Get(string id, List<string>? includes = null)
-        {
-            return _mapper.Map<CaoSalarioDto>(_CaoSalarioRepository.Get(id, includes));
-        }
+        //public CaoSalarioDto Get(string id, List<string>? includes = null)
+        //{
+        //    return _mapper.Map<CaoSalarioDto>(_CaoSalarioRepository.Get(id, includes));
+        //}
 
         public async Task<List<CaoSalarioDto>> GetAllAsync(List<string>? includes = null, Dictionary<string, bool>? order = null)
         {
@@ -82,32 +82,32 @@ namespace Infraestructure.Application.AppServices
             return dtoItems;
         }
 
-        public async Task<CaoSalarioDto> GetAsync(string id, List<string>? includes = null)
-        {
-            return _mapper.Map<CaoSalarioDto>(await _CaoSalarioRepository.GetAsync(id, includes));
-        }
+        //public async Task<CaoSalarioDto> GetAsync(string id, List<string>? includes = null)
+        //{
+        //    return _mapper.Map<CaoSalarioDto>(await _CaoSalarioRepository.GetAsync(id, includes));
+        //}
 
-        public async Task<bool> RemoveAsync(string id)
-        {
-            var item = await _CaoSalarioRepository.GetAsync(id);
-            await _CaoSalarioRepository.DeleteAsync(item);
-            var commited = await _CaoSalarioRepository.UnitOfWork.CommitAsync();
+        //public async Task<bool> RemoveAsync(string id)
+        //{
+        //    var item = await _CaoSalarioRepository.GetAsync(id);
+        //    await _CaoSalarioRepository.DeleteAsync(item);
+        //    var commited = await _CaoSalarioRepository.UnitOfWork.CommitAsync();
 
-            return commited > 0;
-        }
+        //    return commited > 0;
+        //}
 
-        public async Task<bool> UpdateAsync(CaoSalarioDto item)
-        {
-            int commited;
-            if (_entityValidator.IsValid(item))
-            {
-                await _CaoSalarioRepository.UpdateAsync(_mapper.Map<CaoSalario>(item));
-                commited = await _CaoSalarioRepository.UnitOfWork.CommitAsync();
-            }
-            else
-                throw new ApplicationValidationErrorsException(_entityValidator.GetInvalidMessages(item));
-            return commited > 0;
-        }
+        //public async Task<bool> UpdateAsync(CaoSalarioDto item)
+        //{
+        //    int commited;
+        //    if (_entityValidator.IsValid(item))
+        //    {
+        //        await _CaoSalarioRepository.UpdateAsync(_mapper.Map<CaoSalario>(item));
+        //        commited = await _CaoSalarioRepository.UnitOfWork.CommitAsync();
+        //    }
+        //    else
+        //        throw new ApplicationValidationErrorsException(_entityValidator.GetInvalidMessages(item));
+        //    return commited > 0;
+        //}
 
     }
 }

@@ -70,10 +70,10 @@ namespace Infraestructure.Application.AppServices
         }
 
         
-        public CaoUsuarioDto Get(string id, List<string>? includes = null)
-        {
-            return _mapper.Map<CaoUsuarioDto>(_CaoUsuarioRepository.Get(id, includes));
-        }
+        //public CaoUsuarioDto Get(string id, List<string>? includes = null)
+        //{
+        //    return _mapper.Map<CaoUsuarioDto>(_CaoUsuarioRepository.Get(id, includes));
+        //}
 
         public async Task<List<CaoUsuarioDto>> GetAllAsync(List<string>? includes = null, Dictionary<string, bool>? order = null)
         {
@@ -82,32 +82,32 @@ namespace Infraestructure.Application.AppServices
             return dtoItems;
         }
 
-        public async Task<CaoUsuarioDto> GetAsync(string id, List<string>? includes = null)
-        {
-            return _mapper.Map<CaoUsuarioDto>(await _CaoUsuarioRepository.GetAsync(id, includes));
-        }
+        //public async Task<CaoUsuarioDto> GetAsync(string id, List<string>? includes = null)
+        //{
+        //    return _mapper.Map<CaoUsuarioDto>(await _CaoUsuarioRepository.GetAsync(id, includes));
+        //}
 
-        public async Task<bool> RemoveAsync(string id)
-        {
-            var item = await _CaoUsuarioRepository.GetAsync(id);
-            await _CaoUsuarioRepository.DeleteAsync(item);
-            var commited = await _CaoUsuarioRepository.UnitOfWork.CommitAsync();
+        //public async Task<bool> RemoveAsync(string id)
+        //{
+        //    var item = await _CaoUsuarioRepository.GetAsync(id);
+        //    await _CaoUsuarioRepository.DeleteAsync(item);
+        //    var commited = await _CaoUsuarioRepository.UnitOfWork.CommitAsync();
 
-            return commited > 0;
-        }
+        //    return commited > 0;
+        //}
 
-        public async Task<bool> UpdateAsync(CaoUsuarioDto item)
-        {
-            int commited;
-            if (_entityValidator.IsValid(item))
-            {
-                await _CaoUsuarioRepository.UpdateAsync(_mapper.Map<CaoUsuario>(item));
-                commited = await _CaoUsuarioRepository.UnitOfWork.CommitAsync();
-            }
-            else
-                throw new ApplicationValidationErrorsException(_entityValidator.GetInvalidMessages(item));
-            return commited > 0;
-        }
+        //public async Task<bool> UpdateAsync(CaoUsuarioDto item)
+        //{
+        //    int commited;
+        //    if (_entityValidator.IsValid(item))
+        //    {
+        //        await _CaoUsuarioRepository.UpdateAsync(_mapper.Map<CaoUsuario>(item));
+        //        commited = await _CaoUsuarioRepository.UnitOfWork.CommitAsync();
+        //    }
+        //    else
+        //        throw new ApplicationValidationErrorsException(_entityValidator.GetInvalidMessages(item));
+        //    return commited > 0;
+        //}
 
     }
 }

@@ -16,7 +16,7 @@ namespace Infraestructure.Domain.UnitOfWork
     {
         public UnitOfWorkContainer(DbContextOptions<UnitOfWorkContainer> options) : base(options)
         {
-
+            
         }
 
         public async Task<int> CommitAsync()
@@ -78,6 +78,9 @@ namespace Infraestructure.Domain.UnitOfWork
 
             return items;
         }
+
+
+        
 
         #region OnModelCreating
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -523,6 +526,7 @@ namespace Infraestructure.Domain.UnitOfWork
 
                 entity.HasCharSet("latin1")
                     .UseCollation("latin1_swedish_ci");
+
 
                 entity.Property(e => e.CoCliente).HasColumnName("co_cliente");
 

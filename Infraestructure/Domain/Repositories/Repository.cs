@@ -34,12 +34,12 @@ namespace Infraestructure.Domain.Repositories
 
         
 
-        public async Task UpdateAsync(TEntity item)
-        {
-            var a = await GetAsync(item.Id);
-            _unitOfWork.GetEntry(a).CurrentValues.SetValues(item);
-            await Task.CompletedTask;
-        }
+        //public async Task UpdateAsync(TEntity item)
+        //{
+        //    var a = await GetAsync(item.Id);
+        //    _unitOfWork.GetEntry(a).CurrentValues.SetValues(item);
+        //    await Task.CompletedTask;
+        //}
 
 
 
@@ -50,11 +50,11 @@ namespace Infraestructure.Domain.Repositories
         }
 
 
-        public TEntity Get(string id, List<string>? includes = null)
-        {
-            var item = _unitOfWork.GetQueryable(includes,(Expression<Func<TEntity,bool>>) (a => a.Id == id)).FirstOrDefault();
-            return item;
-        }
+        //public TEntity Get(string id, List<string>? includes = null)
+        //{
+        //    var item = _unitOfWork.GetQueryable(includes,(Expression<Func<TEntity,bool>>) (a => a.Id == id)).FirstOrDefault();
+        //    return item;
+        //}
 
         public async Task<IQueryable<TEntity>> GetAllAsync(List<string>? includes = null, Dictionary<string, bool>? order = null)
         {
@@ -62,12 +62,15 @@ namespace Infraestructure.Domain.Repositories
             return (IQueryable<TEntity>)await Task.FromResult(items);
         }
 
-        public async Task<TEntity> GetAsync(string id, List<string>? includes = null)
-        {
-            var i = includes == null ? new List<string>() : includes.ToList();
-            var item = await _unitOfWork.GetQueryable(i, (Expression<Func<TEntity, bool>>)(a => a.Id == id)).FirstOrDefaultAsync();
-            return item;
-        }
+        //public async Task<TEntity> GetAsync(string id, List<string>? includes = null)
+        //{
+        //    var i = includes == null ? new List<string>() : includes.ToList();
+        //    var info = typeof(TEntity);
+        //    var attr = typeof(TEntity).Attributes;
+            
+        //    var item = await _unitOfWork.GetQueryable(i, (Expression<Func<TEntity, bool>>)(a => a.Id == id)).FirstOrDefaultAsync();
+        //    return item;
+        //}
 
         public async Task<TEntity> FindOneByExpressionAsync(Expression<Func<TEntity, bool>>? expression, List<string>? includes)
         {

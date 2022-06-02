@@ -5,7 +5,7 @@ namespace Domain.Entities
 {
     public partial class CaoSistema : Entity
     {
-        public override string Id => CoSistema+"";
+        //public override string Id => CoSistema+"";
 
         public int CoSistema { get; set; }
         public uint? CoCliente { get; set; }

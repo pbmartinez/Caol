@@ -70,10 +70,10 @@ namespace Infraestructure.Application.AppServices
         }
 
         
-        public PermissaoSistemaDto Get(string id, List<string>? includes = null)
-        {
-            return _mapper.Map<PermissaoSistemaDto>(_PermissaoSistemaRepository.Get(id, includes));
-        }
+        //public PermissaoSistemaDto Get(string id, List<string>? includes = null)
+        //{
+        //    return _mapper.Map<PermissaoSistemaDto>(_PermissaoSistemaRepository.Get(id, includes));
+        //}
 
         public async Task<List<PermissaoSistemaDto>> GetAllAsync(List<string>? includes = null, Dictionary<string, bool>? order = null)
         {
@@ -82,32 +82,32 @@ namespace Infraestructure.Application.AppServices
             return dtoItems;
         }
 
-        public async Task<PermissaoSistemaDto> GetAsync(string id, List<string>? includes = null)
-        {
-            return _mapper.Map<PermissaoSistemaDto>(await _PermissaoSistemaRepository.GetAsync(id, includes));
-        }
+        //public async Task<PermissaoSistemaDto> GetAsync(string id, List<string>? includes = null)
+        //{
+        //    return _mapper.Map<PermissaoSistemaDto>(await _PermissaoSistemaRepository.GetAsync(id, includes));
+        //}
 
-        public async Task<bool> RemoveAsync(string id)
-        {
-            var item = await _PermissaoSistemaRepository.GetAsync(id);
-            await _PermissaoSistemaRepository.DeleteAsync(item);
-            var commited = await _PermissaoSistemaRepository.UnitOfWork.CommitAsync();
+        //public async Task<bool> RemoveAsync(string id)
+        //{
+        //    var item = await _PermissaoSistemaRepository.GetAsync(id);
+        //    await _PermissaoSistemaRepository.DeleteAsync(item);
+        //    var commited = await _PermissaoSistemaRepository.UnitOfWork.CommitAsync();
 
-            return commited > 0;
-        }
+        //    return commited > 0;
+        //}
 
-        public async Task<bool> UpdateAsync(PermissaoSistemaDto item)
-        {
-            int commited;
-            if (_entityValidator.IsValid(item))
-            {
-                await _PermissaoSistemaRepository.UpdateAsync(_mapper.Map<PermissaoSistema>(item));
-                commited = await _PermissaoSistemaRepository.UnitOfWork.CommitAsync();
-            }
-            else
-                throw new ApplicationValidationErrorsException(_entityValidator.GetInvalidMessages(item));
-            return commited > 0;
-        }
+        //public async Task<bool> UpdateAsync(PermissaoSistemaDto item)
+        //{
+        //    int commited;
+        //    if (_entityValidator.IsValid(item))
+        //    {
+        //        await _PermissaoSistemaRepository.UpdateAsync(_mapper.Map<PermissaoSistema>(item));
+        //        commited = await _PermissaoSistemaRepository.UnitOfWork.CommitAsync();
+        //    }
+        //    else
+        //        throw new ApplicationValidationErrorsException(_entityValidator.GetInvalidMessages(item));
+        //    return commited > 0;
+        //}
 
     }
 }
