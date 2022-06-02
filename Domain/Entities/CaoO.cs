@@ -10,6 +10,9 @@ namespace Domain.Entities
             CaoHistOcorrenciasOs = new HashSet<CaoHistOcorrenciasO>();
         }
 
+        public override string Id => CoOs + "";
+
+
         public int CoOs { get; set; }
         public int? NuOs { get; set; }
         public int? CoSistema { get; set; }

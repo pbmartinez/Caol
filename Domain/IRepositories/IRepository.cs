@@ -14,9 +14,9 @@ namespace Domain.IRepositories
     public interface IRepository<TEntity> where TEntity : Entity
     {
         IUnitOfWork UnitOfWork { get; }
-        TEntity Get(Guid id, List<string> includes = null);
+        TEntity Get(string id, List<string> includes = null);
         Task<IQueryable<TEntity>> GetAllAsync(List<string> includes = null, Dictionary<string, bool> order = null);
-        Task<TEntity> GetAsync(Guid id, List<string> includes = null);
+        Task<TEntity> GetAsync(string id, List<string> includes = null);
         Task AddAsync(TEntity item);
         Task UpdateAsync(TEntity item);
         Task DeleteAsync(TEntity item);

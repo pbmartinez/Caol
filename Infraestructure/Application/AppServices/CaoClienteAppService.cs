@@ -70,7 +70,7 @@ namespace Infraestructure.Application.AppServices
         }
 
         
-        public CaoClienteDto Get(Guid id, List<string>? includes = null)
+        public CaoClienteDto Get(string id, List<string>? includes = null)
         {
             return _mapper.Map<CaoClienteDto>(_CaoClienteRepository.Get(id, includes));
         }
@@ -82,12 +82,12 @@ namespace Infraestructure.Application.AppServices
             return dtoItems;
         }
 
-        public async Task<CaoClienteDto> GetAsync(Guid id, List<string>? includes = null)
+        public async Task<CaoClienteDto> GetAsync(string id, List<string>? includes = null)
         {
             return _mapper.Map<CaoClienteDto>(await _CaoClienteRepository.GetAsync(id, includes));
         }
 
-        public async Task<bool> RemoveAsync(Guid id)
+        public async Task<bool> RemoveAsync(string id)
         {
             var item = await _CaoClienteRepository.GetAsync(id);
             await _CaoClienteRepository.DeleteAsync(item);

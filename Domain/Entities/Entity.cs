@@ -7,18 +7,19 @@ namespace Domain.Entities
 {
     public class Entity
     {
-        //[Key]
-        //public Guid Id { get; set; }
+        public virtual string Id { get; set; }
 
 
 
-        //public bool IsTransient => Id == Guid.Empty;
+        public bool IsTransient => string.IsNullOrEmpty(Id) || string.IsNullOrWhiteSpace(Id) || Id == "0";
 
-        //public void GenerateIdentity()
-        //{
-        //    if(IsTransient)
-        //        Id = Guid.NewGuid();
-        //}
+
+
+        public void GenerateIdentity()
+        {
+            //if (IsTransient)
+            //    Id = Guid.NewGuid();
+        }
 
     }
 }

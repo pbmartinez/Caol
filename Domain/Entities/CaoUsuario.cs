@@ -12,6 +12,8 @@ namespace Domain.Entities
             CaoPontosConhecimentos = new HashSet<CaoPontosConhecimento>();
         }
 
+        public override string Id => CoUsuario;
+
         public string CoUsuario { get; set; } = null!;
         public string NoUsuario { get; set; } = null!;
         public string DsSenha { get; set; } = null!;
