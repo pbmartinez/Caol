@@ -10,5 +10,7 @@ namespace Application.Dtos
         public DateOnly DtAlteracao { get; set; }
         public float BrutSalario { get; set; }
         public float LiqSalario { get; set; }
+
+        public virtual CaoUsuarioDto CaoUsuario { get; set; }
     }
 }

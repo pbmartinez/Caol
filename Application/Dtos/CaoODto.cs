@@ -36,6 +36,11 @@ namespace Application.Dtos
         public int? CoEmail { get; set; }
         public int? CoOsProspectRel { get; set; }
 
+        
         //public virtual ICollection<CaoHistOcorrenciasO> CaoHistOcorrenciasOs { get; set; }
+
+        public virtual CaoUsuarioDto CaoUsuario { get; set; }
+
+        public virtual ICollection<CaoFaturaDto> CaoFaturas { get; set; }
     }
 }

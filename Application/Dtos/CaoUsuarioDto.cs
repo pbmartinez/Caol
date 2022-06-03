@@ -13,6 +13,8 @@ namespace Application.Dtos
             //CaoConhecimentos = new HashSet<CaoConhecimento>();
             //CaoHistOcorrenciasOs = new HashSet<CaoHistOcorrenciasO>();
             //CaoPontosConhecimentos = new HashSet<CaoPontosConhecimento>();
+
+            CaoOrdenesServicios = new HashSet<CaoODto>();
         }
 
         public string CoUsuario { get; set; } = null!;
@@ -49,5 +51,11 @@ namespace Application.Dtos
         //public virtual ICollection<CaoConhecimento> CaoConhecimentos { get; set; }
         //public virtual ICollection<CaoHistOcorrenciasO> CaoHistOcorrenciasOs { get; set; }
         //public virtual ICollection<CaoPontosConhecimento> CaoPontosConhecimentos { get; set; }
+
+        public virtual PermissaoSistemaDto PermissaoSistema { get; set; }
+
+        public virtual CaoSalarioDto CaoSalario { get; set; }
+
+        public virtual ICollection<CaoODto> CaoOrdenesServicios { get; set; }
     }
 }

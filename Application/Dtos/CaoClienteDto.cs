@@ -6,6 +6,11 @@ namespace Application.Dtos
 {
     public partial class CaoClienteDto : Entity
     {
+        public CaoClienteDto()
+        {
+            CaoFaturas = new HashSet<CaoFaturaDto>();
+        }
+
         public uint CoCliente { get; set; }
         public string? NoRazao { get; set; }
         public string? NoFantasia { get; set; }
@@ -31,5 +36,7 @@ namespace Application.Dtos
         public string? NuFax { get; set; }
         public string? Ddd2 { get; set; }
         public string? Telefone2 { get; set; }
+
+        public virtual ICollection<CaoFaturaDto> CaoFaturas { get; set; }
     }
 }
