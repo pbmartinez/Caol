@@ -5,6 +5,12 @@ namespace Domain.Entities
 {
     public partial class CaoSistema : Entity
     {
+        public CaoSistema()
+        {
+            CaoFaturas = new HashSet<CaoFatura>();
+        }
+
+
         //public override string Id => CoSistema+"";
 
         public int CoSistema { get; set; }
@@ -22,5 +28,7 @@ namespace Domain.Entities
         public DateTime? DtSolicitacao { get; set; }
         public DateTime? DtEntrega { get; set; }
         public int? CoEmail { get; set; }
+
+        public virtual ICollection<CaoFatura> CaoFaturas { get; set; }
     }
 }

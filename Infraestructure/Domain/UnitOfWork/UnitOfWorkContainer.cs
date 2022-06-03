@@ -3064,8 +3064,9 @@ namespace Infraestructure.Domain.UnitOfWork
                     .UseCollation("utf8_general_ci")
                     .HasCharSet("utf8");
             });
-
+            
             OnModelCreatingPartial(modelBuilder);
+            base.OnModelCreating(modelBuilder);
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
