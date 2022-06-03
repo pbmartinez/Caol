@@ -10,7 +10,7 @@ namespace Application.Dtos
         public ulong CoTipoUsuario { get; set; }
         public ulong CoSistema { get; set; }
         public string InAtivo { get; set; } = null!;
-        public string? CoUsuarioAtualizacao { get; set; }
+        public string CoUsuarioAtualizacao { get; set; }
         public DateTime DtAtualizacao { get; set; }
 
         public virtual CaoUsuarioDto CaoUsuario { get; set; }

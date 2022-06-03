@@ -9,6 +9,7 @@ namespace Application.Mappings
         public PermissaoSistemaProfile()
         {
             CreateMap<PermissaoSistema, PermissaoSistemaDto>()
+                .ForMember(g => g.CaoUsuario, options => options.MapFrom(f => f.CaoUsuario))
                 .ReverseMap();
         }
     }

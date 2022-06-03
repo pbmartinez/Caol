@@ -9,6 +9,7 @@ namespace Application.Mappings
         public CaoSalarioProfile()
         {
             CreateMap<CaoSalario, CaoSalarioDto>()
+                .ForMember(g => g.CaoUsuario, options => options.MapFrom(f => f.CaoUsuario))
                 .ReverseMap();
         }
     }

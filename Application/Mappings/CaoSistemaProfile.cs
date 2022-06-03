@@ -9,6 +9,8 @@ namespace Application.Mappings
         public CaoSistemaProfile()
         {
             CreateMap<CaoSistema, CaoSistemaDto>()
+                //Enable mapping when set navigation property
+                //.ForMember(g => g.CaoFatura, options => options.MapFrom(f => f.CaoFatura))
                 .ReverseMap();
         }
     }
