@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities
 {
@@ -10,6 +11,8 @@ namespace Domain.Entities
             CaoConhecimentos = new HashSet<CaoConhecimento>();
             CaoHistOcorrenciasOs = new HashSet<CaoHistOcorrenciasO>();
             CaoPontosConhecimentos = new HashSet<CaoPontosConhecimento>();
+
+            CaoOrdenesServicios = new HashSet<CaoO>();
         }
 
         //public override string Id => CoUsuario;
@@ -48,5 +51,12 @@ namespace Domain.Entities
         public virtual ICollection<CaoConhecimento> CaoConhecimentos { get; set; }
         public virtual ICollection<CaoHistOcorrenciasO> CaoHistOcorrenciasOs { get; set; }
         public virtual ICollection<CaoPontosConhecimento> CaoPontosConhecimentos { get; set; }
+
+        
+        public virtual PermissaoSistema PermissaoSistema { get; set; }
+
+        public virtual CaoSalario CaoSalario { get; set; }
+
+        public virtual ICollection<CaoO> CaoOrdenesServicios { get; set; }
     }
 }

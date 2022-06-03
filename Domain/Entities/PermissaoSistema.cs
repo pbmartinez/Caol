@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities
 {
@@ -11,5 +12,8 @@ namespace Domain.Entities
         public string InAtivo { get; set; } = null!;
         public string? CoUsuarioAtualizacao { get; set; }
         public DateTime DtAtualizacao { get; set; }
+
+        [ForeignKey("CoUsuario")]
+        public virtual CaoUsuario CaoUsuario { get; set;}
     }
 }

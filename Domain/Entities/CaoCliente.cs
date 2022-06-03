@@ -7,6 +7,11 @@ namespace Domain.Entities
 {
     public partial class CaoCliente : Entity
     {
+        public CaoCliente()
+        {
+            CaoFaturas = new HashSet<CaoFatura>();
+        }
+
         //[Column("co_cliente")]
         ////[NotMapped]
         //public override string Id
@@ -41,5 +46,8 @@ namespace Domain.Entities
         public string? NuFax { get; set; }
         public string? Ddd2 { get; set; }
         public string? Telefone2 { get; set; }
+
+
+        public virtual ICollection<CaoFatura> CaoFaturas { get; set; }
     }
 }
