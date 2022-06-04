@@ -19,6 +19,13 @@ namespace WebApi.Controllers
         {
             
         }
+
+        [HttpGet("relatorio")]
+        public async Task<IActionResult> GetRelatorio(DateTime? startDate,DateTime? endDate, string[] coUsuarios)
+        {
+            var facturas = await ((ICaoFaturaAppService)AppService)
+                .GetRelatorioAsync(startDate,endDate,null);
+            return Ok(facturas);
+        }
     }
-    
 }

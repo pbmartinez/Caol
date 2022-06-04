@@ -20,7 +20,10 @@ builder.Services.AddControllers(setupAction =>
     //Return Not Acceptable Status Code when api is requested in a format that it does not support
     setupAction.ReturnHttpNotAcceptable = true;
 })
-.AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles)
+.AddJsonOptions(options => 
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+})
 .ConfigureApiBehaviorOptions(setupAction =>
  {
      setupAction.InvalidModelStateResponseFactory = context =>

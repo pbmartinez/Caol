@@ -42,7 +42,7 @@ namespace Infraestructure.Application.AppServices
             return commited > 0;
         }
 
-        
+
         public async Task<List<CaoFaturaDto>> FindAllBySpecificationPatternAsync(Specification<CaoFaturaDto>? specification = null, List<string>? includes = null, Dictionary<string, bool>? order = null)
         {
             return _mapper.Map<List<CaoFaturaDto>>(
@@ -111,5 +111,31 @@ namespace Infraestructure.Application.AppServices
         //    return commited > 0;
         //}
 
+        public async Task<List<CaoFaturaDto>> GetRelatorioAsync(DateTime? startDate, DateTime? endDate, List<string>? coUsuarios)
+        {
+            if (startDate == null)
+                startDate = DateTime.MinValue;
+            if (endDate == null)
+                endDate = DateTime.MaxValue;
+            if (coUsuarios == null)
+                coUsuarios = new List<string>();
+
+            Expression<Func<CaoFatura, bool>> exp =
+                f => coUsuarios.Contains(f.CaoOrdenServicio.CoUsuario)
+                && f.DataEmissao >= startDate && f.DataEmissao <= endDate;
+            
+            
+            Expression<Func<CaoFatura, bool>> expTrueForAll =
+                f => true;
+            var includes = new List<string>()
+            {
+                $"{nameof(CaoFatura.CaoOrdenServicio)}",
+                $"{nameof(CaoFatura.CaoOrdenServicio)}.{nameof(CaoO.CaoUsuario)}"
+            };
+
+            var facturas = await _CaoFaturaRepository.FindAllByExpressionAsync(expTrueForAll,includes);
+
+            return _mapper.Map<List<CaoFaturaDto>>(facturas.ToList());
+        }
     }
 }
