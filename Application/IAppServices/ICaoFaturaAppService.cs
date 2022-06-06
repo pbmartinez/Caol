@@ -14,6 +14,6 @@ namespace Application.IAppServices
         /// <param name="endDate"></param>
         /// <param name="coUsuarios"></param>
         /// <returns></returns>
-        Task<List<CaoFaturaDto>> GetRelatorioAsync(DateTime? startDate, DateTime? endDate, List<string> coUsuarios);
+        Task<List<CaoFaturaDto>> GetRelatorioAsync(DateTime? startDate, DateTime? endDate, IEnumerable<string> coUsuarios);
     }
 }

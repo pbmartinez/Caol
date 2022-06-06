@@ -111,7 +111,7 @@ namespace Infraestructure.Application.AppServices
         //    return commited > 0;
         //}
 
-        public async Task<List<CaoFaturaDto>> GetRelatorioAsync(DateTime? startDate, DateTime? endDate, List<string>? coUsuarios)
+        public async Task<List<CaoFaturaDto>> GetRelatorioAsync(DateTime? startDate, DateTime? endDate, IEnumerable<string>? coUsuarios)
         {
             if (startDate == null)
                 startDate = DateTime.MinValue;
@@ -124,16 +124,13 @@ namespace Infraestructure.Application.AppServices
                 f => coUsuarios.Contains(f.CaoOrdenServicio.CoUsuario)
                 && f.DataEmissao >= startDate && f.DataEmissao <= endDate;
             
-            
-            Expression<Func<CaoFatura, bool>> expTrueForAll =
-                f => true;
             var includes = new List<string>()
             {
                 $"{nameof(CaoFatura.CaoOrdenServicio)}",
                 $"{nameof(CaoFatura.CaoOrdenServicio)}.{nameof(CaoO.CaoUsuario)}"
             };
 
-            var facturas = await _CaoFaturaRepository.FindAllByExpressionAsync(expTrueForAll,includes);
+            var facturas = await _CaoFaturaRepository.FindAllByExpressionAsync(exp,includes);
 
             return _mapper.Map<List<CaoFaturaDto>>(facturas.ToList());
         }

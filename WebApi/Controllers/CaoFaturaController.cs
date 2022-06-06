@@ -6,6 +6,7 @@ using Domain.Localization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
+using WebApi.Helpers;
 
 namespace WebApi.Controllers
 {
@@ -21,10 +22,10 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("relatorio")]
-        public async Task<IActionResult> GetRelatorio(DateTime? startDate,DateTime? endDate, string[] coUsuarios)
+        public async Task<IActionResult> GetRelatorio(DateTime? startDate,DateTime? endDate, [ModelBinder(BinderType =typeof(ArrayModelBinder))] IEnumerable<string>coUsuarios)
         {
             var facturas = await ((ICaoFaturaAppService)AppService)
-                .GetRelatorioAsync(startDate,endDate,null);
+                .GetRelatorioAsync(startDate,endDate,coUsuarios);
             return Ok(facturas);
         }
     }
