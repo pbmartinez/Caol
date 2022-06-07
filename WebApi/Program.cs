@@ -95,7 +95,7 @@ builder.Services.AddCustomApplicationServices();
 builder.Services.AddDbContext<UnitOfWorkContainer>(options =>   
    options.UseMySql(builder.Configuration.GetConnectionString(AppSettings.DefaultConnectionString),
    Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.28-mysql"))
-   .LogTo(Console.WriteLine, LogLevel.Information)
+   //.LogTo(Console.WriteLine, LogLevel.Information)
    .EnableDetailedErrors()
    );
 

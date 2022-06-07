@@ -1,6 +1,7 @@
 ﻿using BlazorApp.WellKnownNames;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+
 namespace BlazorApp.Identity
 {
     public class CustomAuthorizationMessageHandler : AuthorizationMessageHandler

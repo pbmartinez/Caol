@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using Application.Specifications;
 using Application.IValidator;
 using Application.Exceptions;
+using System.Dynamic;
 
 namespace Infraestructure.Application.AppServices
 {
@@ -111,7 +112,7 @@ namespace Infraestructure.Application.AppServices
         //    return commited > 0;
         //}
 
-        public async Task<List<CaoFaturaDto>> GetRelatorioAsync(DateTime? startDate, DateTime? endDate, IEnumerable<string>? coUsuarios)
+        public async Task<List<CaoFaturaDto>> GetFacturasAsync(DateTime? startDate, DateTime? endDate, IEnumerable<string>? coUsuarios)
         {
             if (startDate == null)
                 startDate = DateTime.MinValue;
@@ -123,16 +124,118 @@ namespace Infraestructure.Application.AppServices
             Expression<Func<CaoFatura, bool>> exp =
                 f => coUsuarios.Contains(f.CaoOrdenServicio.CoUsuario)
                 && f.DataEmissao >= startDate && f.DataEmissao <= endDate;
-            
+
             var includes = new List<string>()
             {
                 $"{nameof(CaoFatura.CaoOrdenServicio)}",
-                $"{nameof(CaoFatura.CaoOrdenServicio)}.{nameof(CaoO.CaoUsuario)}"
+                $"{nameof(CaoFatura.CaoOrdenServicio)}.{nameof(CaoO.CaoUsuario)}",
+                $"{nameof(CaoFatura.CaoOrdenServicio)}.{nameof(CaoO.CaoUsuario)}.{nameof(CaoUsuario.CaoSalario)}"
             };
 
-            var facturas = await _CaoFaturaRepository.FindAllByExpressionAsync(exp,includes);
+            var facturas = await _CaoFaturaRepository.FindAllByExpressionAsync(exp, includes);
 
             return _mapper.Map<List<CaoFaturaDto>>(facturas.ToList());
+        }
+        public async Task<AporteRecetaLiquidaDto> GetPizzaAsync(DateTime? startDate, DateTime? endDate, IEnumerable<string>? coUsuarios)
+        {
+            var facturas = await GetFacturasAsync(startDate, endDate, coUsuarios);
+            var facturasAgrupadasPorUsuario = facturas
+                .GroupBy(f => f.CaoOrdenServicio.CaoUsuario)
+                .Select(u =>
+                new
+                {
+                    coUsuario = u.Key.CoUsuario,
+                    recetaLiquida = u.Key.CaoOrdenesServicios
+                                 .Aggregate(0.0, (a, b) => b.CaoFaturas
+                                 .Aggregate(0.0, (s, f) => f.ReceitaLiquida + s))
+                }).ToList();
+
+            var total = facturasAgrupadasPorUsuario
+                .Sum(u=>u.recetaLiquida);
+            var lista = new List<(string, double, double)>();
+            foreach (var usuario in facturasAgrupadasPorUsuario)
+            {
+                var porCiento = total > 0 ? usuario.recetaLiquida / total * 100 : 0.0;
+                lista.Add(new ( usuario.coUsuario,usuario.recetaLiquida, porCiento ));
+            }
+            var aportes = new AporteRecetaLiquidaDto
+            {
+                StartDate = startDate ?? DateTime.MinValue,
+                EndDate = endDate ?? DateTime.MaxValue,
+                Total = total,
+                Valores = lista
+            };
+
+            return aportes;
+        }
+        public async Task<AporteRecetaLiquidaDto> GetGraficoAsync(DateTime? startDate, DateTime? endDate, IEnumerable<string>? coUsuarios)
+        {
+            var facturas = await GetFacturasAsync(startDate, endDate, coUsuarios);
+            var facturasAgrupadasPorUsuario = facturas
+                .GroupBy(f => f.CaoOrdenServicio.CaoUsuario)
+                .Select(u =>
+                new
+                {
+                    coUsuario = u.Key.CoUsuario,
+                    salario = u.Key.CaoSalario.BrutSalario,
+                    recetaLiquida = u.Key.CaoOrdenesServicios
+                                 .Aggregate(0.0, (a, b) => b.CaoFaturas
+                                 .Aggregate(0.0, (s, f) => f.ReceitaLiquida + s))
+
+                }).ToList();
+
+            var total = facturasAgrupadasPorUsuario
+                .Sum(u=>u.recetaLiquida);
+            var lista = new List<(string, double, double)>();
+            foreach (var usuario in facturasAgrupadasPorUsuario)
+            {
+                var porCiento = total > 0 ? usuario.recetaLiquida / total * 100 : 0.0;
+                lista.Add(new ( usuario.coUsuario,usuario.recetaLiquida, porCiento ));
+            }
+            var aportes = new AporteRecetaLiquidaDto
+            {
+                StartDate = startDate ?? DateTime.MinValue,
+                EndDate = endDate ?? DateTime.MaxValue,
+                Total = total,
+                Valores = lista
+            };
+
+            return aportes;
+        }
+
+
+        //public async Task<List<dynamic>> GetRelatorioAsync(DateTime? startDate, DateTime? endDate, IEnumerable<string>? coUsuarios)
+        //{
+        //    var facturas = await GetFacturasAsync(startDate, endDate, coUsuarios);
+
+        //    // ToDo  GroupBy => data emissao
+        //    var g = facturas
+        //        .GroupBy(f => new { f.CaoOrdenServicio.CaoUsuario, f.DataEmissao })
+        //        .Select(u =>
+        //        new
+        //        {
+        //            coUsuario = u.Key.CaoUsuario,
+        //            brutSalario = u.Key.CaoUsuario.CaoSalario.BrutSalario,
+        //            valor = u.Key.CaoUsuario.CaoOrdenesServicios
+        //                         .Aggregate(0.0, (a, b) => b.CaoFaturas
+        //                          .Aggregate(0.0, (s, f) => f.Valor + s)),
+        //            recetaLiquida = u.Key.CaoUsuario.CaoOrdenesServicios
+        //                         .Aggregate(0.0, (a, b) => b.CaoFaturas
+        //                          .Aggregate(0.0, (s, f) => f.ReceitaLiquida + s)),
+        //            comissao = u.Key.CaoUsuario.CaoOrdenesServicios
+        //                         .Aggregate(0.0, (a, b) => b.CaoFaturas
+        //                          .Aggregate(0.0, (s, f) => f.Comissao + s)),
+        //            lucro = u.Key.CaoUsuario.CaoOrdenesServicios
+        //                         .Aggregate(0.0, (a, b) => b.CaoFaturas
+        //                          .Aggregate(0.0, (s, f) => f.Lucro + s))
+
+        //        }).ToList();
+        //    return g;
+        //}
+
+        public async Task<List<CaoFaturaDto>> GetRelatorioAsync(DateTime? startDate, DateTime? endDate, IEnumerable<string> coUsuarios)
+        {
+            throw new NotImplementedException();
         }
     }
 }

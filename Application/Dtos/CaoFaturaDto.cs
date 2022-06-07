@@ -41,7 +41,7 @@ namespace Application.Dtos
         /// <summary>
         /// Lucro. Ganancia neta de la empresa 
         /// </summary>
-        //public float Lucro => ReceitaLiquida - Comissao - CaoOrdenServicio.CaoUsuario.CaoSalario.BrutSalario;
+        public float Lucro => ReceitaLiquida - Comissao - CaoOrdenServicio.CaoUsuario.CaoSalario.BrutSalario;
 
     }
 }

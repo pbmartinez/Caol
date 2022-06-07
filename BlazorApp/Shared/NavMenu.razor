@@ -14,13 +14,15 @@
 <MudNavMenu>
     <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">@Localizer[Resource.menu_Home]</MudNavLink>
     <AuthorizeView>
-        <Authorized>
-            <MudNavLink Href="/gateways" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.DeviceHub">@Localizer[Resource.menu_Gateway]</MudNavLink>
-            <MudNavLink Href="/peripherals" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.DevicesOther">@Localizer[Resource.menu_Peripheral]</MudNavLink>
+        @*<Authorized>*@
+            @*<MudNavLink Href="/comercialperformance" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Business">@Localizer[Resource.menu_Comercial]</MudNavLink>
+            <MudNavLink OnClick="BeginSignOut" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Logout">@Localizer[Resource.btn_Logout]</MudNavLink>
+            *@
+        @*</Authorized>*@
+        <NotAuthorized>
+            <MudNavLink Href="/comercialperformance" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Business">@Localizer[Resource.menu_Comercial]</MudNavLink>
             <MudNavLink OnClick="BeginSignOut" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Logout">@Localizer[Resource.btn_Logout]</MudNavLink>
             
-        </Authorized>
-        <NotAuthorized>
             <MudNavLink Href="/authentication/login" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Login">@Localizer[Resource.btn_Login]</MudNavLink>
             
         </NotAuthorized>

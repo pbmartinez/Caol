@@ -22,7 +22,7 @@ namespace BlazorApp.Services
         {
             if (!e.Response.IsSuccessStatusCode)
             {
-                string message = string.Empty;
+                var message = string.Empty;
                 var statusCode = e.Response.StatusCode;
 
                 switch (statusCode)
@@ -46,7 +46,7 @@ namespace BlazorApp.Services
                         break;
                 }
 
-                //throw new HttpResponseException(message);
+                throw new HttpResponseException(message);
             }
         }
 

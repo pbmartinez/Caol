@@ -15,5 +15,14 @@ namespace Application.IAppServices
         /// <param name="coUsuarios"></param>
         /// <returns></returns>
         Task<List<CaoFaturaDto>> GetRelatorioAsync(DateTime? startDate, DateTime? endDate, IEnumerable<string> coUsuarios);
+
+        /// <summary>
+        /// Get contributions from vendors to the total sales
+        /// </summary>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <param name="coUsuarios"></param>
+        /// <returns></returns>
+        Task<AporteRecetaLiquidaDto> GetPizzaAsync(DateTime? startDate, DateTime? endDate, IEnumerable<string>? coUsuarios);
     }
 }
