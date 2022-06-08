@@ -17,7 +17,7 @@
 
 @code {
     [EditorRequired]
-    [Parameter] public AporteRecetaLiquidaDto Aporte { get; set; } = null!;
+    [Parameter] public AporteRecetaLiquidaDto Aporte { get; set; } = default;
     [Parameter] public DateTime StartDate { get; set; }
     [Parameter] public DateTime EndDate { get; set; }
     double[] Data { get; set; } = new double[1];
@@ -29,8 +29,8 @@
     }
     public async Task UpdateChartAsync()
     {
-        var link = $"pizza?startDate={StartDate}&endDate={EndDate}&coUsuarios={string.Join(',', Aporte.Valores.Select(a => a.Name))}";
-        Aporte = await Http.GetFromJsonAsync<AporteRecetaLiquidaDto>(link) ?? new AporteRecetaLiquidaDto();
+        //var link = $"pizza?startDate={StartDate}&endDate={EndDate}&coUsuarios={string.Join(',', Aporte.Valores.Select(a => a.Name))}";
+        //Aporte = await Http.GetFromJsonAsync<AporteRecetaLiquidaDto>(link) ;
 
         Data = new double[Aporte.Valores.Count];
         Labels = new string[Aporte.Valores.Count];

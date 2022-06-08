@@ -6,55 +6,56 @@
 @inject IStringLocalizer<Resource> Localizer
 
 
-<MudDatePicker Label="Inicio" @bind-Date="startDate" FixDay=1/>
+<MudDatePicker Label="Inicio" @bind-Date="StartDate" FixDay=1/>
 
-<MudDatePicker Label="Fin" @bind-Date="endDate" FixDay=1/>
+<MudDatePicker Label="Fin" @bind-Date="EndDate" FixDay=1/>
 
 @if(Usuarios != null && Usuarios.Count > 0)
 {
-    <MudChipSet @bind-SelectedChips="selected" MultiSelection="true" Filter="true">
-        <MudChip Text="Milk" ></MudChip>
-        <MudChip Text="Eggs"></MudChip>
-        <MudChip Text="Soap"></MudChip>
-        <MudChip Text="Cornflakes" ></MudChip>
-        <MudChip Text="Salad"></MudChip>
-        <MudChip Text="Apples"></MudChip>
-        <MudChip Text="Red wine"></MudChip>
+    <MudSelect T="string" 
+               Label="Vendedor" 
+               MultiSelection="true" @bind-Value="value" @bind-SelectedValues="options"
+               Clearable="true"
+               SelectAll="true"
+               Placeholder="Select vendor ..."
+               Dense="true"
+               >
+    @foreach (var item in Usuarios)
+    {
+        <MudSelectItem T="string" Value="@item.CoUsuario">@item.NoUsuario</MudSelectItem>
+    }
+    </MudSelect>
 
-    
-            @foreach(var item in Usuarios)
-            {
-                var nombre = item.NoUsuario;
-                <MudChip Text="@nombre"></MudChip>
-            }
-    
-    </MudChipSet>
 }
 
 
-@*<MudButton OnClick="ShowPizzaAsync"> Show Pizza </MudButton>*@
+<MudButton OnClick="ShowPizzaAsync"> Show Pizza </MudButton>
 
+@if (Aporte.Valores != null && Aporte.Valores.Count != 0)
+{
+    <PieChart Aporte=Aporte></PieChart>
+}
 
 @code {
-
-    DateTime? startDate;
-    DateTime? endDate;
-    //List<string> coUsuarios = new List<string>(20);
-    MudChip[] selected ;
+    private string value { get; set; } = "Nothing selected";
+    private IEnumerable<string> options { get; set; } = new HashSet<string>();
+    DateTime? StartDate;
+    DateTime? EndDate;
     List<CaoUsuarioDto> Usuarios = new List<CaoUsuarioDto> ();
-
+    AporteRecetaLiquidaDto Aporte = default;
     protected override async Task OnInitializedAsync()
     {
-        startDate = DateTime.Today.AddDays(-DateTime.Today.Day+1);
-        endDate = DateTime.Today.AddDays(-DateTime.Today.Day+1).AddMonths(1);
-            
+        StartDate = DateTime.Today.AddDays(-DateTime.Today.Day+1);
+        EndDate = DateTime.Today.AddDays(-DateTime.Today.Day+1).AddMonths(1);
+
         var us = await Http.GetFromJsonAsync<List<CaoUsuarioDto>>("api/usuarios");
         Usuarios = us ?? new List<CaoUsuarioDto>();
     }
 
-    //private async Task ShowPizzaAsync()
-    //{
-            
-    //}
+    private async Task ShowPizzaAsync()
+    {
+        var link = $"api/facturas/pizza?startDate={StartDate}&endDate={EndDate}&coUsuarios={string.Join(',', options)}";
+        Aporte = await Http.GetFromJsonAsync<AporteRecetaLiquidaDto>(link) ;
+    }
 }
 

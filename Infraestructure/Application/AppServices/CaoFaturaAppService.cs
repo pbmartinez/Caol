@@ -152,11 +152,16 @@ namespace Infraestructure.Application.AppServices
 
             var total = facturasAgrupadasPorUsuario
                 .Sum(u=>u.recetaLiquida);
-            var lista = new List<(string, double, double)>();
+            var lista = new List<ValorAporteDto>();
             foreach (var usuario in facturasAgrupadasPorUsuario)
             {
                 var porCiento = total > 0 ? usuario.recetaLiquida / total * 100 : 0.0;
-                lista.Add(new ( usuario.coUsuario,usuario.recetaLiquida, porCiento ));
+                lista.Add(new ValorAporteDto 
+                {
+                    Name = usuario.coUsuario,
+                    RecetaLiquida = usuario.recetaLiquida ,
+                    Porciento = porCiento 
+                });
             }
             var aportes = new AporteRecetaLiquidaDto
             {
@@ -186,11 +191,16 @@ namespace Infraestructure.Application.AppServices
 
             var total = facturasAgrupadasPorUsuario
                 .Sum(u=>u.recetaLiquida);
-            var lista = new List<(string, double, double)>();
+            var lista = new List<ValorAporteDto>();
             foreach (var usuario in facturasAgrupadasPorUsuario)
             {
                 var porCiento = total > 0 ? usuario.recetaLiquida / total * 100 : 0.0;
-                lista.Add(new ( usuario.coUsuario,usuario.recetaLiquida, porCiento ));
+                lista.Add(new ValorAporteDto
+                {
+                    Name = usuario.coUsuario,
+                    RecetaLiquida = usuario.recetaLiquida,
+                    Porciento = porCiento
+                });
             }
             var aportes = new AporteRecetaLiquidaDto
             {

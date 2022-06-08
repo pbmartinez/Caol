@@ -6,19 +6,14 @@ using System.Threading.Tasks;
 
 namespace Application.Dtos
 {
-    public class AporteRecetaLiquidaDto
+    public struct AporteRecetaLiquidaDto
     {
-        public AporteRecetaLiquidaDto()
-        {
-            Valores = new List<(string, double, double)>();
-        }
-
         public double Total { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         /// <summary>
         /// Nombre del usuario, Receta Liquida Aportada, Porciento de aporte
         /// </summary>
-        public List<(string Name,double RecetaLiquida,double Porciento)> Valores { get; set; }
+        public List<ValorAporteDto> Valores { get; set; }
     }
 }
