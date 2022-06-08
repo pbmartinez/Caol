@@ -1,8 +1,11 @@
 ﻿@page "/"
+@using Domain.Localization
+@using Microsoft.Extensions.Localization
 
-<PageTitle>Index</PageTitle>
+@inject IStringLocalizer<Resource> Localizer
 
-<h1>Hello, world!</h1>
+<PageTitle>@Localizer[Resource.page_Index]</PageTitle>
 
-Welcome to your new app.
+<h1>@Localizer[Resource.display_Welcome]</h1>
 
+@Localizer[Resource.display_WelcomeMessage]

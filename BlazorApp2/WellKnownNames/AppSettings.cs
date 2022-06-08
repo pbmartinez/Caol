@@ -6,8 +6,8 @@
 
         public static string AzureAd => "AzureAd";
 
-        public static string HttpClientApi => "HttpClientApi";
+        public static string HttpClientGatewayApi => "HttpClientGatewayApi";
 
-        public static string ScopeApiAccess => "ScopeApiAccess";
+        public static string ScopeGatewayApiAccess => "ScopeGatewayApiAccess";
     }
 }
