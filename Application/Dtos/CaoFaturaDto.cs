@@ -31,12 +31,12 @@ namespace Application.Dtos
         /// <summary>
         /// Receita Liquida o valor líquido
         /// </summary>
-        public float ReceitaLiquida => Valor - (TotalImpInc % 100 * Valor);
+        public float ReceitaLiquida => Valor - (TotalImpInc / 100 * Valor);
 
         /// <summary>
         /// Valor de Comision
         /// </summary>
-        public float Comissao => (Valor - (TotalImpInc % 100 * Valor)) * (ComissaoCn % 100);
+        public float Comissao => (Valor - (TotalImpInc / 100 * Valor)) * (ComissaoCn / 100);
 
         /// <summary>
         /// Lucro. Ganancia neta de la empresa 
