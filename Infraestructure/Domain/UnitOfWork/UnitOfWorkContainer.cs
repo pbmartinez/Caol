@@ -78,9 +78,27 @@ namespace Infraestructure.Domain.UnitOfWork
 
             return items;
         }
+        public IQueryable<TEntity> ExecuteQuery<TEntity>(string sqlQuery, params object[] parameters)
+        {
+            return Database.SqlQuery<TEntity>(sqlQuery, parameters).AsQueryable();
+        }
+
+        public IQueryable ExecuteQuery(Type entityType, string sqlQuery, params object[] parameters)
+        {
+            return Database.SqlQuery(entityType, sqlQuery, parameters).AsQueryable();
+        }
+
+        public int ExecuteCommand(string sqlCommand, params object[] parameters)
+        {
+            return Database.ExecuteSqlCommand(sqlCommand, parameters);
+        }
+
+        public async Task<int> ExecuteCommandAsync(string sqlCommand, params object[] parameters)
+        {
+            return await Database.ExecuteSqlCommandAsync(sqlCommand, parameters);
+        }
 
 
-        
 
         #region OnModelCreating
         protected override void OnModelCreating(ModelBuilder modelBuilder)
