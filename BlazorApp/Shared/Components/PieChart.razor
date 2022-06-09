@@ -23,11 +23,11 @@
     double[] Data { get; set; } = new double[1];
     string[] Labels { get; set; } = new string[1];
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        await UpdateChartAsync();
+        InitChart();
     }
-    public async Task UpdateChartAsync()
+    public void InitChart()
     {
         //var link = $"pizza?startDate={StartDate}&endDate={EndDate}&coUsuarios={string.Join(',', Aporte.Valores.Select(a => a.Name))}";
         //Aporte = await Http.GetFromJsonAsync<AporteRecetaLiquidaDto>(link) ;
@@ -39,6 +39,7 @@
         {
             Data[i] = a.RecetaLiquida;
             Labels[i] = $"{a.Name}, {a.Porciento}";
+            i++;
         });
     }
 

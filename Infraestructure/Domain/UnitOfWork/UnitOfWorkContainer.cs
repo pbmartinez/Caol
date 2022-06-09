@@ -23,11 +23,11 @@ namespace Infraestructure.Domain.UnitOfWork
         {
             return await SaveChangesAsync();
         }
-
+        //Todo : Copiar un metodo como este y hacerlo que reciba la consulta para pasarsela al dbset
         public DbSet<TEntity> Repository<TEntity>() where TEntity : Entity
         {
             return Set<TEntity>();
-        }
+        }        
 
         public async Task RollbackAsync()
         {
@@ -80,22 +80,25 @@ namespace Infraestructure.Domain.UnitOfWork
         }
         public IQueryable<TEntity> ExecuteQuery<TEntity>(string sqlQuery, params object[] parameters)
         {
-            return Database.SqlQuery<TEntity>(sqlQuery, parameters).AsQueryable();
+            throw new NotImplementedException();
+            //return Database.ExecuteSqlRaw(sqlQuery, parameters);
         }
 
         public IQueryable ExecuteQuery(Type entityType, string sqlQuery, params object[] parameters)
         {
-            return Database.SqlQuery(entityType, sqlQuery, parameters).AsQueryable();
+            throw new NotImplementedException();
+
+            //return Database.SqlQuery(entityType, sqlQuery, parameters).AsQueryable();
         }
 
         public int ExecuteCommand(string sqlCommand, params object[] parameters)
         {
-            return Database.ExecuteSqlCommand(sqlCommand, parameters);
+            return Database.ExecuteSqlRaw(sqlCommand, parameters);
         }
 
         public async Task<int> ExecuteCommandAsync(string sqlCommand, params object[] parameters)
         {
-            return await Database.ExecuteSqlCommandAsync(sqlCommand, parameters);
+            return await Database.ExecuteSqlRawAsync(sqlCommand, parameters);
         }
 
 

@@ -136,8 +136,26 @@ namespace Infraestructure.Application.AppServices
 
             return _mapper.Map<List<CaoFaturaDto>>(facturas.ToList());
         }
+        public async Task<AporteRecetaLiquidaDto> GetPizzaAsync2(DateTime? startDate, DateTime? endDate, IEnumerable<string>? coUsuarios)
+        {
+            throw new NotImplementedException();
+            var query = $"select  u.co_usuario, u.no_usuario, f.data_emissao, sum(f.valor), " +
+                $"CONCAT(year(f.data_emissao), '-', month(f.data_emissao)) as yeamon" +
+                $"from cao_fatura as f" +
+                $"join cao_os as o on f.co_os = o.co_os join cao_usuario as u on o.co_usuario = u.co_usuario" +
+                $"group by u.co_usuario, yeamon" +
+                $"order by u.co_usuario, f.data_emissao";
+            //_CaoFaturaRepository.UnitOfWork.ExecuteQuery<AporteRecetaLiquidaDto>(query,new object[] { startDate, endDate, coUsuarios });
+        }
         public async Task<AporteRecetaLiquidaDto> GetPizzaAsync(DateTime? startDate, DateTime? endDate, IEnumerable<string>? coUsuarios)
         {
+            /*
+             * select  u.co_usuario, u.no_usuario, f.data_emissao, sum(f.valor), 
+                       CONCAT(year(f.data_emissao),'-',month(f.data_emissao)) as yeamon
+                from cao_fatura as f join cao_os as o on f.co_os = o.co_os join cao_usuario as u on o.co_usuario = u.co_usuario
+                group by u.co_usuario, yeamon
+                order by u.co_usuario, f.data_emissao
+             */
             var facturas = await GetFacturasAsync(startDate, endDate, coUsuarios);
             var facturasAgrupadasPorUsuario = facturas
                 .GroupBy(f => f.CaoOrdenServicio.CaoUsuario)
@@ -151,16 +169,16 @@ namespace Infraestructure.Application.AppServices
                 }).ToList();
 
             var total = facturasAgrupadasPorUsuario
-                .Sum(u=>u.recetaLiquida);
+                .Sum(u => u.recetaLiquida);
             var lista = new List<ValorAporteDto>();
             foreach (var usuario in facturasAgrupadasPorUsuario)
             {
                 var porCiento = total > 0 ? usuario.recetaLiquida / total * 100 : 0.0;
-                lista.Add(new ValorAporteDto 
+                lista.Add(new ValorAporteDto
                 {
                     Name = usuario.coUsuario,
-                    RecetaLiquida = usuario.recetaLiquida ,
-                    Porciento = porCiento 
+                    RecetaLiquida = usuario.recetaLiquida,
+                    Porciento = porCiento
                 });
             }
             var aportes = new AporteRecetaLiquidaDto
@@ -190,7 +208,7 @@ namespace Infraestructure.Application.AppServices
                 }).ToList();
 
             var total = facturasAgrupadasPorUsuario
-                .Sum(u=>u.recetaLiquida);
+                .Sum(u => u.recetaLiquida);
             var lista = new List<ValorAporteDto>();
             foreach (var usuario in facturasAgrupadasPorUsuario)
             {
