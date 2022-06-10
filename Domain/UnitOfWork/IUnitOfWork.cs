@@ -56,15 +56,12 @@ namespace Domain.UnitOfWork
         ChangeTracker ChangeTracker();
 
         /// <summary>
-        /// Executes a query against the database. i.e reading statement
+        /// Executes a query against the database. (i.e reading statement). 
         /// </summary>
-        /// <typeparam name="TEntity"></typeparam>
-        /// <param name="sqlQuery"></param>
-        /// <param name="parameters"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="query"></param>
         /// <returns></returns>
-        IQueryable<TEntity> ExecuteQuery<TEntity>(string sqlQuery, params object[] parameters);
-
-        IQueryable ExecuteQuery(Type entityType, string sqlQuery, params object[] parameters);
+        IQueryable<T> ExecuteQuery<T>(string query, params object[] parameters) where T : class;
 
 
         int ExecuteCommand(string sqlCommand, params object[] parameters);

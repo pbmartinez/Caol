@@ -5,6 +5,7 @@ using AutoMapper.Extensions.ExpressionMapping;
 using Domain.IRepositories;
 using Domain.Specification;
 using Domain.Entities;
+using Domain.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -136,60 +137,63 @@ namespace Infraestructure.Application.AppServices
 
             return _mapper.Map<List<CaoFaturaDto>>(facturas.ToList());
         }
-        public async Task<AporteRecetaLiquidaDto> GetPizzaAsync2(DateTime? startDate, DateTime? endDate, IEnumerable<string>? coUsuarios)
-        {
-            throw new NotImplementedException();
-            var query = $"select  u.co_usuario, u.no_usuario, f.data_emissao, sum(f.valor), " +
-                $"CONCAT(year(f.data_emissao), '-', month(f.data_emissao)) as yeamon" +
-                $"from cao_fatura as f" +
-                $"join cao_os as o on f.co_os = o.co_os join cao_usuario as u on o.co_usuario = u.co_usuario" +
-                $"group by u.co_usuario, yeamon" +
-                $"order by u.co_usuario, f.data_emissao";
-            //_CaoFaturaRepository.UnitOfWork.ExecuteQuery<AporteRecetaLiquidaDto>(query,new object[] { startDate, endDate, coUsuarios });
-        }
         public async Task<AporteRecetaLiquidaDto> GetPizzaAsync(DateTime? startDate, DateTime? endDate, IEnumerable<string>? coUsuarios)
         {
-            /*
-             * select  u.co_usuario, u.no_usuario, f.data_emissao, sum(f.valor), 
-                       CONCAT(year(f.data_emissao),'-',month(f.data_emissao)) as yeamon
-                from cao_fatura as f join cao_os as o on f.co_os = o.co_os join cao_usuario as u on o.co_usuario = u.co_usuario
-                group by u.co_usuario, yeamon
-                order by u.co_usuario, f.data_emissao
-             */
-            var facturas = await GetFacturasAsync(startDate, endDate, coUsuarios);
-            var facturasAgrupadasPorUsuario = facturas
-                .GroupBy(f => f.CaoOrdenServicio.CaoUsuario)
-                .Select(u =>
-                new
-                {
-                    coUsuario = u.Key.CoUsuario,
-                    recetaLiquida = u.Key.CaoOrdenesServicios
-                                 .Aggregate(0.0, (a, b) => b.CaoFaturas
-                                 .Aggregate(0.0, (s, f) => f.ReceitaLiquida + s))
-                }).ToList();
+            var listOfUserCodes = string.Empty;
 
-            var total = facturasAgrupadasPorUsuario
-                .Sum(u => u.recetaLiquida);
-            var lista = new List<ValorAporteDto>();
-            foreach (var usuario in facturasAgrupadasPorUsuario)
+            coUsuarios?.ToList().ForEach(a =>
             {
-                var porCiento = total > 0 ? usuario.recetaLiquida / total * 100 : 0.0;
+                if (!string.IsNullOrEmpty(a))
+                {
+                    listOfUserCodes = $"{listOfUserCodes},'{a}'";
+                }
+            });
+            if (string.IsNullOrEmpty(listOfUserCodes))
+                listOfUserCodes = "''";
+            if (listOfUserCodes.StartsWith(','))
+                listOfUserCodes = listOfUserCodes.Remove(0, 1);
+            if (listOfUserCodes.EndsWith(','))
+                listOfUserCodes = listOfUserCodes.Remove(listOfUserCodes.Length - 1);
+
+            if (startDate == null)
+                startDate = DateTime.MinValue;
+            if (endDate == null)
+                endDate = DateTime.MaxValue;
+
+            //Todo fix where clause
+            var query = "select u.co_usuario, u.no_usuario, f.data_emissao, sum(f.valor) as valor, " +
+                "CONCAT(year(f.data_emissao), '-', month(f.data_emissao)) as yearmonth " +
+                "from cao_fatura as f " +
+                "join cao_os as o on f.co_os = o.co_os join cao_usuario as u on o.co_usuario = u.co_usuario " +
+                //"where f.data_emissao between STR_TO_DATE('{0}', '%m/%d/%Y') and STR_TO_DATE('{1}', '%m/%d/%Y') and " +
+                //"u.co_usuario in ({2}) " +
+                "group by u.co_usuario, yearmonth " +
+                "order by u.no_usuario, f.data_emissao";
+
+
+
+            //var queryResult = _CaoFaturaRepository.UnitOfWork.ExecuteQuery<UsuarioRecetaLiquida>(query, new object[] { startDate?.ParsedAsMySql() , endDate?.ParsedAsMySql(), listOfUserCodes });
+            var queryResult = _CaoFaturaRepository.UnitOfWork.ExecuteQuery<UsuarioRecetaLiquida>(query);
+            var total = queryResult.Sum(u => u.Valor);
+            var lista = new List<ValorAporteDto>();
+            foreach (var usuario in queryResult)
+            {
+                var porCiento = total > 0 ? usuario.Valor / total * 100 : 0.0;
                 lista.Add(new ValorAporteDto
                 {
-                    Name = usuario.coUsuario,
-                    RecetaLiquida = usuario.recetaLiquida,
+                    Code = usuario.CoUsuario,
+                    Name = usuario.CoUsuario,
+                    RecetaLiquida = usuario.Valor,
                     Porciento = porCiento
                 });
             }
-            var aportes = new AporteRecetaLiquidaDto
+            return new AporteRecetaLiquidaDto
             {
                 StartDate = startDate ?? DateTime.MinValue,
                 EndDate = endDate ?? DateTime.MaxValue,
                 Total = total,
                 Valores = lista
             };
-
-            return aportes;
         }
         public async Task<AporteRecetaLiquidaDto> GetGraficoAsync(DateTime? startDate, DateTime? endDate, IEnumerable<string>? coUsuarios)
         {

@@ -78,18 +78,17 @@ namespace Infraestructure.Domain.UnitOfWork
 
             return items;
         }
-        public IQueryable<TEntity> ExecuteQuery<TEntity>(string sqlQuery, params object[] parameters)
+        public IQueryable<T> ExecuteQuery<T>(string query, params object[] parameters) where T : class
         {
-            throw new NotImplementedException();
-            //return Database.ExecuteSqlRaw(sqlQuery, parameters);
+            var res = Set<T>().FromSqlRaw<T>(query, parameters).ToList();
+            return Set<T>().FromSqlRaw<T>(query,parameters).AsQueryable();
         }
 
-        public IQueryable ExecuteQuery(Type entityType, string sqlQuery, params object[] parameters)
-        {
-            throw new NotImplementedException();
-
-            //return Database.SqlQuery(entityType, sqlQuery, parameters).AsQueryable();
-        }
+        //public IQueryable<TEntity> ExecuteQuery2<TEntity>(string query, params object[] parameters) where TEntity : class
+        //{
+        //    return Set<TEntity>().FromSqlRaw<TEntity>(query,parameters).AsQueryable();
+        //}
+        
 
         public int ExecuteCommand(string sqlCommand, params object[] parameters)
         {
@@ -101,6 +100,12 @@ namespace Infraestructure.Domain.UnitOfWork
             return await Database.ExecuteSqlRawAsync(sqlCommand, parameters);
         }
 
+        /// <summary>
+        /// Used for mapping objects to custom raw sql queries 
+        /// </summary>
+        #region Database Raw Query Results
+        public DbSet<UsuarioRecetaLiquida> UsuarioRecetaLiquida { get; set; }
+        #endregion
 
 
         #region OnModelCreating
