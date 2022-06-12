@@ -5,17 +5,20 @@
 @inject IStringLocalizer<Resource> Localizer
 
 
-<h3>Participacao na Receita Liquida</h3>
 
-<MudPaper Class="pa-4">
-    <MudChart ChartType="ChartType.Pie" 
-                InputData="@Data" @bind-SelectedIndex="Index" 
-                InputLabels="@Labels" 
-                Width="300px" 
-                Height="300px" 
-                LegendPosition=Position.Left
-                />
-</MudPaper>
+
+<ApexChart TItem="ValorAporteDto"
+            Title="Participacao na Receita Liquida">
+
+    <ApexPointSeries TItem="ValorAporteDto"
+                        Items="Aporte.Valores"
+                        Name="Gross Value"
+                        SeriesType="SeriesType.Pie"
+                        XValue="@(e => e.Name)"
+                        YAggregate="@(e => e.Sum(e => (decimal)e.Porciento ))"
+                        OrderByDescending="e=>e.Y" 
+                        />
+</ApexChart>
 
 @code {
     [EditorRequired]

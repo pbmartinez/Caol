@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Application.Dtos
 {
-    public struct ValorAporteDto
+    public class ValorAporteDto
     {
         public string Code { get; set; }
         public string Name { get; set; }    
