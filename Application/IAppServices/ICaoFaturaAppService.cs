@@ -24,5 +24,14 @@ namespace Application.IAppServices
         /// <param name="coUsuarios"></param>
         /// <returns></returns>
         Task<AporteRecetaLiquidaDto> GetPizzaAsync(DateTime? startDate, DateTime? endDate, IEnumerable<string>? coUsuarios);
+
+        /// <summary>
+        /// Get contributions from vendors vs their salary
+        /// </summary>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <param name="coUsuarios"></param>
+        /// <returns></returns>
+        Task<AporteMensualDto> GetGraphicAsync(DateTime? startDate, DateTime? endDate, IEnumerable<string>? coUsuarios);
     }
 }

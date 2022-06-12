@@ -9,8 +9,9 @@ namespace Application.Dtos
     public struct ValorAporteDto
     {
         public string Code { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; }    
         public double RecetaLiquida { get; set; }
         public double Porciento { get; set; }
+        public double Salario { get; set; }
     }
 }

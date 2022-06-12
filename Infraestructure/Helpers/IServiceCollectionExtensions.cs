@@ -10,6 +10,7 @@ using Infraestructure.Application.Validator;
 using Infraestructure.Domain.Repositories;
 using Infraestructure.Domain.UnitOfWork;
 using Infraestructure.Services;
+using Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -96,6 +97,7 @@ namespace Infraestructure.DependencyInjectionExtensions
             services.AddScoped<IPropertyCheckerService, PropertyCheckerService>();
 
             // Inject here any other service from the Application
+            services.AddScoped<IDateTimeService, DateTimeService>();
         }
     }
 }

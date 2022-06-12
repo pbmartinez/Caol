@@ -37,5 +37,11 @@ namespace WebApi.Controllers
             var aportes = await ((ICaoFaturaAppService)AppService).GetPizzaAsync(startDate,endDate,coUsuarios);
             return aportes;
         }
+        [HttpGet("graphic")]
+        public async Task<AporteMensualDto> GetGraphicAsync(DateTime? startDate, DateTime? endDate, [ModelBinder(BinderType = typeof(ArrayModelBinder))] IEnumerable<string> coUsuarios)
+        {
+            var aportes = await ((ICaoFaturaAppService)AppService).GetGraphicAsync(startDate,endDate,coUsuarios);
+            return aportes;
+        }
     }
 }

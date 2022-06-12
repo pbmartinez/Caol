@@ -1,0 +1,55 @@
+﻿@using Application.Dtos
+@using Domain.Localization
+@using Microsoft.Extensions.Localization
+@inject HttpClient Http
+@inject IStringLocalizer<Resource> Localizer
+
+
+<h3>Performance Comercial</h3>
+
+<MudPaper Class="pa-4">
+    <MudChart ChartType="ChartType.Line" 
+              ChartSeries="@Series" @bind-SelectedIndex="Index" 
+              XAxisLabels="@XAxisLabels" 
+              Width="100%" Height="350px"
+              ChartOptions=options
+              >
+    </MudChart>
+</MudPaper>
+
+@code {
+    [EditorRequired]
+    [Parameter] public AporteMensualDto UsuarioPerformance { get; set; } = default;
+    [Parameter] public DateTime StartDate { get; set; }
+    [Parameter] public DateTime EndDate { get; set; }
+
+    public List<ChartSeries> Series = new List<ChartSeries>();
+    public string[] XAxisLabels ;
+    ChartOptions options = new ChartOptions()
+    {
+
+    };
+
+
+    protected override void OnInitialized()
+    {
+        InitChart();
+    }
+    public void InitChart()
+    {
+        XAxisLabels = UsuarioPerformance.Months.Select(a => a.Month+"").ToArray();
+        Series = new List<ChartSeries>();
+        foreach (var item in UsuarioPerformance.UsuarioRecetas)
+        {
+            var serie = new ChartSeries()
+                {
+                    Name = item.Name,
+                    Data = item.Data
+                };
+            Series.Add(serie);
+        }
+        
+    }
+    private int Index = 0; //default value cannot be 0 -> first selectedindex is 0.
+    int dataSize = 4;
+}

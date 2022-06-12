@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Application.Dtos
 {
-    public struct AporteRecetaLiquidaDto
+    public class AporteRecetaLiquidaDto
     {
         public double Total { get; set; }
         public DateTime StartDate { get; set; }

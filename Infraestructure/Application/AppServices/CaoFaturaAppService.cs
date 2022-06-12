@@ -5,7 +5,6 @@ using AutoMapper.Extensions.ExpressionMapping;
 using Domain.IRepositories;
 using Domain.Specification;
 using Domain.Entities;
-using Domain.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +14,7 @@ using Application.Specifications;
 using Application.IValidator;
 using Application.Exceptions;
 using System.Dynamic;
+using Domain.Interfaces;
 
 namespace Infraestructure.Application.AppServices
 {
@@ -23,12 +23,14 @@ namespace Infraestructure.Application.AppServices
         private readonly ICaoFaturaRepository _CaoFaturaRepository;
         private readonly IMapper _mapper;
         private readonly IEntityValidator _entityValidator;
+        private readonly IDateTimeService _dateTimeService;
 
-        public CaoFaturaAppService(ICaoFaturaRepository CaoFaturaRepository, IMapper mapper, IEntityValidator entityValidator)
+        public CaoFaturaAppService(ICaoFaturaRepository CaoFaturaRepository, IMapper mapper, IEntityValidator entityValidator, IDateTimeService dateTimeService)
         {
             _CaoFaturaRepository = CaoFaturaRepository ?? throw new ArgumentNullException(nameof(CaoFaturaRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _entityValidator = entityValidator ?? throw new ArgumentNullException(nameof(entityValidator));
+            _dateTimeService = dateTimeService ?? throw new ArgumentNullException(nameof(dateTimeService));
         }
 
         public async Task<bool> AddAsync(CaoFaturaDto item)
@@ -203,7 +205,67 @@ namespace Infraestructure.Application.AppServices
                 Valores = lista
             };
         }
-        public async Task<AporteRecetaLiquidaDto> GetGraficoAsync(DateTime? startDate, DateTime? endDate, IEnumerable<string>? coUsuarios)
+        
+        public async Task<AporteMensualDto> GetGraphicAsync(DateTime? startDate, DateTime? endDate, IEnumerable<string>? coUsuarios)
+        {
+            var listOfUserCodes = string.Empty;
+            var allUserCodes = coUsuarios?.ToList() ?? new List<string>();
+            coUsuarios?.ToList().ForEach(a =>
+            {
+                if (!string.IsNullOrEmpty(a))
+                {
+                    listOfUserCodes = $"{listOfUserCodes},'{a}'";
+                }
+            });
+            if (string.IsNullOrEmpty(listOfUserCodes))
+                listOfUserCodes = "''";
+            if (listOfUserCodes.StartsWith(','))
+                listOfUserCodes = listOfUserCodes.Remove(0, 1);
+            if (listOfUserCodes.EndsWith(','))
+                listOfUserCodes = listOfUserCodes.Remove(listOfUserCodes.Length - 1);
+
+            if (startDate == null)
+                startDate = DateTime.MinValue;
+            if (endDate == null)
+                endDate = DateTime.MaxValue;
+
+            //Todo fix where clause
+            var query = "select u.co_usuario, u.no_usuario, f.data_emissao, sum(f.valor) as valor, sum(f.valor - (f.valor * f.total_imp_inc/100)) as receita_liquida, s.brut_salario, " +
+                "CONCAT(year(f.data_emissao), '-', month(f.data_emissao)) as yearmonth " +
+                "from cao_fatura as f " +
+                "join cao_os as o on f.co_os = o.co_os join cao_usuario as u on o.co_usuario = u.co_usuario join cao_salario as s on u.co_usuario = s.co_usuario " +
+                //"where f.data_emissao between STR_TO_DATE('{0}', '%m/%d/%Y') and STR_TO_DATE('{1}', '%m/%d/%Y') and " +
+                //"u.co_usuario in ({2}) " +
+                "group by u.co_usuario, yearmonth " +
+                "order by u.no_usuario, f.data_emissao";
+
+            //var queryResult = _CaoFaturaRepository.UnitOfWork.ExecuteQuery<UsuarioRecetaLiquida>(query, new object[] { startDate?.ParsedAsMySql() , endDate?.ParsedAsMySql(), listOfUserCodes });
+            var queryResult = _CaoFaturaRepository.UnitOfWork.ExecuteQuery<UsuarioPerformance>(query);
+            
+            var listOfMonth = _dateTimeService.GetDateTimesInBetween(startDate.Value, endDate.Value);
+
+            var aporteMensual = new AporteMensualDto()
+            {
+                Months=listOfMonth
+            };
+            var totalSalary = 0.0;
+            foreach (var item in allUserCodes)
+            {
+                var aportes = queryResult.Where(a => a.CoUsuario == item).ToList();
+                totalSalary += queryResult.FirstOrDefault(a => a.CoUsuario == item)?.BrutSalario ?? 0.0;
+                var usuarioReceta = new UsuarioRecetasDto(item, aportes.FirstOrDefault()?.NoUsuario ?? item, listOfMonth.Count);
+                foreach (var aporte in aportes)
+                {
+                    var index = _dateTimeService.IndexOf(listOfMonth,aporte.DataEmissao);
+                    usuarioReceta.Data[index] = Math.Round(aporte.ReceitaLiquida,2);
+                }
+                aporteMensual.UsuarioRecetas.Add(usuarioReceta);
+            }
+            var averageSalary = totalSalary / allUserCodes.Count;
+            aporteMensual.AvarageSalary = averageSalary;
+            return aporteMensual;
+        }
+        public async Task<AporteRecetaLiquidaDto> GetGraficoAsync2(DateTime? startDate, DateTime? endDate, IEnumerable<string>? coUsuarios)
         {
             var facturas = await GetFacturasAsync(startDate, endDate, coUsuarios);
             var facturasAgrupadasPorUsuario = facturas

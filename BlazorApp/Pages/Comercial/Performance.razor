@@ -7,7 +7,7 @@
 @inject ISnackbar Snackbar
 
 
-<MudDatePicker Label="Inicio" @bind-Date="StartDate" FixDay=1/>
+<MudDatePicker Label="Inicio" @bind-Date="StartDate" FixDay=1 />
 
 <MudDatePicker Label="Fin" @bind-Date="EndDate" FixDay=1/>
 
@@ -32,10 +32,15 @@
 
 
 <MudButton OnClick="ShowPizzaAsync"> Show Pizza </MudButton>
+<MudButton OnClick="ShowGraphicAsync"> Show Graphic </MudButton>
 
-@if (Aporte.Valores != null && Aporte.Valores.Count != 0)
+@if (Aporte != null && Aporte.Valores != null && Aporte.Valores.Count != 0)
 {
     <PieChart Aporte=Aporte></PieChart>
+}
+@if (UserPerformance!=null && UserPerformance.UsuarioRecetas != null && UserPerformance.UsuarioRecetas.Count != 0)
+{    
+    <GraphicChart UsuarioPerformance=UserPerformance></GraphicChart>
 }
 
 @code {
@@ -44,7 +49,8 @@
     DateTime? StartDate;
     DateTime? EndDate;
     List<CaoUsuarioDto> Usuarios = new List<CaoUsuarioDto> ();
-    AporteRecetaLiquidaDto Aporte = default;
+    AporteRecetaLiquidaDto? Aporte = null;
+    AporteMensualDto? UserPerformance = null;
     protected override async Task OnInitializedAsync()
     {
         StartDate = DateTime.Today.AddDays(-DateTime.Today.Day+1);
@@ -53,16 +59,37 @@
         Usuarios = us ?? new List<CaoUsuarioDto>();
     }
 
+    private string ForApiEndPoint(DateTime? date)
+    {
+        if (date == null)
+        {
+            return string.Empty;
+        }
+        return $"{date?.Year}-{date?.Month}-{date?.Day}";
+    }
     private async Task ShowPizzaAsync()
     {
-        var link = $"api/facturas/pizza?startDate={StartDate}&endDate={EndDate}&coUsuarios={string.Join(',', options)}";
+        var link = $"api/facturas/pizza?startDate={ForApiEndPoint(StartDate)}&endDate={ForApiEndPoint(EndDate)}&coUsuarios={string.Join(',', options)}";
         var distroAporte = await Http.GetFromJsonAsync<AporteRecetaLiquidaDto>(link);
-        if (distroAporte.Total == 0 || distroAporte.Valores.Count == 0)
+        if (distroAporte == null || distroAporte.Total == 0 || distroAporte.Valores.Count == 0)
         {
             Snackbar.Add("No results", Severity.Info);
         }
         else
             Aporte = distroAporte;
     }
+    private async Task ShowGraphicAsync()
+    {
+        //var link = $"api/facturas/graphic?startDate={ForApiEndPoint(StartDate)}&endDate={ForApiEndPoint(EndDate)}&coUsuarios={string.Join(',', options)}";
+        var link = $"api/facturas/graphic?startDate=2007-01-01&endDate=2007-12-01&coUsuarios=carlos.carvalho,carlos.arruda,anapaula.chiodaro";
+        var aporteMensualDto = await Http.GetFromJsonAsync<AporteMensualDto>(link);
+        if (aporteMensualDto == null || aporteMensualDto.UsuarioRecetas.Count == 0 || aporteMensualDto.UsuarioRecetas.Count == 0)
+        {
+            Snackbar.Add("No results", Severity.Info);
+        }
+        else
+            UserPerformance = aporteMensualDto;
+    }
+
 }
 
