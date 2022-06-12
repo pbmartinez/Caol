@@ -19,6 +19,8 @@ namespace Domain.Entities
         public DateTime DataEmissao { get; set; }
         [Column("valor")]
         public double Valor { get; set; }
+        [Column("receita_liquida")]
+        public double ReceitaLiquida { get; set; }
         [Column("yearmonth")]
         public string Yearmonth { get; set; }
     }

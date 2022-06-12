@@ -161,7 +161,7 @@ namespace Infraestructure.Application.AppServices
                 endDate = DateTime.MaxValue;
 
             //Todo fix where clause
-            var query = "select u.co_usuario, u.no_usuario, f.data_emissao, sum(f.valor) as valor, " +
+            var query = "select u.co_usuario, u.no_usuario, f.data_emissao, sum(f.valor) as valor, sum(f.valor - (f.valor * f.total_imp_inc/100)) as receita_liquida," +
                 "CONCAT(year(f.data_emissao), '-', month(f.data_emissao)) as yearmonth " +
                 "from cao_fatura as f " +
                 "join cao_os as o on f.co_os = o.co_os join cao_usuario as u on o.co_usuario = u.co_usuario " +
@@ -170,20 +170,28 @@ namespace Infraestructure.Application.AppServices
                 "group by u.co_usuario, yearmonth " +
                 "order by u.no_usuario, f.data_emissao";
 
-
-
             //var queryResult = _CaoFaturaRepository.UnitOfWork.ExecuteQuery<UsuarioRecetaLiquida>(query, new object[] { startDate?.ParsedAsMySql() , endDate?.ParsedAsMySql(), listOfUserCodes });
             var queryResult = _CaoFaturaRepository.UnitOfWork.ExecuteQuery<UsuarioRecetaLiquida>(query);
-            var total = queryResult.Sum(u => u.Valor);
-            var lista = new List<ValorAporteDto>();
-            foreach (var usuario in queryResult)
+            var groupedByUsuario = queryResult.GroupBy(u => u.CoUsuario).Select(g => new UsuarioRecetaLiquida 
             {
-                var porCiento = total > 0 ? usuario.Valor / total * 100 : 0.0;
+                CoUsuario = g.Key,
+                NoUsuario = queryResult.FirstOrDefault(us => us.CoUsuario == g.Key).NoUsuario ?? g.Key,
+                DataEmissao = queryResult.FirstOrDefault(us => us.CoUsuario == g.Key).DataEmissao ,
+                Yearmonth = queryResult.FirstOrDefault(us => us.CoUsuario == g.Key).Yearmonth ,
+                Valor = queryResult.Where(us => us.CoUsuario == g.Key).Sum(uv => uv.Valor),
+                ReceitaLiquida = queryResult.Where(us => us.CoUsuario == g.Key).Sum(uv => uv.ReceitaLiquida),
+            }).ToList();
+
+            var total = groupedByUsuario.Sum(u => u.ReceitaLiquida);
+            var lista = new List<ValorAporteDto>();
+            foreach (var usuario in groupedByUsuario)
+            {
+                var porCiento = total > 0 ? usuario.ReceitaLiquida / total * 100 : 0.0;
                 lista.Add(new ValorAporteDto
                 {
                     Code = usuario.CoUsuario,
-                    Name = usuario.CoUsuario,
-                    RecetaLiquida = usuario.Valor,
+                    Name = usuario.NoUsuario,
+                    RecetaLiquida = usuario.ReceitaLiquida,
                     Porciento = porCiento
                 });
             }

@@ -5,14 +5,16 @@
 @inject IStringLocalizer<Resource> Localizer
 
 
-<h3>Pie Chart</h3>
+<h3>Participacao na Receita Liquida</h3>
 
 <MudPaper Class="pa-4">
     <MudChart ChartType="ChartType.Pie" 
                 InputData="@Data" @bind-SelectedIndex="Index" 
                 InputLabels="@Labels" 
                 Width="300px" 
-                Height="300px" />
+                Height="300px" 
+                LegendPosition=Position.Left
+                />
 </MudPaper>
 
 @code {
@@ -35,7 +37,7 @@
         Aporte.Valores.ForEach(a =>
         {
             Data[i] = a.RecetaLiquida;
-            Labels[i] = $"{a.Name}, {a.Porciento}";
+            Labels[i] = $"{a.Name}, {a.Porciento.ToString("N2")} %";
             i++;
         });
     }
