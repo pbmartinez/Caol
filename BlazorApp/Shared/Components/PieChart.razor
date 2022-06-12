@@ -12,10 +12,10 @@
 
     <ApexPointSeries TItem="ValorAporteDto"
                         Items="Aporte.Valores"
-                        Name="Gross Value"
+                        Name="Aporte"
                         SeriesType="SeriesType.Pie"
-                        XValue="@(e => e.Name)"
-                        YAggregate="@(e => e.Sum(e => (decimal)e.Porciento ))"
+                        XValue="@(e => $"{e.Name}"  )"
+                        YAggregate="@(e => e.Sum(e => (decimal)Math.Round( e.Porciento,2) ))"
                         OrderByDescending="e=>e.Y" 
                         />
 </ApexChart>
@@ -44,7 +44,4 @@
             i++;
         });
     }
-
-    private int Index = 0; //default value cannot be 0 -> first selectedindex is 0.
-    int dataSize = 4;
 }

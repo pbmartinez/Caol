@@ -13,5 +13,6 @@ namespace Application.Dtos
         public double RecetaLiquida { get; set; }
         public double Porciento { get; set; }
         public double Salario { get; set; }
+        public string AnnoMes { get; set; }
     }
 }

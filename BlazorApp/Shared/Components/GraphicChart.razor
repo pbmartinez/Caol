@@ -4,52 +4,56 @@
 @inject HttpClient Http
 @inject IStringLocalizer<Resource> Localizer
 
+@try
+{
+    <ApexChart TItem="UsuarioRecetasDto"
+           Title="Order Net Value">
 
-<h3>Performance Comercial</h3>
+        @for (var i = 0; i < UsuarioPerformance.UsuarioRecetas.Count; i++)
+        {
+            var usuario = UsuarioPerformance.UsuarioRecetas[i];
 
-<MudPaper Class="pa-4">
-    <MudChart ChartType="MudBlazor.ChartType.Bar" 
-              ChartSeries="@Series" @bind-SelectedIndex="Index" 
-              XAxisLabels="@XAxisLabels" 
-              Width="100%" Height="350px"
-              ChartOptions=options
-              >
-    </MudChart>
-</MudPaper>
+            <ApexPointSeries TItem="ValorAporteDto"
+                     Items="@GetValorAporteDtos(usuario)"
+                     Name="@usuario.Name"
+                     XValue="@(e => e.AnnoMes)"
+                     YAggregate="@(e => e.Sum(v => (decimal)v.RecetaLiquida))"
+                     OrderByDescending="e=>e.Y"
+                     SeriesType="SeriesType.Bar" />
+        }
+
+    </ApexChart>
+}
+catch (Exception es)
+{
+    var ex = es;
+}
+
 
 @code {
     [EditorRequired]
-    [Parameter] public AporteMensualDto UsuarioPerformance { get; set; } = default;
+    [Parameter] public AporteMensualDto UsuarioPerformance { get; set; } = null!;
     [Parameter] public DateTime StartDate { get; set; }
     [Parameter] public DateTime EndDate { get; set; }
 
-    public List<ChartSeries> Series = new List<ChartSeries>();
-    public string[] XAxisLabels ;
-    ChartOptions options = new ChartOptions()
-    {
-
-    };
-
-
     protected override void OnInitialized()
     {
-        InitChart();
+        base.OnInitialized();
     }
-    public void InitChart()
+
+    private List<ValorAporteDto> GetValorAporteDtos(UsuarioRecetasDto usuario)
     {
-        XAxisLabels = UsuarioPerformance.Months.Select(a => a.Month+"").ToArray();
-        Series = new List<ChartSeries>();
-        foreach (var item in UsuarioPerformance.UsuarioRecetas)
+        var list = new List<ValorAporteDto>();
+        for (int i = 0; i < usuario.Data.Length; i++)
         {
-            var serie = new ChartSeries()
+            list.Add(new ValorAporteDto
                 {
-                    Name = item.Name,
-                    Data = item.Data
-                };
-            Series.Add(serie);
+                    Name = usuario.Name,
+                    RecetaLiquida = usuario.Data[i],
+                    AnnoMes = UsuarioPerformance.Months[i].ToShortDateString()
+                });
         }
-        
+
+        return list;
     }
-    private int Index = 0; //default value cannot be 0 -> first selectedindex is 0.
-    int dataSize = 4;
 }
