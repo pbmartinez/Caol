@@ -30,9 +30,9 @@
 
 }
 
-
-<MudButton OnClick="ShowPizzaAsync"> Show Pizza </MudButton>
+<MudButton OnClick="ShowPizzaAsync" > Show Pizza </MudButton>
 <MudButton OnClick="ShowGraphicAsync"> Show Graphic </MudButton>
+<MudButton OnClick="ShowRelatorioAsync"> Show Relatorio </MudButton>
 
 @if (Aporte != null && Aporte.Valores != null && Aporte.Valores.Count != 0)
 {
@@ -41,6 +41,10 @@
 @if (UserPerformance!=null && UserPerformance.UsuarioRecetas != null && UserPerformance.UsuarioRecetas.Count != 0)
 {    
     <GraphicChart UsuarioPerformance=UserPerformance></GraphicChart>
+}
+@if (UsuariosRelatorio != null && UsuariosRelatorio.Count > 0)
+{
+    <RelatorioTable Usuarios=UsuariosRelatorio></RelatorioTable>
 }
 
 @code {
@@ -51,6 +55,8 @@
     List<CaoUsuarioDto> Usuarios = new List<CaoUsuarioDto> ();
     AporteRecetaLiquidaDto? Aporte = null;
     AporteMensualDto? UserPerformance = null;
+    List<UsuarioDto> UsuariosRelatorio = new List<UsuarioDto>();
+
     protected override async Task OnInitializedAsync()
     {
         StartDate = DateTime.Today.AddDays(-DateTime.Today.Day+1);
@@ -89,6 +95,18 @@
         }
         else
             UserPerformance = aporteMensualDto;
+    }
+    private async Task ShowRelatorioAsync()
+    {
+        //var link = $"api/facturas/relatorio?startDate={ForApiEndPoint(StartDate)}&endDate={ForApiEndPoint(EndDate)}&coUsuarios={string.Join(',', options)}";
+        var link = $"api/facturas/relatorio?startDate=2007-01-01&endDate=2007-12-01&coUsuarios=carlos.carvalho,carlos.arruda,anapaula.chiodaro";
+        var listaUsuarios = await Http.GetFromJsonAsync<List<UsuarioDto>>(link);
+        if (listaUsuarios == null || listaUsuarios.Count == 0)
+        {
+            Snackbar.Add("No results", Severity.Info);
+        }
+        else
+            UsuariosRelatorio = listaUsuarios;
     }
 
 }

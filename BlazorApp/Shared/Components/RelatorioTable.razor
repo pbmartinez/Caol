@@ -1,0 +1,55 @@
+﻿@using Application.Dtos
+
+<MudGrid>
+    @foreach (var usuario in Usuarios)
+    {
+        <MudItem xs=12>
+            <MudCard>
+                <MudCardHeader> <b>@usuario.Name</b> </MudCardHeader>
+                <MudCardContent>
+                    <MudSimpleTable Style="overflow-x: auto;"
+                                FixedHeader=true
+                                Dense=true
+                                Elevation=4
+                                Striped=true
+                                Hover=true>
+
+                        <thead>
+                            <tr>
+                                @foreach (var h in headings)
+                                {
+                                    <th>@h</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var factura in usuario.Facturas)
+                            {
+                                <tr>
+                                    <td>@factura.Mes</td>
+                                    <td>@factura.RecetaLiquida</td>
+                                    <td>@usuario.BrutSalario</td>
+                                    <td>@factura.Comissao</td>
+                                    <td>@factura.Lucro</td>
+                                </tr>
+                            }
+                            <tr>
+                                <td><b>Saldo</b></td>
+                                <td><b>@usuario.Facturas.Sum(f=>f.RecetaLiquida)</b></td>
+                                <td><b>@(usuario.BrutSalario * usuario.Facturas.Count) </b></td>
+                                <td><b>@usuario.Facturas.Sum(f=>f.Comissao)</b></td>
+                                <td><b>@usuario.Facturas.Sum(f=>f.Lucro)</b></td>
+                            </tr>
+                        </tbody>
+                    </MudSimpleTable>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    }
+</MudGrid>
+@code {
+    [Parameter]
+    public List<UsuarioDto> Usuarios { get; set; } = new List<UsuarioDto>();
+
+    string[] headings = { "Mes", "Receta Liquida","Custo Fixo" , "Comissao", "Lucro" };
+}
