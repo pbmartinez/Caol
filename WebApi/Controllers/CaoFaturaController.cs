@@ -22,26 +22,24 @@ namespace WebApi.Controllers
             
         }
 
-        [HttpGet("relatorio")]
-        public async Task<IActionResult> GetRelatorio([FromQuery] QueryStringParameters queryStringParameters, DateTime? startDate,DateTime? endDate, [ModelBinder(BinderType =typeof(ArrayModelBinder))] IEnumerable<string>coUsuarios)
-        {
-            var facturas = await ((ICaoFaturaAppService)AppService)
-                .GetRelatorioAsync(startDate,endDate,coUsuarios);
-            var items = facturas.ShapeDataOnIEnumerable(queryStringParameters.Fields);
-            return Ok(items);
-        }
-
         [HttpGet("pizza")]
-        public async Task<AporteRecetaLiquidaDto> GetPizzaAsync(DateTime? startDate, DateTime? endDate, [ModelBinder(BinderType = typeof(ArrayModelBinder))] IEnumerable<string> coUsuarios)
+        public AporteRecetaLiquidaDto GetPizzaAsync(DateTime? startDate, DateTime? endDate, [ModelBinder(BinderType = typeof(ArrayModelBinder))] IEnumerable<string> coUsuarios)
         {
-            var aportes = await ((ICaoFaturaAppService)AppService).GetPizzaAsync(startDate,endDate,coUsuarios);
+            var aportes = ((ICaoFaturaAppService)AppService).GetPizza(startDate,endDate,coUsuarios);
             return aportes;
         }
         [HttpGet("graphic")]
-        public async Task<AporteMensualDto> GetGraphicAsync(DateTime? startDate, DateTime? endDate, [ModelBinder(BinderType = typeof(ArrayModelBinder))] IEnumerable<string> coUsuarios)
+        public AporteMensualDto GetGraphic(DateTime? startDate, DateTime? endDate, [ModelBinder(BinderType = typeof(ArrayModelBinder))] IEnumerable<string> coUsuarios)
         {
-            var aportes = await ((ICaoFaturaAppService)AppService).GetGraphicAsync(startDate,endDate,coUsuarios);
+            var aportes =  ((ICaoFaturaAppService)AppService).GetGraphic(startDate,endDate,coUsuarios);
             return aportes;
+        }
+
+        [HttpGet("relatorio")]
+        public IActionResult GetRelatorio(DateTime? startDate, DateTime? endDate, [ModelBinder(BinderType = typeof(ArrayModelBinder))] IEnumerable<string> coUsuarios)
+        {
+            var usuarios = ((ICaoFaturaAppService)AppService).GetRelatorio(startDate, endDate, coUsuarios);
+            return Ok(usuarios);
         }
     }
 }

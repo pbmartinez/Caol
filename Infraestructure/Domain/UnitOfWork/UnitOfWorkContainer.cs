@@ -106,6 +106,7 @@ namespace Infraestructure.Domain.UnitOfWork
         #region Database Raw Query Results
         public DbSet<UsuarioRecetaLiquida> UsuarioRecetaLiquida { get; set; }
         public DbSet<UsuarioPerformance> UsuarioPerformance { get; set; }
+        public DbSet<UsuarioRelatorio> UsuarioRelatorio { get; set; }
         #endregion
 
 
