@@ -1,5 +1,7 @@
 using BlazorApp;
 using BlazorApp.WellKnownNames;
+using Domain.Interfaces;
+using Domain.Services;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor.Services;
@@ -17,5 +19,8 @@ builder.Services.AddHttpClient(AppSettings.HttpClientApi, (services, client) =>
 builder.Services.AddTransient(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient(AppSettings.HttpClientApi));
 builder.Services.AddLocalization();
 builder.Services.AddMudServices();
+builder.Services.AddScoped<IDateTimeService, DateTimeService>();
+builder.Services.AddScoped<IGlobalizationService, GlobalizationService>();
+builder.Services.AddScoped<ICurrencyService, CurrencyService>();
 
 await builder.Build().RunAsync();

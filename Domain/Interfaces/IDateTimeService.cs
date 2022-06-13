@@ -11,5 +11,6 @@ namespace Domain.Interfaces
         string ParsedAsMySql(DateTime date);
         List<DateTime> GetDateTimesInBetween(DateTime startDate, DateTime endDate);
         int IndexOf(List<DateTime> dateTimes, DateTime date);
+        string DateAsMonthYear(DateTime date);
     }
 }

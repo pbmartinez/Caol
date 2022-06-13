@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Domain.Interfaces;
 
-namespace Infrastructure.Services
+namespace Domain.Services
 {
-    public class DateTimeService :IDateTimeService
+    public class DateTimeService : IDateTimeService
     {
         public string ParsedAsMySql(DateTime date)
         {
@@ -35,6 +35,11 @@ namespace Infrastructure.Services
                 index++;
             }
             return -1;
+        }
+
+        public string DateAsMonthYear(DateTime date)
+        {
+            return date.ToString("Y");
         }
     }
 }

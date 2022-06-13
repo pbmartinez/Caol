@@ -4,13 +4,13 @@ using Application.Mappings;
 using AutoMapper.Extensions.ExpressionMapping;
 using Domain.Interfaces;
 using Domain.IRepositories;
+using Domain.Services;
 using Domain.UnitOfWork;
 using Infraestructure.Application.AppServices;
 using Infraestructure.Application.Validator;
 using Infraestructure.Domain.Repositories;
 using Infraestructure.Domain.UnitOfWork;
 using Infraestructure.Services;
-using Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -98,6 +98,8 @@ namespace Infraestructure.DependencyInjectionExtensions
 
             // Inject here any other service from the Application
             services.AddScoped<IDateTimeService, DateTimeService>();
+            services.AddScoped<IGlobalizationService, GlobalizationService>();
+            services.AddScoped<ICurrencyService, CurrencyService>();
         }
     }
 }

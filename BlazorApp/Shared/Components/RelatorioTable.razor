@@ -1,4 +1,8 @@
 ﻿@using Application.Dtos
+@using Domain.Interfaces
+
+@inject IDateTimeService _dateTimeService
+@inject ICurrencyService _currencyService
 
 <MudGrid>
     @foreach (var usuario in Usuarios)
@@ -13,7 +17,6 @@
                                 Elevation=4
                                 Striped=true
                                 Hover=true>
-
                         <thead>
                             <tr>
                                 @foreach (var h in headings)
@@ -26,19 +29,19 @@
                             @foreach (var factura in usuario.Facturas)
                             {
                                 <tr>
-                                    <td>@factura.Mes</td>
-                                    <td>@factura.RecetaLiquida</td>
-                                    <td>@usuario.BrutSalario</td>
-                                    <td>@factura.Comissao</td>
-                                    <td>@factura.Lucro</td>
+                                    <td>@_dateTimeService.DateAsMonthYear(factura.Mes)</td>
+                                    <td>@_currencyService.GetCurrencyValue( factura.RecetaLiquida)</td>
+                                    <td>@_currencyService.GetCurrencyValue(usuario.BrutSalario)</td>
+                                    <td>@_currencyService.GetCurrencyValue(factura.Comissao)</td>
+                                    <td>@_currencyService.GetCurrencyValue(factura.Lucro)</td>
                                 </tr>
                             }
                             <tr>
                                 <td><b>Saldo</b></td>
-                                <td><b>@usuario.Facturas.Sum(f=>f.RecetaLiquida)</b></td>
-                                <td><b>@(usuario.BrutSalario * usuario.Facturas.Count) </b></td>
-                                <td><b>@usuario.Facturas.Sum(f=>f.Comissao)</b></td>
-                                <td><b>@usuario.Facturas.Sum(f=>f.Lucro)</b></td>
+                                <td><b>@_currencyService.GetCurrencyValue(usuario.Facturas.Sum(f=>f.RecetaLiquida))</b></td>
+                                <td><b>@(_currencyService.GetCurrencyValue(usuario.BrutSalario * usuario.Facturas.Count)) </b></td>
+                                <td><b>@_currencyService.GetCurrencyValue(usuario.Facturas.Sum(f=>f.Comissao))</b></td>
+                                <td><b>@_currencyService.GetCurrencyValue(usuario.Facturas.Sum(f=>f.Lucro))</b></td>
                             </tr>
                         </tbody>
                     </MudSimpleTable>

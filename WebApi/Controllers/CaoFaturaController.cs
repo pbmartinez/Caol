@@ -11,33 +11,40 @@ using WebApi.Parameters;
 
 namespace WebApi.Controllers
 {
-    
+
     [ApiController]
     [Route("api/facturas")]
     public class CaoFaturaController : ApiBaseController<CaoFaturaDto>
     {
-        public CaoFaturaController(ICaoFaturaAppService appService, ILogger<ApiBaseController<CaoFaturaDto>> logger, IPropertyCheckerService propertyCheckerService) 
+        public CaoFaturaController(ICaoFaturaAppService appService, ILogger<ApiBaseController<CaoFaturaDto>> logger, IPropertyCheckerService propertyCheckerService)
             : base(appService, logger, propertyCheckerService)
         {
-            
+
         }
 
         [HttpGet("pizza")]
-        public AporteRecetaLiquidaDto GetPizzaAsync(DateTime? startDate, DateTime? endDate, [ModelBinder(BinderType = typeof(ArrayModelBinder))] IEnumerable<string> coUsuarios)
+        public ActionResult<AporteRecetaLiquidaDto> GetPizzaAsync(DateTime? startDate, DateTime? endDate, [ModelBinder(BinderType = typeof(ArrayModelBinder))] IEnumerable<string> coUsuarios)
         {
-            var aportes = ((ICaoFaturaAppService)AppService).GetPizza(startDate,endDate,coUsuarios);
-            return aportes;
+            if (startDate == null || endDate == null || coUsuarios == null || !coUsuarios.Any() || startDate > endDate)
+                return BadRequest();
+
+            var aportes = ((ICaoFaturaAppService)AppService).GetPizza(startDate, endDate, coUsuarios);
+            return Ok(aportes);
         }
         [HttpGet("graphic")]
-        public AporteMensualDto GetGraphic(DateTime? startDate, DateTime? endDate, [ModelBinder(BinderType = typeof(ArrayModelBinder))] IEnumerable<string> coUsuarios)
+        public ActionResult<AporteMensualDto> GetGraphic(DateTime? startDate, DateTime? endDate, [ModelBinder(BinderType = typeof(ArrayModelBinder))] IEnumerable<string> coUsuarios)
         {
-            var aportes =  ((ICaoFaturaAppService)AppService).GetGraphic(startDate,endDate,coUsuarios);
-            return aportes;
+            if (startDate == null || endDate == null || coUsuarios == null || !coUsuarios.Any() || startDate > endDate)
+                return BadRequest();
+            var aportes = ((ICaoFaturaAppService)AppService).GetGraphic(startDate, endDate, coUsuarios);
+            return Ok(aportes);
         }
 
         [HttpGet("relatorio")]
-        public IActionResult GetRelatorio(DateTime? startDate, DateTime? endDate, [ModelBinder(BinderType = typeof(ArrayModelBinder))] IEnumerable<string> coUsuarios)
+        public ActionResult<List<UsuarioDto>> GetRelatorio(DateTime? startDate, DateTime? endDate, [ModelBinder(BinderType = typeof(ArrayModelBinder))] IEnumerable<string> coUsuarios)
         {
+            if (startDate == null || endDate == null || coUsuarios == null || !coUsuarios.Any() || startDate > endDate)
+                return BadRequest();
             var usuarios = ((ICaoFaturaAppService)AppService).GetRelatorio(startDate, endDate, coUsuarios);
             return Ok(usuarios);
         }
