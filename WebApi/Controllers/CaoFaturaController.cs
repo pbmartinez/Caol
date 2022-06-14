@@ -39,6 +39,14 @@ namespace WebApi.Controllers
             var aportes = ((ICaoFaturaAppService)AppService).GetGraphic(startDate, endDate, coUsuarios);
             return Ok(aportes);
         }
+        [HttpGet("graphic2")]
+        public ActionResult<List<UsuarioDto>> GetGraphic2(DateTime? startDate, DateTime? endDate, [ModelBinder(BinderType = typeof(ArrayModelBinder))] IEnumerable<string> coUsuarios)
+        {
+            if (startDate == null || endDate == null || coUsuarios == null || !coUsuarios.Any() || startDate > endDate)
+                return BadRequest();
+            var aportes = ((ICaoFaturaAppService)AppService).GetGraphicList(startDate, endDate, coUsuarios);
+            return Ok(aportes);
+        }
 
         [HttpGet("relatorio")]
         public ActionResult<List<UsuarioDto>> GetRelatorio(DateTime? startDate, DateTime? endDate, [ModelBinder(BinderType = typeof(ArrayModelBinder))] IEnumerable<string> coUsuarios)

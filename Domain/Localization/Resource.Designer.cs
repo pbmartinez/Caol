@@ -277,7 +277,7 @@ namespace Domain.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Agence.
+        ///   Looks up a localized string similar to CAOL Agence App.
         /// </summary>
         public static string display_AppName {
             get {
@@ -399,6 +399,15 @@ namespace Domain.Localization {
         public static string display_RelatorioColumnProfit {
             get {
                 return ResourceManager.GetString("display_RelatorioColumnProfit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Balance.
+        /// </summary>
+        public static string display_RelatorioColumnSaldo {
+            get {
+                return ResourceManager.GetString("display_RelatorioColumnSaldo", resourceCulture);
             }
         }
         

@@ -33,5 +33,7 @@ namespace Application.IAppServices
         /// <param name="coUsuarios"></param>
         /// <returns></returns>
         AporteMensualDto GetGraphic(DateTime? startDate, DateTime? endDate, IEnumerable<string> coUsuarios);
+
+        List<UsuarioDto> GetGraphicList(DateTime? startDate, DateTime? endDate, IEnumerable<string>? coUsuarios);
     }
 }

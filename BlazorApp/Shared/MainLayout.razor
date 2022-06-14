@@ -1,5 +1,7 @@
 ﻿@inherits LayoutComponentBase
 
+@inject IStringLocalizer<Resource> Localizer
+
 <MudThemeProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
@@ -11,7 +13,7 @@
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" Elevation="1">
         <MudDrawerHeader>
-            <MudText Typo="Typo.h6">Agence App</MudText>
+            <MudText Typo="Typo.h6">@Localizer[Resource.display_AppName]</MudText>
         </MudDrawerHeader>
         <NavMenu />
     </MudDrawer>

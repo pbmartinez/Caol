@@ -39,7 +39,7 @@
                                 </tr>
                             }
                             <tr>
-                                <td><b>Saldo</b></td>
+                                <td><b>@Localizer[Resource.display_RelatorioColumnSaldo]</b></td>
                                 <td><b>@_currencyService.GetCurrencyValue(usuario.Facturas.Sum(f=>f.RecetaLiquida))</b></td>
                                 <td><b>@(_currencyService.GetCurrencyValue(usuario.BrutSalario * usuario.Facturas.Count)) </b></td>
                                 <td><b>@_currencyService.GetCurrencyValue(usuario.Facturas.Sum(f=>f.Comissao))</b></td>

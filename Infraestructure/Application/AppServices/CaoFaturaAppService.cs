@@ -160,12 +160,12 @@ namespace Infraestructure.Application.AppServices
 
             //var queryResult = _CaoFaturaRepository.UnitOfWork.ExecuteQuery<UsuarioRecetaLiquida>(query, new object[] { startDate?.ParsedAsMySql() , endDate?.ParsedAsMySql(), listOfUserCodes });
             var queryResult = _CaoFaturaRepository.UnitOfWork.ExecuteQuery<UsuarioRecetaLiquida>(query).ToList();
-            var groupedByUsuario = queryResult.GroupBy(u => u.CoUsuario).Select(g => new UsuarioRecetaLiquida 
+            var groupedByUsuario = queryResult.GroupBy(u => u.CoUsuario).Select(g => new UsuarioRecetaLiquida
             {
                 CoUsuario = g.Key,
                 NoUsuario = queryResult.FirstOrDefault(us => us.CoUsuario == g.Key)?.NoUsuario ?? g.Key,
                 DataEmissao = queryResult.FirstOrDefault(us => us.CoUsuario == g.Key)?.DataEmissao ?? DateTime.MinValue,
-                Yearmonth = queryResult.FirstOrDefault(us => us.CoUsuario == g.Key)?.Yearmonth ,
+                Yearmonth = queryResult.FirstOrDefault(us => us.CoUsuario == g.Key)?.Yearmonth,
                 Valor = queryResult.Where(us => us.CoUsuario == g.Key).Sum(uv => uv.Valor),
                 ReceitaLiquida = queryResult.Where(us => us.CoUsuario == g.Key).Sum(uv => uv.ReceitaLiquida),
             }).ToList();
@@ -190,7 +190,7 @@ namespace Infraestructure.Application.AppServices
                 Total = total,
                 Valores = lista
             };
-        }        
+        }
         public AporteMensualDto GetGraphic(DateTime? startDate, DateTime? endDate, IEnumerable<string>? coUsuarios)
         {
             ArgumentNullException.ThrowIfNull(startDate, nameof(startDate));
@@ -214,12 +214,12 @@ namespace Infraestructure.Application.AppServices
             //Todo !! Debug and trace 
             //if query executes on ToList later in method
             var queryResult = _CaoFaturaRepository.UnitOfWork.ExecuteQuery<UsuarioPerformance>(query);
-            
+
             var listOfMonth = _dateTimeService.GetDateTimesInBetween(startDate.Value, endDate.Value);
 
             var aporteMensual = new AporteMensualDto()
             {
-                Months=listOfMonth
+                Months = listOfMonth
             };
             var totalSalary = 0.0;
             foreach (var item in allUserCodes)
@@ -229,14 +229,74 @@ namespace Infraestructure.Application.AppServices
                 var usuarioReceta = new UsuarioRecetasDto(item, aportes.FirstOrDefault()?.NoUsuario ?? item, listOfMonth.Count);
                 foreach (var aporte in aportes)
                 {
-                    var index = _dateTimeService.IndexOf(listOfMonth,aporte.DataEmissao);
-                    usuarioReceta.Data[index] = Math.Round(aporte.ReceitaLiquida,2);
+                    var index = _dateTimeService.IndexOf(listOfMonth, aporte.DataEmissao);
+                    usuarioReceta.Data[index] = Math.Round(aporte.ReceitaLiquida, 2);
                 }
                 aporteMensual.UsuarioRecetas.Add(usuarioReceta);
             }
             var averageSalary = totalSalary / allUserCodes.Count;
             aporteMensual.AvarageSalary = averageSalary;
             return aporteMensual;
+        }
+
+        public List<UsuarioDto> GetGraphicList(DateTime? startDate, DateTime? endDate, IEnumerable<string>? coUsuarios)
+        {
+            ArgumentNullException.ThrowIfNull(startDate, nameof(startDate));
+            ArgumentNullException.ThrowIfNull(endDate, nameof(endDate));
+            ArgumentNullException.ThrowIfNull(coUsuarios, nameof(coUsuarios));
+
+            var listOfUserCodes = coUsuarios.GetAsCsvSingleQuote();
+            var allUserCodes = coUsuarios?.ToList() ?? new List<string>();
+
+            //Todo fix where clause
+            var query = "select u.co_usuario, u.no_usuario, f.data_emissao, sum(f.valor) as valor, sum(f.valor - (f.valor * f.total_imp_inc/100)) as receita_liquida, s.brut_salario, " +
+                "CONCAT(year(f.data_emissao), '-', month(f.data_emissao)) as yearmonth " +
+                "from cao_fatura as f " +
+                "join cao_os as o on f.co_os = o.co_os join cao_usuario as u on o.co_usuario = u.co_usuario join cao_salario as s on u.co_usuario = s.co_usuario " +
+                //"where f.data_emissao between STR_TO_DATE('{0}', '%m/%d/%Y') and STR_TO_DATE('{1}', '%m/%d/%Y') and " +
+                //"u.co_usuario in ({2}) " +
+                "group by u.co_usuario, yearmonth " +
+                "order by u.no_usuario, f.data_emissao";
+
+            //var queryResult = _CaoFaturaRepository.UnitOfWork.ExecuteQuery<UsuarioRecetaLiquida>(query, new object[] { startDate?.ParsedAsMySql() , endDate?.ParsedAsMySql(), listOfUserCodes });
+            //Todo !! Debug and trace 
+            //if query executes on ToList later in method
+            var queryResult = _CaoFaturaRepository.UnitOfWork.ExecuteQuery<UsuarioPerformance>(query);
+
+            var listOfMonth = _dateTimeService.GetDateTimesInBetween(startDate.Value, endDate.Value);
+
+            var listOfUsers = new List<UsuarioDto>();
+
+            var totalSalary = 0.0;
+            foreach (var item in allUserCodes)
+            {
+                var aportes = queryResult.Where(a => a.CoUsuario == item).ToList();
+                var aporteUsuario = aportes?.FirstOrDefault(a => a.CoUsuario == item);
+                if (aporteUsuario != null && aportes!= null && aportes.Any())
+                {
+                    totalSalary += aporteUsuario?.BrutSalario ?? 0.0;
+
+                    var usuario = new UsuarioDto()
+                    {
+                        Code = item,
+                        Name = aporteUsuario?.NoUsuario ?? item,
+                        BrutSalario = aporteUsuario?.BrutSalario ?? 0.0
+                    };
+                    foreach (var aporte in aportes)
+                    {
+                        usuario.Facturas.Add(new FacturaAcumuladaDto
+                        {
+                            Mes = aporte.DataEmissao,
+                            Valor = aporte.Valor,
+                            RecetaLiquida = aporte.ReceitaLiquida
+                        });                        
+                    }
+
+                    listOfUsers.Add(usuario);
+                }
+            }
+            var averageSalary = totalSalary / allUserCodes.Count;
+            return listOfUsers;
         }
         public List<UsuarioDto> GetRelatorio(DateTime? startDate, DateTime? endDate, IEnumerable<string>? coUsuarios)
         {
@@ -264,8 +324,8 @@ namespace Infraestructure.Application.AppServices
             var listOfMonth = _dateTimeService.GetDateTimesInBetween(startDate.Value, endDate.Value);
 
             var listOfUsers = new List<UsuarioDto>();
-            
-                
+
+
             foreach (var item in allUserCodes)
             {
                 var aportes = queryResult.Where(a => a.CoUsuario == item).ToList();

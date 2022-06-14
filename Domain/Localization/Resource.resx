@@ -190,7 +190,7 @@
     <value>Add / Edit</value>
   </data>
   <data name="display_AppName" xml:space="preserve">
-    <value>Agence</value>
+    <value>CAOL Agence App</value>
   </data>
   <data name="display_Buscar" xml:space="preserve">
     <value>Find ...</value>
@@ -230,6 +230,9 @@
   </data>
   <data name="display_RelatorioColumnProfit" xml:space="preserve">
     <value>Profit</value>
+  </data>
+  <data name="display_RelatorioColumnSaldo" xml:space="preserve">
+    <value>Balance</value>
   </data>
   <data name="display_SeleccioneXXX" xml:space="preserve">
     <value>Select ...</value>
