@@ -8,7 +8,7 @@
 
 
 <ApexChart TItem="ValorAporteDto"
-            Title="Participacao na Receita Liquida">
+            Title="@Localizer[Resource.display_PieChartTitle]">
 
     <ApexPointSeries TItem="ValorAporteDto"
                         Items="Aporte.Valores"
@@ -22,7 +22,7 @@
 
 @code {
     [EditorRequired]
-    [Parameter] public AporteRecetaLiquidaDto Aporte { get; set; } = default;
+    [Parameter] public AporteRecetaLiquidaDto Aporte { get; set; } = null!;
     [Parameter] public DateTime StartDate { get; set; }
     [Parameter] public DateTime EndDate { get; set; }
     double[] Data { get; set; } = new double[1];

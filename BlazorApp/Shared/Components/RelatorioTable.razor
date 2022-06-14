@@ -3,6 +3,7 @@
 
 @inject IDateTimeService _dateTimeService
 @inject ICurrencyService _currencyService
+@inject IStringLocalizer<Resource> Localizer
 
 <MudGrid>
     @foreach (var usuario in Usuarios)
@@ -19,10 +20,11 @@
                                 Hover=true>
                         <thead>
                             <tr>
-                                @foreach (var h in headings)
-                                {
-                                    <th>@h</th>
-                                }
+                                <th>@Localizer[Resource.display_RelatorioColumnPeriod]</th>
+                                <th>@Localizer[Resource.display_RelatorioColumnLiquidSales]</th>
+                                <th>@Localizer[Resource.display_RelatorioColumnFixCost]</th>
+                                <th>@Localizer[Resource.display_RelatorioColumnCommision]</th>
+                                <th>@Localizer[Resource.display_RelatorioColumnProfit]</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -52,7 +54,5 @@
 </MudGrid>
 @code {
     [Parameter]
-    public List<UsuarioDto> Usuarios { get; set; } = new List<UsuarioDto>();
-
-    string[] headings = { "Mes", "Receta Liquida","Custo Fixo" , "Comissao", "Lucro" };
+    public List<UsuarioDto> Usuarios { get; set; } = new List<UsuarioDto>();        
 }

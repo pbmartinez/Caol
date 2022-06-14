@@ -150,6 +150,15 @@
   <data name="btn_Save" xml:space="preserve">
     <value>Save</value>
   </data>
+  <data name="btn_ShowGraphic" xml:space="preserve">
+    <value>Graphic</value>
+  </data>
+  <data name="btn_ShowPizza" xml:space="preserve">
+    <value>Pizza</value>
+  </data>
+  <data name="btn_ShowRelatorio" xml:space="preserve">
+    <value>Relatorio</value>
+  </data>
   <data name="display_401" xml:space="preserve">
     <value>401</value>
   </data>
@@ -201,6 +210,30 @@
   <data name="display_ListOfXXX" xml:space="preserve">
     <value>List of {0}</value>
   </data>
+  <data name="display_NoResults" xml:space="preserve">
+    <value>There is no data to show</value>
+  </data>
+  <data name="display_PieChartTitle" xml:space="preserve">
+    <value>Contribution to Liquid Sales</value>
+  </data>
+  <data name="display_RelatorioColumnCommision" xml:space="preserve">
+    <value>Commision</value>
+  </data>
+  <data name="display_RelatorioColumnFixCost" xml:space="preserve">
+    <value>Fixed Costs</value>
+  </data>
+  <data name="display_RelatorioColumnLiquidSales" xml:space="preserve">
+    <value>Liquid Sales</value>
+  </data>
+  <data name="display_RelatorioColumnPeriod" xml:space="preserve">
+    <value>Period</value>
+  </data>
+  <data name="display_RelatorioColumnProfit" xml:space="preserve">
+    <value>Profit</value>
+  </data>
+  <data name="display_SeleccioneXXX" xml:space="preserve">
+    <value>Select ...</value>
+  </data>
   <data name="display_Welcome" xml:space="preserve">
     <value>Welcome</value>
   </data>
@@ -215,6 +248,15 @@
   </data>
   <data name="Exception_NullFieldOnOrderingEntity" xml:space="preserve">
     <value>The property specified {0} can not be defined for ordering collection of {1}.</value>
+  </data>
+  <data name="FilterOptionsEndDate" xml:space="preserve">
+    <value>End date</value>
+  </data>
+  <data name="FilterOptionsSelectedValues" xml:space="preserve">
+    <value>Selected vendors</value>
+  </data>
+  <data name="FilterOptionsStartDate" xml:space="preserve">
+    <value>Start date</value>
   </data>
   <data name="menu_Comercial" xml:space="preserve">
     <value>Commercial</value>
@@ -252,19 +294,19 @@
   <data name="page_500" xml:space="preserve">
     <value>500</value>
   </data>
-  <data name="page_GridGateways" xml:space="preserve">
-    <value>Gateways</value>
-  </data>
-  <data name="page_GridPeripherals" xml:space="preserve">
-    <value>Peripherals</value>
-  </data>
   <data name="page_Index" xml:space="preserve">
     <value>Index</value>
+  </data>
+  <data name="validation_EmptyVendorSelection" xml:space="preserve">
+    <value>You must select at least one vendor</value>
   </data>
   <data name="validation_FieldRequired" xml:space="preserve">
     <value>Field required</value>
   </data>
   <data name="validation_Ipv4AddressBadFormat" xml:space="preserve">
     <value>Ipv4 it has bad format</value>
+  </data>
+  <data name="validation_OnDateComparison" xml:space="preserve">
+    <value>Final date should be greated then initial date</value>
   </data>
 </root>

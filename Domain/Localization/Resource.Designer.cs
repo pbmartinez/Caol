@@ -160,6 +160,33 @@ namespace Domain.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Graphic.
+        /// </summary>
+        public static string btn_ShowGraphic {
+            get {
+                return ResourceManager.GetString("btn_ShowGraphic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pizza.
+        /// </summary>
+        public static string btn_ShowPizza {
+            get {
+                return ResourceManager.GetString("btn_ShowPizza", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Relatorio.
+        /// </summary>
+        public static string btn_ShowRelatorio {
+            get {
+                return ResourceManager.GetString("btn_ShowRelatorio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 401.
         /// </summary>
         public static string display_401 {
@@ -313,6 +340,78 @@ namespace Domain.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There is no data to show.
+        /// </summary>
+        public static string display_NoResults {
+            get {
+                return ResourceManager.GetString("display_NoResults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Contribution to Liquid Sales.
+        /// </summary>
+        public static string display_PieChartTitle {
+            get {
+                return ResourceManager.GetString("display_PieChartTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Commision.
+        /// </summary>
+        public static string display_RelatorioColumnCommision {
+            get {
+                return ResourceManager.GetString("display_RelatorioColumnCommision", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fixed Costs.
+        /// </summary>
+        public static string display_RelatorioColumnFixCost {
+            get {
+                return ResourceManager.GetString("display_RelatorioColumnFixCost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Liquid Sales.
+        /// </summary>
+        public static string display_RelatorioColumnLiquidSales {
+            get {
+                return ResourceManager.GetString("display_RelatorioColumnLiquidSales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Period.
+        /// </summary>
+        public static string display_RelatorioColumnPeriod {
+            get {
+                return ResourceManager.GetString("display_RelatorioColumnPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Profit.
+        /// </summary>
+        public static string display_RelatorioColumnProfit {
+            get {
+                return ResourceManager.GetString("display_RelatorioColumnProfit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select ....
+        /// </summary>
+        public static string display_SeleccioneXXX {
+            get {
+                return ResourceManager.GetString("display_SeleccioneXXX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Welcome.
         /// </summary>
         public static string display_Welcome {
@@ -354,6 +453,33 @@ namespace Domain.Localization {
         public static string Exception_NullFieldOnOrderingEntity {
             get {
                 return ResourceManager.GetString("Exception_NullFieldOnOrderingEntity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to End date.
+        /// </summary>
+        public static string FilterOptionsEndDate {
+            get {
+                return ResourceManager.GetString("FilterOptionsEndDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected vendors.
+        /// </summary>
+        public static string FilterOptionsSelectedValues {
+            get {
+                return ResourceManager.GetString("FilterOptionsSelectedValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start date.
+        /// </summary>
+        public static string FilterOptionsStartDate {
+            get {
+                return ResourceManager.GetString("FilterOptionsStartDate", resourceCulture);
             }
         }
         
@@ -466,29 +592,20 @@ namespace Domain.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Gateways.
-        /// </summary>
-        public static string page_GridGateways {
-            get {
-                return ResourceManager.GetString("page_GridGateways", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Peripherals.
-        /// </summary>
-        public static string page_GridPeripherals {
-            get {
-                return ResourceManager.GetString("page_GridPeripherals", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Index.
         /// </summary>
         public static string page_Index {
             get {
                 return ResourceManager.GetString("page_Index", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must select at least one vendor.
+        /// </summary>
+        public static string validation_EmptyVendorSelection {
+            get {
+                return ResourceManager.GetString("validation_EmptyVendorSelection", resourceCulture);
             }
         }
         
@@ -507,6 +624,15 @@ namespace Domain.Localization {
         public static string validation_Ipv4AddressBadFormat {
             get {
                 return ResourceManager.GetString("validation_Ipv4AddressBadFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Final date should be greated then initial date.
+        /// </summary>
+        public static string validation_OnDateComparison {
+            get {
+                return ResourceManager.GetString("validation_OnDateComparison", resourceCulture);
             }
         }
     }
