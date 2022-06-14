@@ -1,62 +1,102 @@
 ﻿@page "/comercial-performance"
 @using Application.Dtos
+@using Domain.DataAnnotations
 @using BlazorApp.Shared.Components
+@using BlazorApp.Models
+@using System.ComponentModel.DataAnnotations
+@using System.Text.RegularExpressions
 
 @inject HttpClient Http
 @inject IStringLocalizer<Resource> Localizer
 @inject ISnackbar Snackbar
 
 <MudGrid>
-    <MudItem xs="12" md="6" sm="4">
-        <MudDatePicker Label="Inicio" @bind-Date="StartDate" FixDay=1 />
-    </MudItem>
-    <MudItem xs="12" md="6" sm="4">
-        <MudDatePicker Label="Fin" @bind-Date="EndDate" FixDay=1 />
-    </MudItem>
-    <MudItem xs="12" md="6" sm="4">
-        @if (Usuarios != null && Usuarios.Count > 0)
-        {
-            <MudSelect T="string"
-                   Label="Vendedor"
-                   MultiSelection="true" @bind-Value="value" @bind-SelectedValues="options"
-                   Clearable="true"
-                   SelectAll="true"
-                   Placeholder="Select vendor ..."
-                   Dense="true">
-                @foreach (var item in Usuarios)
-                {
-                    <MudSelectItem T="string" Value="@item.CoUsuario">@item.NoUsuario</MudSelectItem>
-                }
-            </MudSelect>
-        }
+    <MudItem xs="12">
+        <MudPaper Class="pa-4">
+            <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors" >
+                <MudGrid>
+                    <MudItem xs="12" sm="6" md="4">
+                        <MudDatePicker Label="Inicio" @bind-Date="filterOptions.StartDate" FixDay=1 Required="true" RequiredError="Start Date is required!" />
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="4">
+                        <MudDatePicker Label="Fin" @bind-Date="filterOptions.EndDate" FixDay=1 Required="true" RequiredError="End Date is required!"
+                                       Validation="@(new Func<DateTime?, IEnumerable<string>>(CompareDates))" 
+                                       />
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="4">
+                        @if (Usuarios != null && Usuarios.Count > 0)
+                        {
+                            <MudSelect T="string"
+                                   Label="Vendedor"
+                                   MultiSelection="true" @bind-Value="filterOptions.SelectedValues" @bind-SelectedValues="options"
+                                   Clearable="true"
+                                   SelectAll="true"
+                                   Placeholder="Select vendor ..."
+                                   Dense="true"
+                                   Required="true"
+                                   RequiredError="Must select at least one vendor !">
+                                @foreach (var item in Usuarios)
+                                {
+                                    <MudSelectItem T="string" Value="@item.CoUsuario">@item.NoUsuario</MudSelectItem>
+                                }
+                            </MudSelect>
+                        }
+                        else
+                        {
+                            <MudSelect T="string"></MudSelect>
+                        }
+                    </MudItem>
+                </MudGrid>
+
+                <div class="d-flex align-center justify-space-between mt-6">
+                    <MudButton Variant="Variant.Filled" Color="MudBlazor.Color.Primary" Disabled="@(!success)" OnClick="ShowPizzaAsync" Class="ml-auto" 
+                               StartIcon="@Icons.Material.Filled.PieChart" > Show Pizza </MudButton>
+                    <MudButton Variant="Variant.Filled" Color="MudBlazor.Color.Primary" Disabled="@(!success)" OnClick="ShowGraphicAsync" Class="ml-auto"
+                               StartIcon="@Icons.Material.Filled.BarChart"> Show Graphic </MudButton>
+                    <MudButton Variant="Variant.Filled" Color="MudBlazor.Color.Primary" Disabled="@(!success)" OnClick="ShowRelatorioAsync" Class="ml-auto"
+                               StartIcon="@Icons.Material.Filled.TableRows"> Show Relatorio </MudButton>                    
+                </div>
+            </MudForm>
+        </MudPaper>
     </MudItem>
 </MudGrid>
 
 
 
 
-<MudButton OnClick="ShowPizzaAsync"> Show Pizza </MudButton>
-<MudButton OnClick="ShowGraphicAsync"> Show Graphic </MudButton>
-<MudButton OnClick="ShowRelatorioAsync"> Show Relatorio </MudButton>
-
-@if (Aporte != null && Aporte.Valores != null && Aporte.Valores.Count != 0)
-{
-    <PieChart Aporte=Aporte></PieChart>
-}
-@if (UserPerformance != null && UserPerformance.UsuarioRecetas != null && UserPerformance.UsuarioRecetas.Count != 0)
-{
-    <GraphicChart UsuarioPerformance=UserPerformance></GraphicChart>
-}
-@if (UsuariosRelatorio != null && UsuariosRelatorio.Count > 0)
-{
-    <RelatorioTable Usuarios=UsuariosRelatorio></RelatorioTable>
-}
-
+<MudGrid>
+    @if (Aporte != null && Aporte.Valores != null && Aporte.Valores.Count != 0)
+    {
+        <MudItem xs="12" sm="6">
+            <PieChart Aporte=Aporte></PieChart>
+        </MudItem>
+    }
+    @if (UserPerformance != null && UserPerformance.UsuarioRecetas != null && UserPerformance.UsuarioRecetas.Count != 0)
+    {
+        <MudItem xs="12" sm="6">
+            <GraphicChart UsuarioPerformance=UserPerformance></GraphicChart>
+        </MudItem>
+    }
+    @if (UsuariosRelatorio != null && UsuariosRelatorio.Count > 0)
+    {
+        <MudItem xs="12">
+            <RelatorioTable Usuarios=UsuariosRelatorio></RelatorioTable>
+        </MudItem>
+    }
+</MudGrid>
 @code {
-    private string value { get; set; } = "Nothing selected";
+
+    bool success;
+    string[] errors = { };
+    MudTextField<string> pwField1;
+    MudForm form;
+
     private IEnumerable<string> options { get; set; } = new HashSet<string>();
+
+    private string value { get; set; } = "Nothing selected";
     DateTime? StartDate;
     DateTime? EndDate;
+    FilterOptions filterOptions; 
     List<CaoUsuarioDto> Usuarios = new List<CaoUsuarioDto>();
     AporteRecetaLiquidaDto? Aporte = null;
     AporteMensualDto? UserPerformance = null;
@@ -66,6 +106,12 @@
     {
         StartDate = DateTime.Today.AddDays(-DateTime.Today.Day + 1);
         EndDate = DateTime.Today.AddDays(-DateTime.Today.Day + 1).AddMonths(1);
+        filterOptions = new FilterOptions
+            {
+                StartDate = StartDate,
+                EndDate = EndDate,
+                SelectedValues = string.Empty
+            };
         var us = await Http.GetFromJsonAsync<List<CaoUsuarioDto>>("api/usuarios");
         Usuarios = us ?? new List<CaoUsuarioDto>();
     }
@@ -80,7 +126,7 @@
     }
     private async Task ShowPizzaAsync()
     {
-        var link = $"api/facturas/pizza?startDate={ForApiEndPoint(StartDate)}&endDate={ForApiEndPoint(EndDate)}&coUsuarios={string.Join(',', options)}";
+        var link = $"api/facturas/pizza?startDate={ForApiEndPoint(filterOptions.StartDate)}&endDate={ForApiEndPoint(filterOptions.EndDate)}&coUsuarios={string.Join(',', options)}";
         var distroAporte = await Http.GetFromJsonAsync<AporteRecetaLiquidaDto>(link);
         if (distroAporte == null || distroAporte.Total == 0 || distroAporte.Valores.Count == 0)
         {
@@ -113,6 +159,12 @@
         else
             UsuariosRelatorio = listaUsuarios;
     }
-
+    private List<string> CompareDates(DateTime? endDate)
+    {
+        var listOfErrors = new List<string>();
+        if (endDate?.Date <= filterOptions.StartDate?.Date)
+            listOfErrors.Add("EndDate must be greated then start date");
+        return listOfErrors;
+    }
 }
 

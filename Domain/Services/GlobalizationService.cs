@@ -14,5 +14,9 @@ namespace Domain.Services
         {
             return new CultureInfo("pt-BR");
         }
+        public RegionInfo GetRegionInfo()
+        {
+            return new RegionInfo("pt-BR");
+        }
     }
 }
