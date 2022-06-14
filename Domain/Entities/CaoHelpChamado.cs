@@ -7,7 +7,7 @@ namespace Domain.Entities
     {
         public int CoChamado { get; set; }
         public string DsChamado { get; set; } = null!;
-        public string? DsSolucao { get; set; }
+        public string DsSolucao { get; set; }
         public sbyte CoStatus { get; set; }
         public int CoMotivo { get; set; }
         public int CoTela { get; set; }

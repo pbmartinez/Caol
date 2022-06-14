@@ -9,7 +9,7 @@ namespace Domain.Entities
         public string CoUsuario { get; set; } = null!;
         public DateOnly DtEfetuado { get; set; }
         public string Status { get; set; } = null!;
-        public string? Observacao { get; set; }
+        public string Observacao { get; set; }
 
         public virtual CaoUsuario CoUsuarioNavigation { get; set; } = null!;
     }

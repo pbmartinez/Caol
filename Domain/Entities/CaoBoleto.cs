@@ -12,8 +12,8 @@ namespace Domain.Entities
         public string Valor { get; set; } = null!;
         public string Vencimento { get; set; } = null!;
         public int Status { get; set; }
-        public string? Boleto { get; set; }
-        public string? LinhaDig { get; set; }
-        public string? Parcela { get; set; }
+        public string Boleto { get; set; }
+        public string LinhaDig { get; set; }
+        public string Parcela { get; set; }
     }
 }

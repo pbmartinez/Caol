@@ -23,7 +23,7 @@ namespace Application.IAppServices
         /// <param name="endDate"></param>
         /// <param name="coUsuarios"></param>
         /// <returns></returns>
-        AporteRecetaLiquidaDto GetPizza(DateTime? startDate, DateTime? endDate, IEnumerable<string>? coUsuarios);
+        AporteRecetaLiquidaDto GetPizza(DateTime? startDate, DateTime? endDate, IEnumerable<string> coUsuarios);
 
         /// <summary>
         /// Get contributions from vendors vs their salary
@@ -32,6 +32,6 @@ namespace Application.IAppServices
         /// <param name="endDate"></param>
         /// <param name="coUsuarios"></param>
         /// <returns></returns>
-        AporteMensualDto GetGraphic(DateTime? startDate, DateTime? endDate, IEnumerable<string>? coUsuarios);
+        AporteMensualDto GetGraphic(DateTime? startDate, DateTime? endDate, IEnumerable<string> coUsuarios);
     }
 }

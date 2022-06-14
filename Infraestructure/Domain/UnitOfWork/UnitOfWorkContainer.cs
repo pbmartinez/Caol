@@ -80,7 +80,6 @@ namespace Infraestructure.Domain.UnitOfWork
         }
         public IQueryable<T> ExecuteQuery<T>(string query, params object[] parameters) where T : class
         {
-            var res = Set<T>().FromSqlRaw<T>(query, parameters).ToList();
             return Set<T>().FromSqlRaw<T>(query,parameters).AsQueryable();
         }
 
@@ -104,9 +103,9 @@ namespace Infraestructure.Domain.UnitOfWork
         /// Used for mapping objects to custom raw sql queries 
         /// </summary>
         #region Database Raw Query Results
-        public DbSet<UsuarioRecetaLiquida> UsuarioRecetaLiquida { get; set; }
-        public DbSet<UsuarioPerformance> UsuarioPerformance { get; set; }
-        public DbSet<UsuarioRelatorio> UsuarioRelatorio { get; set; }
+        public DbSet<UsuarioRecetaLiquida> UsuarioRecetaLiquida { get; set; } = null!;
+        public DbSet<UsuarioPerformance> UsuarioPerformance { get; set; } = null!;
+        public DbSet<UsuarioRelatorio> UsuarioRelatorio { get; set; } = null!;
         #endregion
 
 

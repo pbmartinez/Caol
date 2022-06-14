@@ -19,6 +19,6 @@ namespace Domain.Entities
         public int Status { get; set; }
         public string CoUsuario { get; set; } = null!;
         public string CoAnalista { get; set; } = null!;
-        public string? Email { get; set; }
+        public string Email { get; set; }
     }
 }

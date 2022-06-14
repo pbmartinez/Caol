@@ -7,6 +7,6 @@ namespace Domain.Entities
     {
         public int CoAtividade { get; set; }
         public string DsAtividade { get; set; } = null!;
-        public string? Ativo { get; set; }
+        public string Ativo { get; set; }
     }
 }

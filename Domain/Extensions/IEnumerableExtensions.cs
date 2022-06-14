@@ -8,7 +8,7 @@ namespace Domain.Extensions
 {
     public static class IEnumerableExtensions
     {
-        public static string GetAsCsvSingleQuote(this IEnumerable<string>? source) 
+        public static string GetAsCsvSingleQuote(this IEnumerable<string> source) 
         {
             if (source == null || !source.Any())
                 return "''";

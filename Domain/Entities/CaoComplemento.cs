@@ -9,6 +9,6 @@ namespace Domain.Entities
     public partial class CaoComplemento : Entity
     {
         public ulong CoComplemento { get; set; }
-        public string? DsComplemento { get; set; }
+        public string DsComplemento { get; set; }
     }
 }

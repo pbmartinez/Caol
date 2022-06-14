@@ -8,6 +8,6 @@ namespace Domain.Entities
         public byte CoMenu { get; set; }
         public string DsMenu { get; set; } = null!;
         public string DsPagina { get; set; } = null!;
-        public string? DsImagem { get; set; }
+        public string DsImagem { get; set; }
     }
 }

@@ -159,13 +159,13 @@ namespace Infraestructure.Application.AppServices
                 "order by u.no_usuario, f.data_emissao";
 
             //var queryResult = _CaoFaturaRepository.UnitOfWork.ExecuteQuery<UsuarioRecetaLiquida>(query, new object[] { startDate?.ParsedAsMySql() , endDate?.ParsedAsMySql(), listOfUserCodes });
-            var queryResult = _CaoFaturaRepository.UnitOfWork.ExecuteQuery<UsuarioRecetaLiquida>(query);
+            var queryResult = _CaoFaturaRepository.UnitOfWork.ExecuteQuery<UsuarioRecetaLiquida>(query).ToList();
             var groupedByUsuario = queryResult.GroupBy(u => u.CoUsuario).Select(g => new UsuarioRecetaLiquida 
             {
                 CoUsuario = g.Key,
-                NoUsuario = queryResult.FirstOrDefault(us => us.CoUsuario == g.Key).NoUsuario ?? g.Key,
-                DataEmissao = queryResult.FirstOrDefault(us => us.CoUsuario == g.Key).DataEmissao ,
-                Yearmonth = queryResult.FirstOrDefault(us => us.CoUsuario == g.Key).Yearmonth ,
+                NoUsuario = queryResult.FirstOrDefault(us => us.CoUsuario == g.Key)?.NoUsuario ?? g.Key,
+                DataEmissao = queryResult.FirstOrDefault(us => us.CoUsuario == g.Key)?.DataEmissao ?? DateTime.MinValue,
+                Yearmonth = queryResult.FirstOrDefault(us => us.CoUsuario == g.Key)?.Yearmonth ,
                 Valor = queryResult.Where(us => us.CoUsuario == g.Key).Sum(uv => uv.Valor),
                 ReceitaLiquida = queryResult.Where(us => us.CoUsuario == g.Key).Sum(uv => uv.ReceitaLiquida),
             }).ToList();
@@ -211,6 +211,8 @@ namespace Infraestructure.Application.AppServices
                 "order by u.no_usuario, f.data_emissao";
 
             //var queryResult = _CaoFaturaRepository.UnitOfWork.ExecuteQuery<UsuarioRecetaLiquida>(query, new object[] { startDate?.ParsedAsMySql() , endDate?.ParsedAsMySql(), listOfUserCodes });
+            //Todo !! Debug and trace 
+            //if query executes on ToList later in method
             var queryResult = _CaoFaturaRepository.UnitOfWork.ExecuteQuery<UsuarioPerformance>(query);
             
             var listOfMonth = _dateTimeService.GetDateTimesInBetween(startDate.Value, endDate.Value);
