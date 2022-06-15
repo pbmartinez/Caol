@@ -1,0 +1,47 @@
+﻿@using Application.Dtos
+@using Domain.Localization
+@using Microsoft.Extensions.Localization
+@inject HttpClient Http
+@inject IStringLocalizer<Resource> Localizer
+
+
+
+
+<ApexChart TItem="ValorAporteDto"
+            Title="@Localizer[Resource.display_PieChartTitle]">
+
+    <ApexPointSeries TItem="ValorAporteDto"
+                        Items="Aporte.Valores"
+                        Name="Aporte"
+                        SeriesType="SeriesType.Pie"
+                        XValue="@(e => $"{e.Name}")"
+                        YAggregate="@(e => e.Sum(e => (decimal)Math.Round( e.Porciento,2) ))"
+                        
+                        />
+</ApexChart>
+
+@code {
+    [EditorRequired]
+    [Parameter] public AporteRecetaLiquidaDto Aporte { get; set; } = null!;
+    [Parameter] public DateTime StartDate { get; set; }
+    [Parameter] public DateTime EndDate { get; set; }
+    double[] Data { get; set; } = new double[1];
+    string[] Labels { get; set; } = new string[1];
+
+    protected override void OnInitialized()
+    {
+        InitChart();
+    }
+    public void InitChart()
+    {
+        Data = new double[Aporte.Valores.Count];
+        Labels = new string[Aporte.Valores.Count];
+        var i = 0;
+        Aporte.Valores.ForEach(a =>
+        {
+            Data[i] = a.RecetaLiquida;
+            Labels[i] = $"{a.Name}, {a.Porciento.ToString("N2")} %";
+            i++;
+        });
+    }
+}

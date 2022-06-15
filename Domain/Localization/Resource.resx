@@ -132,14 +132,32 @@
   <data name="btn_Edit" xml:space="preserve">
     <value>Edit</value>
   </data>
+  <data name="btn_Grafico" xml:space="preserve">
+    <value>Charts</value>
+  </data>
   <data name="btn_Login" xml:space="preserve">
     <value>Login</value>
   </data>
   <data name="btn_Logout" xml:space="preserve">
     <value>Logout</value>
   </data>
+  <data name="btn_Pizza" xml:space="preserve">
+    <value>Pie chart</value>
+  </data>
+  <data name="btn_Relatorio" xml:space="preserve">
+    <value>Performance</value>
+  </data>
   <data name="btn_Save" xml:space="preserve">
     <value>Save</value>
+  </data>
+  <data name="btn_ShowGraphic" xml:space="preserve">
+    <value>Graphic</value>
+  </data>
+  <data name="btn_ShowPizza" xml:space="preserve">
+    <value>Pizza</value>
+  </data>
+  <data name="btn_ShowRelatorio" xml:space="preserve">
+    <value>Relatorio</value>
   </data>
   <data name="display_401" xml:space="preserve">
     <value>401</value>
@@ -172,7 +190,7 @@
     <value>Add / Edit</value>
   </data>
   <data name="display_AppName" xml:space="preserve">
-    <value>Musala Gateways</value>
+    <value>CAOL Agence App</value>
   </data>
   <data name="display_Buscar" xml:space="preserve">
     <value>Find ...</value>
@@ -180,17 +198,56 @@
   <data name="display_ConfirmOnDelete" xml:space="preserve">
     <value>Are you sure you want to delete ?</value>
   </data>
+  <data name="display_Consultores" xml:space="preserve">
+    <value>Vendors</value>
+  </data>
+  <data name="display_DateRange" xml:space="preserve">
+    <value>Period</value>
+  </data>
   <data name="display_DetailsOf" xml:space="preserve">
     <value>Details of {0}</value>
   </data>
+  <data name="display_GraphicChartMarker" xml:space="preserve">
+    <value>Average salary</value>
+  </data>
+  <data name="display_GraphicChartTitle" xml:space="preserve">
+    <value>Performance</value>
+  </data>
   <data name="display_ListOfXXX" xml:space="preserve">
     <value>List of {0}</value>
+  </data>
+  <data name="display_NoResults" xml:space="preserve">
+    <value>There is no data to show</value>
+  </data>
+  <data name="display_PieChartTitle" xml:space="preserve">
+    <value>Contribution to Liquid Sales (%)</value>
+  </data>
+  <data name="display_RelatorioColumnCommision" xml:space="preserve">
+    <value>Commision</value>
+  </data>
+  <data name="display_RelatorioColumnFixCost" xml:space="preserve">
+    <value>Fixed Costs</value>
+  </data>
+  <data name="display_RelatorioColumnLiquidSales" xml:space="preserve">
+    <value>Liquid Sales</value>
+  </data>
+  <data name="display_RelatorioColumnPeriod" xml:space="preserve">
+    <value>Period</value>
+  </data>
+  <data name="display_RelatorioColumnProfit" xml:space="preserve">
+    <value>Profit</value>
+  </data>
+  <data name="display_RelatorioColumnSaldo" xml:space="preserve">
+    <value>Balance</value>
+  </data>
+  <data name="display_SeleccioneXXX" xml:space="preserve">
+    <value>Select ...</value>
   </data>
   <data name="display_Welcome" xml:space="preserve">
     <value>Welcome</value>
   </data>
   <data name="display_WelcomeMessage" xml:space="preserve">
-    <value>Welcome to Gateway Application</value>
+    <value>Welcome to Agence Application</value>
   </data>
   <data name="Exception_ApplicationValidationError" xml:space="preserve">
     <value>Validation errors, for more information check validation errors</value>
@@ -201,29 +258,23 @@
   <data name="Exception_NullFieldOnOrderingEntity" xml:space="preserve">
     <value>The property specified {0} can not be defined for ordering collection of {1}.</value>
   </data>
-  <data name="GatewayDto" xml:space="preserve">
-    <value>Gateway</value>
+  <data name="FilterOptionsEndDate" xml:space="preserve">
+    <value>End date</value>
   </data>
-  <data name="GatewayDtoIpv4Address" xml:space="preserve">
-    <value>Ipv4</value>
+  <data name="FilterOptionsSelectedValues" xml:space="preserve">
+    <value>Selected vendors</value>
   </data>
-  <data name="GatewayDtoName" xml:space="preserve">
-    <value>Name</value>
+  <data name="FilterOptionsStartDate" xml:space="preserve">
+    <value>Start date</value>
   </data>
-  <data name="GatewayDtoPeripherals" xml:space="preserve">
-    <value>Peripherals</value>
+  <data name="menu_Comercial" xml:space="preserve">
+    <value>Commercial</value>
   </data>
-  <data name="GatewayDtos" xml:space="preserve">
-    <value>Gateways</value>
-  </data>
-  <data name="menu_Gateway" xml:space="preserve">
-    <value>Gateways</value>
+  <data name="menu_ComercialRendimiento" xml:space="preserve">
+    <value>Buisness Performance</value>
   </data>
   <data name="menu_Home" xml:space="preserve">
     <value>Home</value>
-  </data>
-  <data name="menu_Peripheral" xml:space="preserve">
-    <value>Peripherals</value>
   </data>
   <data name="message_ItemDoesNotExist" xml:space="preserve">
     <value>Item does not exist</value>
@@ -252,32 +303,11 @@
   <data name="page_500" xml:space="preserve">
     <value>500</value>
   </data>
-  <data name="page_GridGateways" xml:space="preserve">
-    <value>Gateways</value>
-  </data>
-  <data name="page_GridPeripherals" xml:space="preserve">
-    <value>Peripherals</value>
-  </data>
   <data name="page_Index" xml:space="preserve">
     <value>Index</value>
   </data>
-  <data name="PeripheralDto" xml:space="preserve">
-    <value>Peripheral</value>
-  </data>
-  <data name="PeripheralDtoCreatedDate" xml:space="preserve">
-    <value>Created Date</value>
-  </data>
-  <data name="PeripheralDtoGatewayId" xml:space="preserve">
-    <value>Gateway</value>
-  </data>
-  <data name="PeripheralDtos" xml:space="preserve">
-    <value>Peripherals</value>
-  </data>
-  <data name="PeripheralDtoStatus" xml:space="preserve">
-    <value>Status</value>
-  </data>
-  <data name="PeripheralDtoVendor" xml:space="preserve">
-    <value>Vendor</value>
+  <data name="validation_EmptyVendorSelection" xml:space="preserve">
+    <value>You must select at least one vendor</value>
   </data>
   <data name="validation_FieldRequired" xml:space="preserve">
     <value>Field required</value>
@@ -285,7 +315,7 @@
   <data name="validation_Ipv4AddressBadFormat" xml:space="preserve">
     <value>Ipv4 it has bad format</value>
   </data>
-  <data name="validation_MaxPeriphelsAllowed" xml:space="preserve">
-    <value>No more then {0} peripherals by gateway are allowed</value>
+  <data name="validation_OnDateComparison" xml:space="preserve">
+    <value>Final date should be greated then initial date</value>
   </data>
 </root>

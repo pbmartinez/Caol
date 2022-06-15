@@ -1,23 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Domain.Entities
 {
     public class Entity
     {
-        [Key]
-        public Guid Id { get; set; }
+        //public virtual string Id { get; set; }
 
 
+        //public bool IsTransient => string.IsNullOrEmpty(Id) || string.IsNullOrWhiteSpace(Id) || Id == "0";
 
-        public bool IsTransient => Id == Guid.Empty;
+
 
         public void GenerateIdentity()
         {
-            if(IsTransient)
-                Id = Guid.NewGuid();
+            //if (IsTransient)
+            //    Id = Guid.NewGuid();
         }
 
     }

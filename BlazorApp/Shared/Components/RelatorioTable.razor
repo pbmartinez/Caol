@@ -1,0 +1,58 @@
+﻿@using Application.Dtos
+@using Domain.Interfaces
+
+@inject IDateTimeService _dateTimeService
+@inject ICurrencyService _currencyService
+@inject IStringLocalizer<Resource> Localizer
+
+<MudGrid>
+    @foreach (var usuario in Usuarios)
+    {
+        <MudItem xs=12>
+            <MudCard>
+                <MudCardHeader> <b>@usuario.Name</b> </MudCardHeader>
+                <MudCardContent>
+                    <MudSimpleTable Style="overflow-x: auto;"
+                                FixedHeader=true
+                                Dense=true
+                                Elevation=4
+                                Striped=true
+                                Hover=true>
+                        <thead>
+                            <tr>
+                                <th>@Localizer[Resource.display_RelatorioColumnPeriod]</th>
+                                <th>@Localizer[Resource.display_RelatorioColumnLiquidSales]</th>
+                                <th>@Localizer[Resource.display_RelatorioColumnFixCost]</th>
+                                <th>@Localizer[Resource.display_RelatorioColumnCommision]</th>
+                                <th>@Localizer[Resource.display_RelatorioColumnProfit]</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var factura in usuario.Facturas)
+                            {
+                                <tr>
+                                    <td>@_dateTimeService.DateAsMonthYear(factura.Mes)</td>
+                                    <td>@_currencyService.GetCurrencyValue( factura.RecetaLiquida)</td>
+                                    <td>@_currencyService.GetCurrencyValue(usuario.BrutSalario)</td>
+                                    <td>@_currencyService.GetCurrencyValue(factura.Comissao)</td>
+                                    <td>@_currencyService.GetCurrencyValue(factura.Lucro)</td>
+                                </tr>
+                            }
+                            <tr>
+                                <td><b>@Localizer[Resource.display_RelatorioColumnSaldo]</b></td>
+                                <td><b>@_currencyService.GetCurrencyValue(usuario.Facturas.Sum(f=>f.RecetaLiquida))</b></td>
+                                <td><b>@(_currencyService.GetCurrencyValue(usuario.BrutSalario * usuario.Facturas.Count)) </b></td>
+                                <td><b>@_currencyService.GetCurrencyValue(usuario.Facturas.Sum(f=>f.Comissao))</b></td>
+                                <td><b>@_currencyService.GetCurrencyValue(usuario.Facturas.Sum(f=>f.Lucro))</b></td>
+                            </tr>
+                        </tbody>
+                    </MudSimpleTable>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    }
+</MudGrid>
+@code {
+    [Parameter]
+    public List<UsuarioDto> Usuarios { get; set; } = new List<UsuarioDto>();        
+}

@@ -1,4 +1,6 @@
 ﻿@page "/"
+@using Domain.Localization
+@using Microsoft.Extensions.Localization
 
 @inject IStringLocalizer<Resource> Localizer
 
@@ -7,4 +9,3 @@
 <h1>@Localizer[Resource.display_Welcome]</h1>
 
 @Localizer[Resource.display_WelcomeMessage]
-

@@ -1,19 +1,14 @@
-﻿@using BlazorApp.Pages
-@using Domain.Localization
-@using Microsoft.AspNetCore.Components.Authorization
-@using Microsoft.Extensions.Localization
-@inherits LayoutComponentBase
+﻿@inherits LayoutComponentBase
 
 @inject IStringLocalizer<Resource> Localizer
-@inject NavigationManager _navigationManager;
-<MudThemeProvider/>
-<MudDialogProvider/>
-<MudSnackbarProvider/>
 
+<MudThemeProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
 
 <MudLayout>
     <MudAppBar Elevation="0">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="MudBlazor.Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
         <MudSpacer />        
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" Elevation="1">
@@ -23,11 +18,6 @@
         <NavMenu />
     </MudDrawer>
     <MudMainContent>
-        <AuthorizeView>
-            <Authorized>
-                <MudBreadcrumbs Items=Breadcrumbs></MudBreadcrumbs>
-            </Authorized>
-        </AuthorizeView>
         <MudContainer MaxWidth="MaxWidth.Large" Class="my-16 pt-16">
             @Body
         </MudContainer>
@@ -40,16 +30,5 @@
     void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
-    }
-
-    private List<BreadcrumbItem> Breadcrumbs = new List<BreadcrumbItem>();
-    protected override void OnInitialized()
-    {
-        Breadcrumbs.Add(new BreadcrumbItem
-                        (Localizer[Resource.menu_Home], "/", false, Icons.Material.Filled.Home));
-        Breadcrumbs.Add(new BreadcrumbItem
-                        (Localizer[Resource.menu_Gateway], "/gateways", false, Icons.Material.Filled.DeviceHub));
-        Breadcrumbs.Add(new BreadcrumbItem
-                        (Localizer[Resource.menu_Peripheral], "/peripherals", false, Icons.Material.Filled.Devices));
     }
 }

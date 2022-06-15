@@ -1,0 +1,50 @@
+﻿@using Application.Dtos
+@using Domain.Interfaces
+@using Domain.Localization
+@using Microsoft.Extensions.Localization
+@inject HttpClient Http
+@inject IStringLocalizer<Resource> Localizer
+@inject IDateTimeService DateTimeService
+
+<ApexChart TItem="FacturaAcumuladaDto"
+           Title="@Localizer[Resource.display_GraphicChartTitle]">
+
+    @for (var i = 0; i < UsuariosGraphico.Count; i++)
+    {
+        var usuario = UsuariosGraphico[i];
+
+        <ApexPointSeries TItem="FacturaAcumuladaDto"
+                     Items="@usuario.Facturas"
+                     Name="@usuario.Name"
+                     XValue="@(e => DateTimeService.DateAsMonthYear(e.Mes))"
+                     YAggregate="@(e => e.Sum(v => (decimal)Math.Round(v.RecetaLiquida,2)))"                     
+                     SeriesType="SeriesType.Bar"
+                     DataPointMutator="SetMarkers" />
+    }
+    
+</ApexChart>
+
+
+@code {
+    [EditorRequired]
+    [Parameter] public List<UsuarioDto> UsuariosGraphico { get; set; } = null!;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+    }
+    private void SetMarkers(DataPoint<FacturaAcumuladaDto> dataPoint)
+    {
+        dataPoint.Goals = new();
+        var goal = new DataPointGoal
+            {
+                Name = Localizer[Resource.display_GraphicChartMarker],
+                Value = UsuariosGraphico == null || UsuariosGraphico.Count == 0
+                        ? 0.0m
+                        : (decimal)Math.Round(UsuariosGraphico.Sum(u => u.BrutSalario) / UsuariosGraphico.Count, 2),
+                StrokeLineCap = StrokeLineCap.Round,
+                StrokeColor = "#e3001b",
+            };
+        dataPoint.Goals.Add(goal);
+    }
+}

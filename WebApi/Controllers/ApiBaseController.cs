@@ -75,67 +75,67 @@ namespace WebApi.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{id}")]
-        [HttpHead("{id}")]
-        public virtual async Task<ActionResult<TEntityDto>> Get(Guid? id, [FromQuery] QueryStringParameters queryStringParameters)
-        {
-            if (!_propertyCheckerService.TypeHasProperties<TEntityDto>(queryStringParameters.Fields))
-                return BadRequest();
-            if (id == null || id.Value == Guid.Empty)
-                return BadRequest();
-            var includes = queryStringParameters.Includes.Split(',').ToList();
-            var item = await AppService.GetAsync(id.Value, includes);
-            if (item == null)
-                return NotFound();
-            return Ok(item.ShapeDataOnObject(queryStringParameters.Fields ?? string.Empty));
-        }
+        //[HttpGet("{id}")]
+        //[HttpHead("{id}")]
+        //public virtual async Task<ActionResult<TEntityDto>> Get(string id, [FromQuery] QueryStringParameters queryStringParameters)
+        //{
+        //    if (!_propertyCheckerService.TypeHasProperties<TEntityDto>(queryStringParameters.Fields))
+        //        return BadRequest();
+        //    if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))
+        //        return BadRequest();
+        //    var includes = queryStringParameters.Includes.Split(',').ToList();
+        //    var item = await AppService.GetAsync(id, includes);
+        //    if (item == null)
+        //        return NotFound();
+        //    return Ok(item.ShapeDataOnObject(queryStringParameters.Fields ?? string.Empty));
+        //}
 
-        [HttpPost]
-        public virtual async Task<IActionResult> Post(TEntityDto item)
-        {
-            if(item.IsTransient)
-                item.GenerateIdentity();
-            var result = await AppService.AddAsync(item);
-            return CreatedAtAction(nameof(Get), new { id = item.Id }, item);
-        }
+        //[HttpPost]
+        //public virtual async Task<IActionResult> Post(TEntityDto item)
+        //{
+        //    if(item.IsTransient)
+        //        item.GenerateIdentity();
+        //    var result = await AppService.AddAsync(item);
+        //    return CreatedAtAction(nameof(Get), new { id = item.Id }, item);
+        //}
 
-        [HttpPut("{id}")]
-        public virtual async Task<IActionResult> Put(Guid? id, TEntityDto item)
-        {
-            if (id == null || id == Guid.Empty)
-                return BadRequest();
-            var itemTarget = await AppService.GetAsync(id.Value);
-            if (itemTarget == null)
-                return NotFound();
-            var result = await AppService.UpdateAsync(item);
-            return NoContent();
-        }
-        [HttpPatch("{id}")]
-        public virtual async Task<IActionResult> Patch(Guid? id, JsonPatchDocument<TEntityDto> patchDocument)
-        {
-            if (id == null || id == Guid.Empty)
-                return BadRequest();
-            var item = await AppService.GetAsync(id.Value);
-            if (item == null)
-                return NotFound();            
-            //TODO: Check client errors vs server error response
-            patchDocument.ApplyTo(item);
-            if(!TryValidateModel(item))
-                return ValidationProblem(ModelState);
-            var result = await AppService.UpdateAsync(item);
-            return NoContent();
-        }
-        [HttpDelete("{id}")]
-        public virtual async Task<IActionResult> Delete(Guid? id)
-        {
-            if (id == null || id.Value == Guid.Empty)
-                return NotFound();
-            var item = await AppService.GetAsync(id.Value);
-            if (item==null)
-                return NotFound();
-            var result = await AppService.RemoveAsync(id.Value);
-            return NoContent();
-        }
+        //[HttpPut("{id}")]
+        //public virtual async Task<IActionResult> Put(string id, TEntityDto item)
+        //{
+        //    if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))                
+        //        return BadRequest();
+        //    var itemTarget = await AppService.GetAsync(id);
+        //    if (itemTarget == null)
+        //        return NotFound();
+        //    var result = await AppService.UpdateAsync(item);
+        //    return NoContent();
+        //}
+        //[HttpPatch("{id}")]
+        //public virtual async Task<IActionResult> Patch(string id, JsonPatchDocument<TEntityDto> patchDocument)
+        //{
+        //    if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))
+        //        return BadRequest();
+        //    var item = await AppService.GetAsync(id);
+        //    if (item == null)
+        //        return NotFound();            
+        //    //TODO: Check client errors vs server error response
+        //    patchDocument.ApplyTo(item);
+        //    if(!TryValidateModel(item))
+        //        return ValidationProblem(ModelState);
+        //    var result = await AppService.UpdateAsync(item);
+        //    return NoContent();
+        //}
+        //[HttpDelete("{id}")]
+        //public virtual async Task<IActionResult> Delete(string id)
+        //{
+        //    if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))
+        //        return NotFound();
+        //    var item = await AppService.GetAsync(id);
+        //    if (item==null)
+        //        return NotFound();
+        //    var result = await AppService.RemoveAsync(id);
+        //    return NoContent();
+        //}
 
         public override ActionResult ValidationProblem([ActionResultObjectValue] ModelStateDictionary modelStateDictionary)
         {

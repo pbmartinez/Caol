@@ -1,4 +1,6 @@
 ﻿@page "/500"
+@using Domain.Localization
+@using Microsoft.Extensions.Localization
 @inject IStringLocalizer<Resource> Localizer
 
 <PageTitle>@Localizer[Resource.page_500]</PageTitle>

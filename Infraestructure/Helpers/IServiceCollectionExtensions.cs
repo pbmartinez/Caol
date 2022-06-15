@@ -4,6 +4,7 @@ using Application.Mappings;
 using AutoMapper.Extensions.ExpressionMapping;
 using Domain.Interfaces;
 using Domain.IRepositories;
+using Domain.Services;
 using Domain.UnitOfWork;
 using Infraestructure.Application.AppServices;
 using Infraestructure.Application.Validator;
@@ -34,10 +35,13 @@ namespace Infraestructure.DependencyInjectionExtensions
             services.AddAutoMapper(configuration =>
             {
                 configuration.AddExpressionMapping();
-                configuration.AddProfile<GatewayProfile>();
-                configuration.AddProfile<PeripheralProfile>();
-                configuration.AddProfile<BrandProfile>();
-                configuration.AddProfile<ProviderProfile>();
+                configuration.AddProfile<CaoClienteProfile>();
+                configuration.AddProfile<CaoFaturaProfile>();
+                configuration.AddProfile<CaoOProfile>();
+                configuration.AddProfile<CaoSalarioProfile>();
+                configuration.AddProfile<CaoSistemaProfile>();
+                configuration.AddProfile<CaoUsuarioProfile>();
+                configuration.AddProfile<PermissaoSistemaProfile>();
                 AppDomain.CurrentDomain.GetAssemblies();
 
             });
@@ -64,16 +68,22 @@ namespace Infraestructure.DependencyInjectionExtensions
             services.AddScoped<IUnitOfWork, UnitOfWorkContainer>();
 
             //AppServices
-            services.AddScoped<IGatewayAppService, GatewayAppService>();
-            services.AddScoped<IPeripheralAppService, PeripheralAppService>();
-            services.AddScoped<IBrandAppService, BrandAppService>();
-            services.AddScoped<IProviderAppService, ProviderAppService>();
+            services.AddScoped<ICaoClienteAppService, CaoClienteAppService>();
+            services.AddScoped<ICaoFaturaAppService, CaoFaturaAppService>();
+            services.AddScoped<ICaoOAppService, CaoOAppService>();
+            services.AddScoped<ICaoSalarioAppService, CaoSalarioAppService>();
+            services.AddScoped<ICaoSistemaAppService, CaoSistemaAppService>();
+            services.AddScoped<ICaoUsuarioAppService, CaoUsuarioAppService>();
+            services.AddScoped<IPermissaoSistemaAppService, PermissaoSistemaAppService>();
 
             //Repositories
-            services.AddScoped<IGatewayRepository, GatewayRepository>();
-            services.AddScoped<IPeripheralRepository, PeripheralRepository>();
-            services.AddScoped<IBrandRepository, BrandRepository>();
-            services.AddScoped<IProviderRepository, ProviderRepository>();
+            services.AddScoped<ICaoClienteRepository, CaoClienteRepository>();
+            services.AddScoped<ICaoFaturaRepository, CaoFaturaRepository>();
+            services.AddScoped<ICaoORepository, CaoORepository>();
+            services.AddScoped<ICaoSalarioRepository, CaoSalarioRepository>();
+            services.AddScoped<ICaoSistemaRepository, CaoSistemaRepository>();
+            services.AddScoped<ICaoUsuarioRepository, CaoUsuarioRepository>();
+            services.AddScoped<IPermissaoSistemaRepository, PermissaoSistemaRepository>();
         }
         /// <summary>
         /// Adds custom Application services
@@ -87,6 +97,9 @@ namespace Infraestructure.DependencyInjectionExtensions
             services.AddScoped<IPropertyCheckerService, PropertyCheckerService>();
 
             // Inject here any other service from the Application
+            services.AddScoped<IDateTimeService, DateTimeService>();
+            services.AddScoped<IGlobalizationService, GlobalizationService>();
+            services.AddScoped<ICurrencyService, CurrencyService>();
         }
     }
 }

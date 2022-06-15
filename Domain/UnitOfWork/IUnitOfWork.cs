@@ -54,5 +54,23 @@ namespace Domain.UnitOfWork
 
         EntityEntry GetEntry<TEntity>(TEntity item) where TEntity : class;
         ChangeTracker ChangeTracker();
+
+        /// <summary>
+        /// Executes a query against the database. (i.e reading statement). 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        IQueryable<T> ExecuteQuery<T>(string query, params object[] parameters) where T : class;
+
+
+        int ExecuteCommand(string sqlCommand, params object[] parameters);
+        /// <summary>
+        /// Excetutes a command against the database. i.e writing statement
+        /// </summary>
+        /// <param name="sqlCommand"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        Task<int> ExecuteCommandAsync(string sqlCommand, params object[] parameters);
     }
 }
