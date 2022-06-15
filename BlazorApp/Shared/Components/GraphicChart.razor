@@ -1,59 +1,50 @@
 ﻿@using Application.Dtos
+@using Domain.Interfaces
 @using Domain.Localization
 @using Microsoft.Extensions.Localization
 @inject HttpClient Http
 @inject IStringLocalizer<Resource> Localizer
+@inject IDateTimeService DateTimeService
 
-@try
-{
-    <ApexChart TItem="UsuarioRecetasDto"
-           Title="Order Net Value">
+<ApexChart TItem="FacturaAcumuladaDto"
+           Title="@Localizer[Resource.display_GraphicChartTitle]">
 
-        @for (var i = 0; i < UsuarioPerformance.UsuarioRecetas.Count; i++)
-        {
-            var usuario = UsuarioPerformance.UsuarioRecetas[i];
+    @for (var i = 0; i < UsuariosGraphico.Count; i++)
+    {
+        var usuario = UsuariosGraphico[i];
 
-            <ApexPointSeries TItem="ValorAporteDto"
-                     Items="@GetValorAporteDtos(usuario)"
+        <ApexPointSeries TItem="FacturaAcumuladaDto"
+                     Items="@usuario.Facturas"
                      Name="@usuario.Name"
-                     XValue="@(e => e.AnnoMes)"
-                     YAggregate="@(e => e.Sum(v => (decimal)v.RecetaLiquida))"
-                     OrderByDescending="e=>e.Y"
-                     SeriesType="SeriesType.Bar" />
-        }
-
-    </ApexChart>
-}
-catch (Exception es)
-{
-    var ex = es;
-}
+                     XValue="@(e => DateTimeService.DateAsMonthYear(e.Mes))"
+                     YAggregate="@(e => e.Sum(v => (decimal)Math.Round(v.RecetaLiquida,2)))"                     
+                     SeriesType="SeriesType.Bar"
+                     DataPointMutator="SetMarkers" />
+    }
+    
+</ApexChart>
 
 
 @code {
     [EditorRequired]
-    [Parameter] public AporteMensualDto UsuarioPerformance { get; set; } = null!;
-    [Parameter] public DateTime StartDate { get; set; }
-    [Parameter] public DateTime EndDate { get; set; }
+    [Parameter] public List<UsuarioDto> UsuariosGraphico { get; set; } = null!;
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
     }
-
-    private List<ValorAporteDto> GetValorAporteDtos(UsuarioRecetasDto usuario)
+    private void SetMarkers(DataPoint<FacturaAcumuladaDto> dataPoint)
     {
-        var list = new List<ValorAporteDto>();
-        for (int i = 0; i < usuario.Data.Length; i++)
-        {
-            list.Add(new ValorAporteDto
-                {
-                    Name = usuario.Name,
-                    RecetaLiquida = usuario.Data[i],
-                    AnnoMes = UsuarioPerformance.Months[i].ToShortDateString()
-                });
-        }
-
-        return list;
+        dataPoint.Goals = new();
+        var goal = new DataPointGoal
+            {
+                Name = Localizer[Resource.display_GraphicChartMarker],
+                Value = UsuariosGraphico == null || UsuariosGraphico.Count == 0
+                        ? 0.0m
+                        : (decimal)Math.Round(UsuariosGraphico.Sum(u => u.BrutSalario) / UsuariosGraphico.Count, 2),
+                StrokeLineCap = StrokeLineCap.Round,
+                StrokeColor = "#e3001b",
+            };
+        dataPoint.Goals.Add(goal);
     }
 }

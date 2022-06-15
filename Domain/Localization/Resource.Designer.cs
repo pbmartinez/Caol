@@ -331,6 +331,24 @@ namespace Domain.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Average salary.
+        /// </summary>
+        public static string display_GraphicChartMarker {
+            get {
+                return ResourceManager.GetString("display_GraphicChartMarker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Performance.
+        /// </summary>
+        public static string display_GraphicChartTitle {
+            get {
+                return ResourceManager.GetString("display_GraphicChartTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to List of {0}.
         /// </summary>
         public static string display_ListOfXXX {
@@ -349,7 +367,7 @@ namespace Domain.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Contribution to Liquid Sales.
+        ///   Looks up a localized string similar to Contribution to Liquid Sales (%).
         /// </summary>
         public static string display_PieChartTitle {
             get {

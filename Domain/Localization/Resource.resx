@@ -207,6 +207,12 @@
   <data name="display_DetailsOf" xml:space="preserve">
     <value>Details of {0}</value>
   </data>
+  <data name="display_GraphicChartMarker" xml:space="preserve">
+    <value>Average salary</value>
+  </data>
+  <data name="display_GraphicChartTitle" xml:space="preserve">
+    <value>Performance</value>
+  </data>
   <data name="display_ListOfXXX" xml:space="preserve">
     <value>List of {0}</value>
   </data>
@@ -214,7 +220,7 @@
     <value>There is no data to show</value>
   </data>
   <data name="display_PieChartTitle" xml:space="preserve">
-    <value>Contribution to Liquid Sales</value>
+    <value>Contribution to Liquid Sales (%)</value>
   </data>
   <data name="display_RelatorioColumnCommision" xml:space="preserve">
     <value>Commision</value>
