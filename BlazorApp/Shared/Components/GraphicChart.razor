@@ -7,7 +7,8 @@
 @inject IDateTimeService DateTimeService
 
 <ApexChart TItem="FacturaAcumuladaDto"
-           Title="@Localizer[Resource.display_GraphicChartTitle]">
+           Title="@Localizer[Resource.display_GraphicChartTitle]"
+           >
 
     @for (var i = 0; i < UsuariosGraphico.Count; i++)
     {
@@ -28,10 +29,11 @@
 @code {
     [EditorRequired]
     [Parameter] public List<UsuarioDto> UsuariosGraphico { get; set; } = null!;
-
+    
     protected override void OnInitialized()
     {
         base.OnInitialized();
+
     }
     private void SetMarkers(DataPoint<FacturaAcumuladaDto> dataPoint)
     {

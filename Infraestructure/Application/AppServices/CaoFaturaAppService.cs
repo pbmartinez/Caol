@@ -148,18 +148,21 @@ namespace Infraestructure.Application.AppServices
 
             var listOfUserCodes = coUsuarios.GetAsCsvSingleQuote();
 
-            //Todo fix where clause
             var query = "select u.co_usuario, u.no_usuario, f.data_emissao, sum(f.valor) as valor, sum(f.valor - (f.valor * f.total_imp_inc/100)) as receita_liquida," +
                 "CONCAT(year(f.data_emissao), '-', month(f.data_emissao)) as yearmonth " +
                 "from cao_fatura as f " +
                 "join cao_os as o on f.co_os = o.co_os join cao_usuario as u on o.co_usuario = u.co_usuario " +
-                //"where f.data_emissao between STR_TO_DATE('{0}', '%m/%d/%Y') and STR_TO_DATE('{1}', '%m/%d/%Y') and " +
-                //"u.co_usuario in ({2}) " +
+                "where f.data_emissao between {0} and {1} and locate (u.co_usuario, {2}) > 0 " +
                 "group by u.co_usuario, yearmonth " +
                 "order by u.no_usuario, f.data_emissao";
 
-            //var queryResult = _CaoFaturaRepository.UnitOfWork.ExecuteQuery<UsuarioRecetaLiquida>(query, new object[] { startDate?.ParsedAsMySql() , endDate?.ParsedAsMySql(), listOfUserCodes });
-            var queryResult = _CaoFaturaRepository.UnitOfWork.ExecuteQuery<UsuarioRecetaLiquida>(query).ToList();
+            var queryResult = _CaoFaturaRepository.UnitOfWork
+                .ExecuteQuery<UsuarioRecetaLiquida>(query, new object[]
+                {
+                    _dateTimeService.ParsedAsMySql( startDate.Value),
+                    _dateTimeService.ParsedAsMySql( endDate.Value),
+                    listOfUserCodes
+                }).ToList();
             var groupedByUsuario = queryResult.GroupBy(u => u.CoUsuario).Select(g => new UsuarioRecetaLiquida
             {
                 CoUsuario = g.Key,
@@ -195,7 +198,7 @@ namespace Infraestructure.Application.AppServices
         {
             var listOfMonth = _dateTimeService.GetDateTimesInBetween(startDate, endDate);
             if (facturas == null)
-                facturas = new List<FacturaAcumuladaDto>(); 
+                facturas = new List<FacturaAcumuladaDto>();
             foreach (var item in listOfMonth)
             {
                 if (facturas.Any(f => f.Mes.Year == item.Year && f.Mes.Month == item.Month))
@@ -214,20 +217,24 @@ namespace Infraestructure.Application.AppServices
             var listOfUserCodes = coUsuarios.GetAsCsvSingleQuote();
             var allUserCodes = coUsuarios?.ToList() ?? new List<string>();
 
-            //Todo fix where clause
             var query = "select u.co_usuario, u.no_usuario, f.data_emissao, sum(f.valor) as valor, sum(f.valor - (f.valor * f.total_imp_inc/100)) as receita_liquida, s.brut_salario, " +
                 "CONCAT(year(f.data_emissao), '-', month(f.data_emissao)) as yearmonth " +
                 "from cao_fatura as f " +
                 "join cao_os as o on f.co_os = o.co_os join cao_usuario as u on o.co_usuario = u.co_usuario join cao_salario as s on u.co_usuario = s.co_usuario " +
-                //"where f.data_emissao between STR_TO_DATE('{0}', '%m/%d/%Y') and STR_TO_DATE('{1}', '%m/%d/%Y') and " +
-                //"u.co_usuario in ({2}) " +
+                "where f.data_emissao between {0} and {1} and locate (u.co_usuario, {2}) > 0 " +
                 "group by u.co_usuario, yearmonth " +
                 "order by u.no_usuario, f.data_emissao";
 
-            //var queryResult = _CaoFaturaRepository.UnitOfWork.ExecuteQuery<UsuarioRecetaLiquida>(query, new object[] { startDate?.ParsedAsMySql() , endDate?.ParsedAsMySql(), listOfUserCodes });
+            var queryResult = _CaoFaturaRepository.UnitOfWork
+                .ExecuteQuery<UsuarioPerformance>(query, new object[]
+                {
+                    _dateTimeService.ParsedAsMySql( startDate.Value),
+                        _dateTimeService.ParsedAsMySql( endDate.Value),
+                        listOfUserCodes
+                });
             //Todo !! Debug and trace 
             //if query executes on ToList later in method
-            var queryResult = _CaoFaturaRepository.UnitOfWork.ExecuteQuery<UsuarioPerformance>(query);
+
 
             var listOfUsers = new List<UsuarioDto>();
 
@@ -235,7 +242,7 @@ namespace Infraestructure.Application.AppServices
             {
                 var aportes = queryResult.Where(a => a.CoUsuario == item).ToList();
                 var aporteUsuario = aportes?.FirstOrDefault(a => a.CoUsuario == item);
-                if (aporteUsuario != null && aportes!= null && aportes.Any())
+                if (aporteUsuario != null && aportes != null && aportes.Any())
                 {
                     var usuario = new UsuarioDto()
                     {
@@ -251,7 +258,7 @@ namespace Infraestructure.Application.AppServices
                             Mes = aporte.DataEmissao,
                             Valor = aporte.Valor,
                             RecetaLiquida = aporte.ReceitaLiquida
-                        });                        
+                        });
                     }
 
                     facturas = CompleteMissedInvoices(facturas, startDate.Value, endDate.Value);
@@ -271,19 +278,21 @@ namespace Infraestructure.Application.AppServices
             var listOfUserCodes = coUsuarios.GetAsCsvSingleQuote();
             var allUserCodes = coUsuarios?.ToList() ?? new List<string>();
 
-
-            //Todo fix where clause
             var query = "select  u.co_usuario, u.no_usuario, f.data_emissao, sum(f.valor) as valor, sum(f.valor - (f.valor*f.total_imp_inc/100)) as receita_liquida, s.brut_salario, sum( (f.valor - (f.valor * f.total_imp_inc/100)) * f.comissao_cn / 100  ) as comissao , f.comissao_cn, sum( (f.valor - (f.valor*f.total_imp_inc/100)) - s.brut_salario - ( (f.valor - (f.valor * f.total_imp_inc/100)) * f.comissao_cn / 100)) as lucro, " +
                 "CONCAT(year(f.data_emissao), '-', month(f.data_emissao)) as yearmonth " +
                 "from cao_fatura as f " +
                 "join cao_os as o on f.co_os = o.co_os join cao_usuario as u on o.co_usuario = u.co_usuario join cao_salario as s on u.co_usuario = s.co_usuario " +
-                //"where f.data_emissao between STR_TO_DATE('{0}', '%m/%d/%Y') and STR_TO_DATE('{1}', '%m/%d/%Y') and " +
-                //"u.co_usuario in ({2}) " +
+                "where f.data_emissao between {0} and {1} and locate (u.co_usuario, {2}) > 0 " +                
                 "group by u.co_usuario, yearmonth " +
                 "order by u.no_usuario, f.data_emissao";
 
-            //var queryResult = _CaoFaturaRepository.UnitOfWork.ExecuteQuery<UsuarioRecetaLiquida>(query, new object[] { startDate?.ParsedAsMySql() , endDate?.ParsedAsMySql(), listOfUserCodes });
-            var queryResult = _CaoFaturaRepository.UnitOfWork.ExecuteQuery<UsuarioRelatorio>(query);
+            var queryResult = _CaoFaturaRepository.UnitOfWork
+                .ExecuteQuery<UsuarioRelatorio>(query, new object[] 
+                {
+                    _dateTimeService.ParsedAsMySql( startDate.Value),
+                    _dateTimeService.ParsedAsMySql( endDate.Value),
+                    listOfUserCodes
+                });
 
             var listOfMonth = _dateTimeService.GetDateTimesInBetween(startDate.Value, endDate.Value);
 

@@ -13,15 +13,14 @@
 <MudGrid>
     <MudItem xs="12">
         <MudPaper Class="pa-4">
-            <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors" >
+            <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
                 <MudGrid>
                     <MudItem xs="12" sm="6" md="4">
                         <MudDatePicker Label="@Localizer[Resource.FilterOptionsStartDate]" @bind-Date="filterOptions.StartDate" FixDay=1 Required="true" RequiredError="@Localizer[Resource.validation_FieldRequired]" />
                     </MudItem>
                     <MudItem xs="12" sm="6" md="4">
                         <MudDatePicker Label="@Localizer[Resource.FilterOptionsEndDate]" @bind-Date="filterOptions.EndDate" FixDay=1 Required="true" RequiredError="@Localizer[Resource.validation_FieldRequired]"
-                                       Validation="@(new Func<DateTime?, IEnumerable<string>>(CompareDates))" 
-                                       />
+                                       Validation="@(new Func<DateTime?, IEnumerable<string>>(CompareDates))" />
                     </MudItem>
                     <MudItem xs="12" sm="12" md="4">
                         @if (Usuarios != null && Usuarios.Count > 0)
@@ -49,12 +48,12 @@
                 </MudGrid>
 
                 <div class="d-flex align-center justify-space-between mt-6">
-                    <MudButton Variant="Variant.Filled" Color="MudBlazor.Color.Primary" Disabled="@(!success)" OnClick="ShowPizzaAsync" Class="ml-auto" 
-                               StartIcon="@Icons.Material.Filled.PieChart" > @Localizer[Resource.btn_ShowPizza] </MudButton>
+                    <MudButton Variant="Variant.Filled" Color="MudBlazor.Color.Primary" Disabled="@(!success)" OnClick="ShowPizzaAsync" Class="ml-auto"
+                               StartIcon="@Icons.Material.Filled.PieChart"> @Localizer[Resource.btn_ShowPizza] </MudButton>
                     <MudButton Variant="Variant.Filled" Color="MudBlazor.Color.Primary" Disabled="@(!success)" OnClick="ShowGraphicAsync" Class="ml-auto"
                                StartIcon="@Icons.Material.Filled.BarChart"> @Localizer[Resource.btn_ShowGraphic] </MudButton>
                     <MudButton Variant="Variant.Filled" Color="MudBlazor.Color.Primary" Disabled="@(!success)" OnClick="ShowRelatorioAsync" Class="ml-auto"
-                               StartIcon="@Icons.Material.Filled.TableRows"> @Localizer[Resource.btn_ShowRelatorio] </MudButton>                    
+                               StartIcon="@Icons.Material.Filled.TableRows"> @Localizer[Resource.btn_ShowRelatorio] </MudButton>
                 </div>
             </MudForm>
         </MudPaper>
@@ -67,13 +66,13 @@
 <MudGrid>
     @if (Aporte != null && Aporte.Valores != null && Aporte.Valores.Count != 0)
     {
-        <MudItem xs="12" sm="6">
+        <MudItem xs="12" md="6">
             <PieChart Aporte=Aporte></PieChart>
         </MudItem>
     }
     @if (UsuariosGraphico != null && UsuariosGraphico.Count != 0)
     {
-        <MudItem xs="12" sm="6">
+        <MudItem xs="12" md="6">
             <GraphicChart UsuariosGraphico=UsuariosGraphico></GraphicChart>
         </MudItem>
     }
@@ -92,8 +91,8 @@
     MudForm form;
 
     private IEnumerable<string> options { get; set; } = new HashSet<string>();
-        
-    FilterOptions filterOptions; 
+
+    FilterOptions filterOptions;
     List<CaoUsuarioDto> Usuarios = new List<CaoUsuarioDto>();
     AporteRecetaLiquidaDto? Aporte = null;
     List<UsuarioDto> UsuariosRelatorio = new List<UsuarioDto>();
@@ -124,37 +123,29 @@
     private async Task ShowPizzaAsync()
     {
         var link = $"api/facturas/pizza?startDate={ForApiEndPoint(filterOptions.StartDate)}&endDate={ForApiEndPoint(filterOptions.EndDate)}&coUsuarios={string.Join(',', options)}";
-        var distroAporte = await Http.GetFromJsonAsync<AporteRecetaLiquidaDto>(link);
-        if (distroAporte == null || distroAporte.Total == 0 || distroAporte.Valores.Count == 0)
-        {
+        Aporte = null;
+        Aporte = await Http.GetFromJsonAsync<AporteRecetaLiquidaDto>(link);
+        if (Aporte == null || Aporte.Total == 0 || Aporte.Valores.Count == 0)
             Snackbar.Add(Localizer[Resource.display_NoResults], Severity.Info);
-        }
-        else
-            Aporte = distroAporte;
+        StateHasChanged();
     }
     private async Task ShowGraphicAsync()
     {
-        //var link = $"api/facturas/graphic?startDate={ForApiEndPoint(StartDate)}&endDate={ForApiEndPoint(EndDate)}&coUsuarios={string.Join(',', options)}";
-        var link = $"api/facturas/graphic?startDate=2007-01-01&endDate=2007-12-01&coUsuarios=carlos.carvalho,carlos.arruda,anapaula.chiodaro";
-        var usuarios = await Http.GetFromJsonAsync<List<UsuarioDto>>(link);
-        if (usuarios == null || usuarios.Count == 0 )
-        {
+        var link = $"api/facturas/graphic?startDate={ForApiEndPoint(filterOptions.StartDate)}&endDate={ForApiEndPoint(filterOptions.EndDate)}&coUsuarios={string.Join(',', options)}";
+        UsuariosGraphico = null; 
+        UsuariosGraphico = (await Http.GetFromJsonAsync<List<UsuarioDto>>(link)) ?? new List<UsuarioDto>();
+        if (UsuariosGraphico == null || UsuariosGraphico.Count == 0)
             Snackbar.Add(Localizer[Resource.display_NoResults], Severity.Info);
-        }
-        else
-            UsuariosGraphico = usuarios;
+        StateHasChanged();
     }
     private async Task ShowRelatorioAsync()
     {
-        //var link = $"api/facturas/relatorio?startDate={ForApiEndPoint(StartDate)}&endDate={ForApiEndPoint(EndDate)}&coUsuarios={string.Join(',', options)}";
-        var link = $"api/facturas/relatorio?startDate=2007-01-01&endDate=2007-12-01&coUsuarios=carlos.carvalho,carlos.arruda,anapaula.chiodaro";
-        var listaUsuarios = await Http.GetFromJsonAsync<List<UsuarioDto>>(link);
-        if (listaUsuarios == null || listaUsuarios.Count == 0)
-        {
+        var link = $"api/facturas/relatorio?startDate={ForApiEndPoint(filterOptions.StartDate)}&endDate={ForApiEndPoint(filterOptions.EndDate)}&coUsuarios={string.Join(',', options)}";
+        UsuariosRelatorio = null;
+        UsuariosRelatorio = (await Http.GetFromJsonAsync<List<UsuarioDto>>(link)) ?? new List<UsuarioDto>();
+        if (UsuariosRelatorio == null || UsuariosRelatorio.Count == 0)
             Snackbar.Add(Localizer[Resource.display_NoResults], Severity.Info);
-        }
-        else
-            UsuariosRelatorio = listaUsuarios;
+        StateHasChanged();
     }
     private List<string> CompareDates(DateTime? endDate)
     {

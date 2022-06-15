@@ -11,7 +11,7 @@ namespace Domain.Services
     {
         public string ParsedAsMySql(DateTime date)
         {
-            var d = $"{date.Month:D2}/{date.Day:D2}/{date.Year:D4}";
+            var d = $"{date.Year:D4}-{date.Month:D2}-{date.Day:D2}";
             return d;
         }
         public List<DateTime> GetDateTimesInBetween(DateTime startDate, DateTime endDate)

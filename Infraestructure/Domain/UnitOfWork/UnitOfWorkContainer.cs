@@ -80,7 +80,8 @@ namespace Infraestructure.Domain.UnitOfWork
         }
         public IQueryable<T> ExecuteQuery<T>(string query, params object[] parameters) where T : class
         {
-            return Set<T>().FromSqlRaw<T>(query,parameters).AsQueryable();
+            var a = Set<T>().FromSqlRaw<T>(query, parameters).AsQueryable();
+            return a;
         }
 
         //public IQueryable<TEntity> ExecuteQuery2<TEntity>(string query, params object[] parameters) where TEntity : class
