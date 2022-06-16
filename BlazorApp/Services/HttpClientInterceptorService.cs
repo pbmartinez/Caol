@@ -1,5 +1,8 @@
 ﻿using BlazorApp.Exceptions;
+using Domain;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
+using MudBlazor;
 using System.Net;
 using Toolbelt.Blazor;
 
@@ -9,11 +12,15 @@ namespace BlazorApp.Services
     {
         private readonly HttpClientInterceptor _interceptor;
         private readonly NavigationManager _navManager;
+        private readonly ISnackbar _snackbar;
+        private readonly IStringLocalizer<Resource> _localizer;
 
-        public HttpClientInterceptorService(HttpClientInterceptor interceptor, NavigationManager navManager)
+        public HttpClientInterceptorService(HttpClientInterceptor interceptor, NavigationManager navManager, ISnackbar snackbar, IStringLocalizer<Resource> localizer)
         {
-            _interceptor = interceptor;
-            _navManager = navManager;
+            _interceptor = interceptor ?? throw new ArgumentNullException(nameof(interceptor));
+            _navManager = navManager ?? throw new ArgumentNullException(nameof(navManager));
+            _snackbar = snackbar ?? throw new ArgumentNullException(nameof(snackbar));
+            _localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
         }
 
         public void RegisterEvent() => _interceptor.AfterSend += InterceptResponse;
@@ -29,25 +36,27 @@ namespace BlazorApp.Services
                 switch (statusCode)
                 {
                     case HttpStatusCode.Unauthorized:
-                        message = "You are not authenticated";
+                        message = _localizer[Resource.display_401_Description];
                         _navManager.NavigateTo("/401");
                         break;
 
                     case HttpStatusCode.Forbidden:
-                        message = "You are not allowed";
+                        message = _localizer[Resource.display_403_Description];
                         _navManager.NavigateTo("/403");
                         break;
 
                     case HttpStatusCode.NotFound:
-                        message = "Requested resource is not found";
+                        message = _localizer[Resource.display_404_Description];
                         _navManager.NavigateTo("/404");
                         break;
 
                     case HttpStatusCode.BadRequest:
-                        message = "Problem with the request";
+                        _snackbar.Add("Input data is not correct", Severity.Error);
+                        message = "Input data is not correct";
                         break;
                     default:
-                        message = "Internal server error";
+                        message = _localizer[Resource.display_500_Description];
+                        _snackbar.Add(_localizer[Resource.display_500_Description], Severity.Error);
                         _navManager.NavigateTo("/500");
                         break;
                 }

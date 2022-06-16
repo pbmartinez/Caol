@@ -192,6 +192,9 @@
   <data name="display_AppName" xml:space="preserve">
     <value>Aplicativo da Agência CAOL</value>
   </data>
+  <data name="display_BadRequest" xml:space="preserve">
+    <value>Os dados de entrada não estão corretos</value>
+  </data>
   <data name="display_Buscar" xml:space="preserve">
     <value>Achar ...</value>
   </data>
