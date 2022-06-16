@@ -1,5 +1,6 @@
 ﻿@page "/comercial-performance"
 @using Application.Dtos
+@using BlazorApp.Services
 @using Domain.DataAnnotations
 @using BlazorApp.Shared.Components
 @using BlazorApp.Models
@@ -9,6 +10,7 @@
 @inject HttpClient Http
 @inject IStringLocalizer<Resource> Localizer
 @inject ISnackbar Snackbar
+@inject HttpClientInterceptorService Interceptor 
 
 <MudGrid>
     <MudItem xs="12">
@@ -83,6 +85,9 @@
         </MudItem>
     }
 </MudGrid>
+
+@implements IDisposable
+
 @code {
 
     bool success;
@@ -100,6 +105,8 @@
 
     protected override async Task OnInitializedAsync()
     {
+        Interceptor.RegisterEvent();
+
         var startDate = DateTime.Today.AddDays(-DateTime.Today.Day + 1);
         var endDate = DateTime.Today.AddDays(-DateTime.Today.Day + 1).AddMonths(1);
         filterOptions = new FilterOptions
@@ -154,5 +161,7 @@
             listOfErrors.Add(Localizer[Resource.validation_OnDateComparison]);
         return listOfErrors;
     }
+
+    public void Dispose() => Interceptor.DisposeEvent();
 }
 
