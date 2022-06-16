@@ -51,8 +51,8 @@ namespace BlazorApp.Services
                         break;
 
                     case HttpStatusCode.BadRequest:
-                        _snackbar.Add("Input data is not correct", Severity.Error);
-                        message = "Input data is not correct";
+                        _snackbar.Add(_localizer[Resource.display_BadRequest], Severity.Error);
+                        message = _localizer[Resource.display_BadRequest];
                         break;
                     default:
                         message = _localizer[Resource.display_500_Description];

@@ -284,6 +284,15 @@ namespace Domain {
                 return ResourceManager.GetString("display_AppName", resourceCulture);
             }
         }
+        /// <summary>
+        ///   Looks up a localized string similar to CAOL Agence App.
+        /// </summary>
+        public static string display_BadRequest
+        {
+            get {
+                return ResourceManager.GetString("display_BadRequest", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to Find ....
