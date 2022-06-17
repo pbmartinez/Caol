@@ -179,6 +179,7 @@ namespace Infraestructure.Application.AppServices
             }).ToList();
 
             var total = groupedByUsuario.Sum(u => u.ReceitaLiquida);
+
             var lista = new List<ValorAporteDto>();
             foreach (var usuario in groupedByUsuario)
             {
@@ -191,12 +192,27 @@ namespace Infraestructure.Application.AppServices
                     Porciento = porCiento
                 });
             }
+            var queryUsers = _caoUsuarioAppService.GetUsuarios(coUsuarios);
+            foreach (var user in queryUsers)
+            {
+                var exist = lista.Any(a => a.Code == user.Code);
+                if (!exist)
+                {
+                    lista.Add(new ValorAporteDto
+                    {
+                        Code = user.Code,
+                        Name = user.Name,
+                        RecetaLiquida = 0.0,
+                        Porciento = 0.0
+                    });
+                }
+            }
             return new AporteRecetaLiquidaDto
             {
                 StartDate = startDate ?? DateTime.MinValue,
                 EndDate = endDate ?? DateTime.MaxValue,
                 Total = total,
-                Valores = lista
+                Valores = lista.OrderBy(a=>a.Name).ToList()
             };
         }
         private List<FacturaAcumuladaDto> CompleteMissedInvoices(List<FacturaAcumuladaDto> facturas, DateTime startDate, DateTime endDate)
