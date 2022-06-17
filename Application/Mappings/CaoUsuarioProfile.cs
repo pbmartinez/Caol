@@ -13,6 +13,8 @@ namespace Application.Mappings
                 .ForMember(g => g.CaoOrdenesServicios, options => options.MapFrom(f => f.CaoOrdenesServicios))
                 .ForMember(g => g.CaoSalario, options => options.MapFrom(f => f.CaoSalario))
                 .ReverseMap();
+            
+            CreateMap<Usuario, UsuarioDto>().ReverseMap();
         }
     }
 }

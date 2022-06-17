@@ -107,6 +107,7 @@ namespace Infraestructure.Domain.UnitOfWork
         public DbSet<UsuarioRecetaLiquida> UsuarioRecetaLiquida { get; set; } = null!;
         public DbSet<UsuarioPerformance> UsuarioPerformance { get; set; } = null!;
         public DbSet<UsuarioRelatorio> UsuarioRelatorio { get; set; } = null!;
+        public DbSet<Usuario> Usuario { get; set; } = null!;
         #endregion
 
 

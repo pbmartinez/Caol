@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using Application.Specifications;
 using Application.IValidator;
 using Application.Exceptions;
+using Domain.Extensions;
 
 namespace Infraestructure.Application.AppServices
 {
@@ -108,6 +109,16 @@ namespace Infraestructure.Application.AppServices
         //        throw new ApplicationValidationErrorsException(_entityValidator.GetInvalidMessages(item));
         //    return commited > 0;
         //}
-
+        public List<UsuarioDto> GetUsuarios(IEnumerable<string> coUsuarios)
+        {
+            ArgumentNullException.ThrowIfNull(coUsuarios, nameof(coUsuarios));
+            var listOfUserCodes = coUsuarios.GetAsCsvSingleQuote();
+            var query = "select u.co_usuario, u.no_usuario from cao_usuario as u " +
+                "where locate (u.co_usuario, {0}) > 0 order by u.no_usuario";
+            var queryResult = _CaoUsuarioRepository.UnitOfWork
+                .ExecuteQuery<Usuario>(query, new object[] { listOfUserCodes }).ToList();
+            var listOfUsers = _mapper.Map<List<UsuarioDto>>(queryResult);                        
+            return listOfUsers;
+        }
     }
 }
