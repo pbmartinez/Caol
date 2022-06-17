@@ -66,16 +66,34 @@
 
 
 <MudGrid>
+    @if (showLoadingPizza)
+    {
+        <MudItem xs="12" md="6">
+            <MudProgressCircular Color="MudBlazor.Color.Primary" Size="Size.Medium" Indeterminate="true" />
+        </MudItem>
+    }
     @if (Aporte != null && Aporte.Valores != null && Aporte.Valores.Count != 0)
     {
         <MudItem xs="12" md="6">
             <PieChart Aporte=Aporte></PieChart>
         </MudItem>
     }
+    @if (showLoadingGraphic)
+    {
+        <MudItem xs="12" md="6">
+            <MudProgressCircular Color="MudBlazor.Color.Primary" Size="Size.Medium" Indeterminate="true" />
+        </MudItem>
+    }
     @if (UsuariosGraphico != null && UsuariosGraphico.Count != 0)
     {
         <MudItem xs="12" md="6">
             <GraphicChart UsuariosGraphico=UsuariosGraphico></GraphicChart>
+        </MudItem>
+    }
+    @if (showLoadingRelatorio)
+    {
+        <MudItem xs="12" md="6">
+            <MudProgressCircular Color="MudBlazor.Color.Primary" Size="Size.Medium" Indeterminate="true" />
         </MudItem>
     }
     @if (UsuariosRelatorio != null && UsuariosRelatorio.Count > 0)
@@ -91,6 +109,9 @@
 @code {
 
     bool success;
+    bool showLoadingPizza = false;
+    bool showLoadingGraphic = false;
+    bool showLoadingRelatorio = false;
     string[] errors = { };
     MudTextField<string> pwField1;
     MudForm form;
@@ -129,30 +150,33 @@
     }
     private async Task ShowPizzaAsync()
     {
-        var link = $"api/facturas/pizza?startDate={ForApiEndPoint(filterOptions.StartDate)}&endDate={ForApiEndPoint(filterOptions.EndDate)}&coUsuarios={string.Join(',', options)}";
         Aporte = null;
+        showLoadingPizza = true;
+        var link = $"api/facturas/pizza?startDate={ForApiEndPoint(filterOptions.StartDate)}&endDate={ForApiEndPoint(filterOptions.EndDate)}&coUsuarios={string.Join(',', options)}";
         Aporte = await Http.GetFromJsonAsync<AporteRecetaLiquidaDto>(link);
         if (Aporte == null || Aporte.Total == 0 || Aporte.Valores.Count == 0)
             Snackbar.Add(Localizer[Resource.display_NoResults], Severity.Info);
-        StateHasChanged();
+        showLoadingPizza = false;
     }
     private async Task ShowGraphicAsync()
     {
+        UsuariosGraphico = null;
+        showLoadingGraphic = true;
         var link = $"api/facturas/graphic?startDate={ForApiEndPoint(filterOptions.StartDate)}&endDate={ForApiEndPoint(filterOptions.EndDate)}&coUsuarios={string.Join(',', options)}";
-        UsuariosGraphico = null; 
         UsuariosGraphico = (await Http.GetFromJsonAsync<List<UsuarioDto>>(link)) ?? new List<UsuarioDto>();
         if (UsuariosGraphico == null || UsuariosGraphico.Count == 0)
             Snackbar.Add(Localizer[Resource.display_NoResults], Severity.Info);
-        StateHasChanged();
+        showLoadingGraphic = false;
     }
     private async Task ShowRelatorioAsync()
     {
-        var link = $"api/facturas/relatorio?startDate={ForApiEndPoint(filterOptions.StartDate)}&endDate={ForApiEndPoint(filterOptions.EndDate)}&coUsuarios={string.Join(',', options)}";
         UsuariosRelatorio = null;
+        showLoadingRelatorio = true;
+        var link = $"api/facturas/relatorio?startDate={ForApiEndPoint(filterOptions.StartDate)}&endDate={ForApiEndPoint(filterOptions.EndDate)}&coUsuarios={string.Join(',', options)}";
         UsuariosRelatorio = (await Http.GetFromJsonAsync<List<UsuarioDto>>(link)) ?? new List<UsuarioDto>();
         if (UsuariosRelatorio == null || UsuariosRelatorio.Count == 0)
             Snackbar.Add(Localizer[Resource.display_NoResults], Severity.Info);
-        StateHasChanged();
+        showLoadingRelatorio = false;
     }
     private List<string> CompareDates(DateTime? endDate)
     {
