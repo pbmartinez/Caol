@@ -10,6 +10,7 @@ using Microsoft.Identity.Web;
 using System.Configuration;
 using Microsoft.IdentityModel.Logging;
 using WebApi.WellKnownNames;
+using Hellang.Middleware.ProblemDetails;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,17 +21,18 @@ builder.Services.AddControllers(setupAction =>
     //Return Not Acceptable Status Code when api is requested in a format that it does not support
     setupAction.ReturnHttpNotAcceptable = true;
 })
-.AddJsonOptions(options => 
+.AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 })
+#region Configuration of Problem Details alternative 1
 .ConfigureApiBehaviorOptions(setupAction =>
  {
      setupAction.InvalidModelStateResponseFactory = context =>
      {
          // create a problem details object
          var problemDetailsFactory = context.HttpContext.RequestServices
-             .GetRequiredService<ProblemDetailsFactory>();
+             .GetRequiredService<Microsoft.AspNetCore.Mvc.Infrastructure.ProblemDetailsFactory>();
          var problemDetails = problemDetailsFactory.CreateValidationProblemDetails(
                  context.HttpContext,
                  context.ModelState);
@@ -68,6 +70,7 @@ builder.Services.AddControllers(setupAction =>
          };
      };
  })
+#endregion
 ;
 // CORS Configuration
 var allowedHosts = builder.Configuration[AppSettings.AllowedHosts].Split(',');
@@ -92,7 +95,7 @@ builder.Services.AddEntitiesServicesAndRepositories();
 builder.Services.AddCustomApplicationServices();
 
 //Unit of Work Implementation Configuration
-builder.Services.AddDbContext<UnitOfWorkContainer>(options =>   
+builder.Services.AddDbContext<UnitOfWorkContainer>(options =>
    options.UseMySql(builder.Configuration.GetConnectionString(AppSettings.DefaultConnectionString),
    Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.28-mysql"))
    //.LogTo(Console.WriteLine, LogLevel.Information)
@@ -100,14 +103,18 @@ builder.Services.AddDbContext<UnitOfWorkContainer>(options =>
    );
 
 //Security Configuration
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)                
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection(AppSettings.AzureAd));
 
+
+builder.Services.AddProblemDetails(); 
 
 IdentityModelEventSource.ShowPII = true;
 
 var app = builder.Build();
 
+
+app.UseProblemDetails();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

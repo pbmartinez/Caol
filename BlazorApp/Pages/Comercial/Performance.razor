@@ -1,5 +1,6 @@
 ﻿@page "/comercial-performance"
 @using Application.Dtos
+@using BlazorApp.Services
 @using Domain.DataAnnotations
 @using BlazorApp.Shared.Components
 @using BlazorApp.Models
@@ -9,19 +10,20 @@
 @inject HttpClient Http
 @inject IStringLocalizer<Resource> Localizer
 @inject ISnackbar Snackbar
+@inject HttpClientInterceptorService Interceptor 
 
 <MudGrid>
     <MudItem xs="12">
         <MudPaper Class="pa-4">
-            <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors" >
+            <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
                 <MudGrid>
                     <MudItem xs="12" sm="6" md="4">
-                        <MudDatePicker Label="@Localizer[Resource.FilterOptionsStartDate]" @bind-Date="filterOptions.StartDate" FixDay=1 Required="true" RequiredError="@Localizer[Resource.validation_FieldRequired]" />
+                        <MudDatePicker Label="@Localizer[Resource.FilterOptionsStartDate]" @bind-Date="filterOptions.StartDate" FixDay=1 Required="true" RequiredError="@Localizer[Resource.validation_FieldRequired]" 
+                                       Validation="@(new Func<DateTime?, IEnumerable<string>>(CheckStartDate))" />
                     </MudItem>
                     <MudItem xs="12" sm="6" md="4">
                         <MudDatePicker Label="@Localizer[Resource.FilterOptionsEndDate]" @bind-Date="filterOptions.EndDate" FixDay=1 Required="true" RequiredError="@Localizer[Resource.validation_FieldRequired]"
-                                       Validation="@(new Func<DateTime?, IEnumerable<string>>(CompareDates))" 
-                                       />
+                                       Validation="@(new Func<DateTime?, IEnumerable<string>>(CheckEndDate))" />
                     </MudItem>
                     <MudItem xs="12" sm="12" md="4">
                         @if (Usuarios != null && Usuarios.Count > 0)
@@ -49,12 +51,12 @@
                 </MudGrid>
 
                 <div class="d-flex align-center justify-space-between mt-6">
-                    <MudButton Variant="Variant.Filled" Color="MudBlazor.Color.Primary" Disabled="@(!success)" OnClick="ShowPizzaAsync" Class="ml-auto" 
-                               StartIcon="@Icons.Material.Filled.PieChart" > @Localizer[Resource.btn_ShowPizza] </MudButton>
+                    <MudButton Variant="Variant.Filled" Color="MudBlazor.Color.Primary" Disabled="@(!success)" OnClick="ShowPizzaAsync" Class="ml-auto"
+                               StartIcon="@Icons.Material.Filled.PieChart"> @Localizer[Resource.btn_ShowPizza] </MudButton>
                     <MudButton Variant="Variant.Filled" Color="MudBlazor.Color.Primary" Disabled="@(!success)" OnClick="ShowGraphicAsync" Class="ml-auto"
                                StartIcon="@Icons.Material.Filled.BarChart"> @Localizer[Resource.btn_ShowGraphic] </MudButton>
                     <MudButton Variant="Variant.Filled" Color="MudBlazor.Color.Primary" Disabled="@(!success)" OnClick="ShowRelatorioAsync" Class="ml-auto"
-                               StartIcon="@Icons.Material.Filled.TableRows"> @Localizer[Resource.btn_ShowRelatorio] </MudButton>                    
+                               StartIcon="@Icons.Material.Filled.TableRows"> @Localizer[Resource.btn_ShowRelatorio] </MudButton>
                 </div>
             </MudForm>
         </MudPaper>
@@ -65,16 +67,34 @@
 
 
 <MudGrid>
+    @if (showLoadingPizza)
+    {
+        <MudItem xs="12" md="6">
+            <MudProgressCircular Color="MudBlazor.Color.Primary" Size="Size.Medium" Indeterminate="true" />
+        </MudItem>
+    }
     @if (Aporte != null && Aporte.Valores != null && Aporte.Valores.Count != 0)
     {
-        <MudItem xs="12" sm="6">
+        <MudItem xs="12" md="6">
             <PieChart Aporte=Aporte></PieChart>
+        </MudItem>
+    }
+    @if (showLoadingGraphic)
+    {
+        <MudItem xs="12" md="6">
+            <MudProgressCircular Color="MudBlazor.Color.Primary" Size="Size.Medium" Indeterminate="true" />
         </MudItem>
     }
     @if (UsuariosGraphico != null && UsuariosGraphico.Count != 0)
     {
-        <MudItem xs="12" sm="6">
+        <MudItem xs="12" md="6">
             <GraphicChart UsuariosGraphico=UsuariosGraphico></GraphicChart>
+        </MudItem>
+    }
+    @if (showLoadingRelatorio)
+    {
+        <MudItem xs="12" md="6">
+            <MudProgressCircular Color="MudBlazor.Color.Primary" Size="Size.Medium" Indeterminate="true" />
         </MudItem>
     }
     @if (UsuariosRelatorio != null && UsuariosRelatorio.Count > 0)
@@ -84,16 +104,22 @@
         </MudItem>
     }
 </MudGrid>
+
+@implements IDisposable
+
 @code {
 
     bool success;
+    bool showLoadingPizza = false;
+    bool showLoadingGraphic = false;
+    bool showLoadingRelatorio = false;
     string[] errors = { };
     MudTextField<string> pwField1;
     MudForm form;
 
     private IEnumerable<string> options { get; set; } = new HashSet<string>();
-        
-    FilterOptions filterOptions; 
+
+    FilterOptions filterOptions;
     List<CaoUsuarioDto> Usuarios = new List<CaoUsuarioDto>();
     AporteRecetaLiquidaDto? Aporte = null;
     List<UsuarioDto> UsuariosRelatorio = new List<UsuarioDto>();
@@ -101,6 +127,8 @@
 
     protected override async Task OnInitializedAsync()
     {
+        Interceptor.RegisterEvent();
+
         var startDate = DateTime.Today.AddDays(-DateTime.Today.Day + 1);
         var endDate = DateTime.Today.AddDays(-DateTime.Today.Day + 1).AddMonths(1);
         filterOptions = new FilterOptions
@@ -123,45 +151,49 @@
     }
     private async Task ShowPizzaAsync()
     {
+        Aporte = null;
+        showLoadingPizza = true;
         var link = $"api/facturas/pizza?startDate={ForApiEndPoint(filterOptions.StartDate)}&endDate={ForApiEndPoint(filterOptions.EndDate)}&coUsuarios={string.Join(',', options)}";
-        var distroAporte = await Http.GetFromJsonAsync<AporteRecetaLiquidaDto>(link);
-        if (distroAporte == null || distroAporte.Total == 0 || distroAporte.Valores.Count == 0)
-        {
+        Aporte = await Http.GetFromJsonAsync<AporteRecetaLiquidaDto>(link);
+        if (Aporte == null || Aporte.Total == 0 || Aporte.Valores.Count == 0)
             Snackbar.Add(Localizer[Resource.display_NoResults], Severity.Info);
-        }
-        else
-            Aporte = distroAporte;
+        showLoadingPizza = false;
     }
     private async Task ShowGraphicAsync()
     {
-        //var link = $"api/facturas/graphic?startDate={ForApiEndPoint(StartDate)}&endDate={ForApiEndPoint(EndDate)}&coUsuarios={string.Join(',', options)}";
-        var link = $"api/facturas/graphic?startDate=2007-01-01&endDate=2007-12-01&coUsuarios=carlos.carvalho,carlos.arruda,anapaula.chiodaro";
-        var usuarios = await Http.GetFromJsonAsync<List<UsuarioDto>>(link);
-        if (usuarios == null || usuarios.Count == 0 )
-        {
+        UsuariosGraphico = null;
+        showLoadingGraphic = true;
+        var link = $"api/facturas/graphic?startDate={ForApiEndPoint(filterOptions.StartDate)}&endDate={ForApiEndPoint(filterOptions.EndDate)}&coUsuarios={string.Join(',', options)}";
+        UsuariosGraphico = (await Http.GetFromJsonAsync<List<UsuarioDto>>(link)) ?? new List<UsuarioDto>();
+        if (UsuariosGraphico == null || UsuariosGraphico.Count == 0)
             Snackbar.Add(Localizer[Resource.display_NoResults], Severity.Info);
-        }
-        else
-            UsuariosGraphico = usuarios;
+        showLoadingGraphic = false;
     }
     private async Task ShowRelatorioAsync()
     {
-        //var link = $"api/facturas/relatorio?startDate={ForApiEndPoint(StartDate)}&endDate={ForApiEndPoint(EndDate)}&coUsuarios={string.Join(',', options)}";
-        var link = $"api/facturas/relatorio?startDate=2007-01-01&endDate=2007-12-01&coUsuarios=carlos.carvalho,carlos.arruda,anapaula.chiodaro";
-        var listaUsuarios = await Http.GetFromJsonAsync<List<UsuarioDto>>(link);
-        if (listaUsuarios == null || listaUsuarios.Count == 0)
-        {
+        UsuariosRelatorio = null;
+        showLoadingRelatorio = true;
+        var link = $"api/facturas/relatorio?startDate={ForApiEndPoint(filterOptions.StartDate)}&endDate={ForApiEndPoint(filterOptions.EndDate)}&coUsuarios={string.Join(',', options)}";
+        UsuariosRelatorio = (await Http.GetFromJsonAsync<List<UsuarioDto>>(link)) ?? new List<UsuarioDto>();
+        if (UsuariosRelatorio == null || UsuariosRelatorio.Count == 0)
             Snackbar.Add(Localizer[Resource.display_NoResults], Severity.Info);
-        }
-        else
-            UsuariosRelatorio = listaUsuarios;
+        showLoadingRelatorio = false;
     }
-    private List<string> CompareDates(DateTime? endDate)
+    private List<string> CheckStartDate(DateTime? startDate)
+    {
+        var listOfErrors = new List<string>();
+        if (startDate?.Date >= filterOptions.EndDate?.Date)
+            listOfErrors.Add(Localizer[Resource.validation_OnDateComparison]);
+        return listOfErrors;
+    }
+    private List<string> CheckEndDate(DateTime? endDate)
     {
         var listOfErrors = new List<string>();
         if (endDate?.Date <= filterOptions.StartDate?.Date)
             listOfErrors.Add(Localizer[Resource.validation_OnDateComparison]);
         return listOfErrors;
     }
+
+    public void Dispose() => Interceptor.DisposeEvent();
 }
 

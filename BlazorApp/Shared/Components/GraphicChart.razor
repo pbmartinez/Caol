@@ -7,7 +7,8 @@
 @inject IDateTimeService DateTimeService
 
 <ApexChart TItem="FacturaAcumuladaDto"
-           Title="@Localizer[Resource.display_GraphicChartTitle]">
+           Title="@Localizer[Resource.display_GraphicChartTitle]"
+           Options="options">
 
     @for (var i = 0; i < UsuariosGraphico.Count; i++)
     {
@@ -17,21 +18,30 @@
                      Items="@usuario.Facturas"
                      Name="@usuario.Name"
                      XValue="@(e => DateTimeService.DateAsMonthYear(e.Mes))"
-                     YAggregate="@(e => e.Sum(v => (decimal)Math.Round(v.RecetaLiquida,2)))"                     
+                     YAggregate="@(e => e.Sum(v => (decimal)Math.Round(v.RecetaLiquida,2)))"
                      SeriesType="SeriesType.Bar"
                      DataPointMutator="SetMarkers" />
     }
-    
+
 </ApexChart>
 
 
 @code {
     [EditorRequired]
     [Parameter] public List<UsuarioDto> UsuariosGraphico { get; set; } = null!;
-
+    ApexChartOptions<FacturaAcumuladaDto> options = new ApexChartOptions<FacturaAcumuladaDto>()
+        {
+            Xaxis = new XAxis() { Min = 0.0, Max = 32000 },
+            Yaxis = new List<YAxis>()
+            {
+                new YAxis(){Min=0.0,Max=32000}
+            },
+        };
     protected override void OnInitialized()
     {
         base.OnInitialized();
+
+
     }
     private void SetMarkers(DataPoint<FacturaAcumuladaDto> dataPoint)
     {
@@ -40,8 +50,8 @@
             {
                 Name = Localizer[Resource.display_GraphicChartMarker],
                 Value = UsuariosGraphico == null || UsuariosGraphico.Count == 0
-                        ? 0.0m
-                        : (decimal)Math.Round(UsuariosGraphico.Sum(u => u.BrutSalario) / UsuariosGraphico.Count, 2),
+                                ? 0.0m
+                                : (decimal)Math.Round(UsuariosGraphico.Sum(u => u.BrutSalario) / UsuariosGraphico.Count, 2),
                 StrokeLineCap = StrokeLineCap.Round,
                 StrokeColor = "#e3001b",
             };

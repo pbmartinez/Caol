@@ -23,11 +23,10 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("pizza")]
-        public ActionResult<AporteRecetaLiquidaDto> GetPizzaAsync(DateTime? startDate, DateTime? endDate, [ModelBinder(BinderType = typeof(ArrayModelBinder))] IEnumerable<string> coUsuarios)
+        public ActionResult<AporteRecetaLiquidaDto> GetPizza(DateTime? startDate, DateTime? endDate, [ModelBinder(BinderType = typeof(ArrayModelBinder))] IEnumerable<string> coUsuarios)
         {
             if (startDate == null || endDate == null || coUsuarios == null || !coUsuarios.Any() || startDate > endDate)
                 return BadRequest();
-
             var aportes = ((ICaoFaturaAppService)AppService).GetPizza(startDate, endDate, coUsuarios);
             return Ok(aportes);
         }

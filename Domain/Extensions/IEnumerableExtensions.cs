@@ -11,7 +11,7 @@ namespace Domain.Extensions
         public static string GetAsCsvSingleQuote(this IEnumerable<string> source) 
         {
             if (source == null || !source.Any())
-                return "''";
+                return "";
 
             var items = string.Empty;
 
@@ -19,12 +19,12 @@ namespace Domain.Extensions
             {
                 if (!string.IsNullOrEmpty(a))
                 {
-                    items = $"{items},'{a}'";
+                    items = $"{items},{a}";
                 }
             });
 
             if (string.IsNullOrEmpty(items))
-                items = "''";
+                items = "";
             if (items.StartsWith(','))
                 items = items.Remove(0, 1);
             if (items.EndsWith(','))
