@@ -18,11 +18,12 @@
             <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
                 <MudGrid>
                     <MudItem xs="12" sm="6" md="4">
-                        <MudDatePicker Label="@Localizer[Resource.FilterOptionsStartDate]" @bind-Date="filterOptions.StartDate" FixDay=1 Required="true" RequiredError="@Localizer[Resource.validation_FieldRequired]" />
+                        <MudDatePicker Label="@Localizer[Resource.FilterOptionsStartDate]" @bind-Date="filterOptions.StartDate" FixDay=1 Required="true" RequiredError="@Localizer[Resource.validation_FieldRequired]" 
+                                       Validation="@(new Func<DateTime?, IEnumerable<string>>(CheckStartDate))" />
                     </MudItem>
                     <MudItem xs="12" sm="6" md="4">
                         <MudDatePicker Label="@Localizer[Resource.FilterOptionsEndDate]" @bind-Date="filterOptions.EndDate" FixDay=1 Required="true" RequiredError="@Localizer[Resource.validation_FieldRequired]"
-                                       Validation="@(new Func<DateTime?, IEnumerable<string>>(CompareDates))" />
+                                       Validation="@(new Func<DateTime?, IEnumerable<string>>(CheckEndDate))" />
                     </MudItem>
                     <MudItem xs="12" sm="12" md="4">
                         @if (Usuarios != null && Usuarios.Count > 0)
@@ -178,7 +179,14 @@
             Snackbar.Add(Localizer[Resource.display_NoResults], Severity.Info);
         showLoadingRelatorio = false;
     }
-    private List<string> CompareDates(DateTime? endDate)
+    private List<string> CheckStartDate(DateTime? startDate)
+    {
+        var listOfErrors = new List<string>();
+        if (startDate?.Date >= filterOptions.EndDate?.Date)
+            listOfErrors.Add(Localizer[Resource.validation_OnDateComparison]);
+        return listOfErrors;
+    }
+    private List<string> CheckEndDate(DateTime? endDate)
     {
         var listOfErrors = new List<string>();
         if (endDate?.Date <= filterOptions.StartDate?.Date)
