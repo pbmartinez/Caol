@@ -278,7 +278,7 @@ namespace Infraestructure.Application.AppServices
             var listOfUserCodes = coUsuarios.GetAsCsvSingleQuote();
             var allUserCodes = coUsuarios?.ToList() ?? new List<string>();
 
-            var query = "select  u.co_usuario, u.no_usuario, f.data_emissao, sum(f.valor) as valor, sum(f.valor - (f.valor*f.total_imp_inc/100)) as receita_liquida, s.brut_salario, sum( (f.valor - (f.valor * f.total_imp_inc/100)) * f.comissao_cn / 100  ) as comissao , f.comissao_cn, sum( (f.valor - (f.valor*f.total_imp_inc/100)) - s.brut_salario - ( (f.valor - (f.valor * f.total_imp_inc/100)) * f.comissao_cn / 100)) as lucro, " +
+            var query = "select  u.co_usuario, u.no_usuario, f.data_emissao, sum(f.valor) as valor, sum(f.valor - (f.valor*f.total_imp_inc/100)) as receita_liquida, s.brut_salario, sum( (f.valor - (f.valor * f.total_imp_inc/100)) * f.comissao_cn / 100  ) as comissao , f.comissao_cn, sum( (f.valor - (f.valor*f.total_imp_inc/100)) - ( (f.valor - (f.valor * f.total_imp_inc/100)) * f.comissao_cn / 100)) - s.brut_salario as lucro, " +
                 "CONCAT(year(f.data_emissao), '-', month(f.data_emissao)) as yearmonth " +
                 "from cao_fatura as f " +
                 "join cao_os as o on f.co_os = o.co_os join cao_usuario as u on o.co_usuario = u.co_usuario join cao_salario as s on u.co_usuario = s.co_usuario " +
