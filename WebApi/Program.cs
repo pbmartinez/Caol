@@ -130,7 +130,7 @@ else
         await context.Response.WriteAsync("An error happened, please try later");
     }));
 }
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseCors("AllowedHosts");
 
