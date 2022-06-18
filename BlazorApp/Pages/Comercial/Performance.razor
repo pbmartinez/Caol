@@ -15,7 +15,7 @@
 <MudGrid>
     <MudItem xs="12">
         <MudPaper Class="pa-4">
-            <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
+            <MudForm @bind-IsValid="@success" @bind-Errors="@errors">
                 <MudGrid>
                     <MudItem xs="12" sm="6" md="4">
                         <MudDatePicker Label="@Localizer[Resource.FilterOptionsStartDate]" @bind-Date="filterOptions.StartDate" FixDay=1 Required="true" RequiredError="@Localizer[Resource.validation_FieldRequired]" 
@@ -114,8 +114,6 @@
     bool showLoadingGraphic = false;
     bool showLoadingRelatorio = false;
     string[] errors = { };
-    MudTextField<string> pwField1;
-    MudForm form;
 
     private IEnumerable<string> options { get; set; } = new HashSet<string>();
 
