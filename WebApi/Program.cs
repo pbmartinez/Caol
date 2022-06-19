@@ -137,7 +137,13 @@ else
 }
 //app.UseHttpsRedirection();
 
-app.UseCors("AllowedHosts");
+//app.UseCors("AllowedHosts");
+app.UseCors(builder =>
+{
+    builder.WithOrigins(allowedHosts.ToArray());
+    builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+    builder.SetIsOriginAllowedToAllowWildcardSubdomains();
+});
 
 
 app.UseAuthentication();
