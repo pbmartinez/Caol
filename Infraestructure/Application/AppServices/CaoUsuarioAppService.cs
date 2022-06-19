@@ -79,7 +79,8 @@ namespace Infraestructure.Application.AppServices
         public async Task<List<CaoUsuarioDto>> GetAllAsync(List<string>? includes = null, Dictionary<string, bool>? order = null)
         {
             var items = await _CaoUsuarioRepository.GetAllAsync(includes, order);
-            var dtoItems = _mapper.Map<List<CaoUsuarioDto>>(items.ToList());
+            var dtoItems = _mapper.Map<List<CaoUsuarioDto>>(items.Where(u=> !string.IsNullOrEmpty(u.NoUsuario) && !string.IsNullOrEmpty(u.CoUsuario))
+                .ToList());
             return dtoItems;
         }
 
@@ -114,7 +115,7 @@ namespace Infraestructure.Application.AppServices
             ArgumentNullException.ThrowIfNull(coUsuarios, nameof(coUsuarios));
             var listOfUserCodes = coUsuarios.GetAsCsvSingleQuote();
             var query = "select u.co_usuario, u.no_usuario from cao_usuario as u " +
-                "where locate (u.co_usuario, {0}) > 0 order by u.no_usuario";
+                "where LENGTH(u.co_usuario) > 0 and locate (u.co_usuario, {0}) > 0 order by u.no_usuario";
             var queryResult = _CaoUsuarioRepository.UnitOfWork
                 .ExecuteQuery<Usuario>(query, new object[] { listOfUserCodes }).ToList();
             var listOfUsers = _mapper.Map<List<UsuarioDto>>(queryResult);                        

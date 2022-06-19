@@ -281,7 +281,7 @@ namespace Infraestructure.Application.AppServices
                 usuario.Facturas = facturas;
                 listOfUsers.Add(usuario);
             }
-            return listOfUsers;
+            return listOfUsers.OrderBy(u=>u.Name).ToList();
         }
         public List<UsuarioDto> GetRelatorio(DateTime? startDate, DateTime? endDate, IEnumerable<string>? coUsuarios)
         {
@@ -330,7 +330,7 @@ namespace Infraestructure.Application.AppServices
                 usuario.Facturas = facturas;
                 listOfUsers.Add(usuario);
             }
-            return listOfUsers;
+            return listOfUsers.OrderBy(u=>u.Name).ToList();
         }
     }
 }

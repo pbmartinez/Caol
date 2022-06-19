@@ -129,11 +129,12 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseExceptionHandler(appBuilder => appBuilder.Run(async context =>
-    {
-        context.Response.StatusCode = 500;
-        await context.Response.WriteAsync("An error happened, please try later");
-    }));
+    // Let ProblemDetails Middelware handle exceptions
+    //app.UseExceptionHandler(appBuilder => appBuilder.Run(async context =>
+    //{
+    //    context.Response.StatusCode = 500;
+    //    await context.Response.WriteAsync("An error happened, please try later");
+    //}));
 }
 //app.UseHttpsRedirection();
 
