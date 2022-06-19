@@ -11,6 +11,7 @@ using System.Configuration;
 using Microsoft.IdentityModel.Logging;
 using WebApi.WellKnownNames;
 using Hellang.Middleware.ProblemDetails;
+using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -113,6 +114,10 @@ IdentityModelEventSource.ShowPII = true;
 
 var app = builder.Build();
 
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
 
 app.UseProblemDetails();
 
